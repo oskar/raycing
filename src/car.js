@@ -1,9 +1,11 @@
 export default class Car {
-  constructor(sound){
-    this.sound = sound;
+  constructor(position, direction){
+    this.position = position;
+    this.direction = direction;
   }
 
-  honk(){
-    return this.sound;
+  move(vector){
+    this.position.add(vector);
+    this.direction = vector;
   }
 }
