@@ -1,0 +1,26 @@
+{
+  "name": "raycing",
+  "version": "0.0.1",
+  "description": "routenetsracing",
+  "main": "main.js",
+  "scripts": {
+    "postinstall": "http-server",
+    "test": "karma start karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "raycing"
+  },
+  "keywords": [
+    "racing",
+    "raycing",
+    "ray",
+    "cing"
+  ],
+  "author": "oskar",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.8.5",
+    "webpack": "^1.12.2"
+  }
+}
