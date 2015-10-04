@@ -46,11 +46,11 @@ function appendMove(playerContainer, position, move){
 }
 
 function appendPosition(playerContainer, position){
-  var newPosition = document.createElement('span');
-  newPosition.className = 'position';
-  newPosition.style.top = position.y * scale + "px";
-  newPosition.style.left = position.x * scale + "px";
-  playerContainer.appendChild(newPosition);
+  var newPositionElement = document.createElement('span');
+  newPositionElement.className = 'position';
+  newPositionElement.style.top = position.y * scale + "px";
+  newPositionElement.style.left = position.x * scale + "px";
+  playerContainer.appendChild(newPositionElement);
 }
 
 var p1 = new Car(new Victor(10,10), new Victor(0,2));

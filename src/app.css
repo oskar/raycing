@@ -1,20 +1,21 @@
 body,
-#background{
+#background {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   margin: 0;
+  overflow: hidden;
 }
 
-#background{
+#background {
   background-image:
     repeating-linear-gradient(90deg, black, transparent 1px, transparent 20px),
     repeating-linear-gradient(180deg, black, transparent 1px, transparent 20px);
 }
 
-#menu{
+#menu {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -27,12 +28,13 @@ body,
   background-color: red;
   display: inline-block;
   position: absolute;
-  transform: translate(-50%, -50%);
+  transform: translate(50%, 50%);
   z-index: 2;
 }
 
-.move{
+.move {
   position: absolute;
+  transform: translate(50%, 50%);
   z-index: 1;
 }
 
