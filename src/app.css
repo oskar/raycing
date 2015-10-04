@@ -28,11 +28,27 @@ body,
   display: inline-block;
   position: absolute;
   transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.move{
+  position: absolute;
+  z-index: 1;
+}
+
+.move.top-right {
+  background:
+       linear-gradient(to top left,
+           rgba(0,0,0,0) 0%,
+           rgba(0,0,0,0) calc(50% - 0.8px),
+           rgba(0,0,0,1) 50%,
+           rgba(0,0,0,0) calc(50% + 0.8px),
+           rgba(0,0,0,0) 100%);
 }
 
 .move.top-left {
   background:
-       linear-gradient(to top left,
+       linear-gradient(to top right,
            rgba(0,0,0,0) 0%,
            rgba(0,0,0,0) calc(50% - 0.8px),
            rgba(0,0,0,1) 50%,
