@@ -2,14 +2,13 @@ var Car = require('./car');
 var Victor = require('victor');
 var Bacon = require('baconjs');
 
-var car = new Car(new Victor(0,0), new Victor(0,2));
+var scale = 20;
 
 var move = document.querySelector('#move');
 var moveButton = document.querySelector('#moveButton');
-var output = document.querySelector('#output');
+var p1Container = document.querySelector('#p1Container');
 
-var moveKeyupStream = Bacon.fromEvent(move, "keyup")
-  .map(() => move.value).toProperty(move.value).log();
+var moveKeyupStream = Bacon.fromEvent(move, "keyup").map(() => move.value).toProperty(move.value).log();
 var moveButtonClickStream = Bacon.fromEvent(moveButton, "click").log();
 
 function parseToIntegerBase10(stringArray){
@@ -23,8 +22,18 @@ moveKeyupStream
   .map(parseToIntegerBase10)
   .map(Victor.fromArray)
   .onValue(moveAsVictor => {
-    car.move(moveAsVictor);
-    output.innerText = car.position.toString();
+    p1.move(moveAsVictor);
+    appendPosition(p1Container, p1.position.x, p1.position.y);
   });
 
-  output.innerText = car.position.toString();
+function appendPosition(playerContainer, x, y){
+  var newPosition = document.createElement('span');
+  newPosition.className = 'position';
+  newPosition.style.top = y * scale + "px";
+  newPosition.style.left = x * scale + "px";
+  playerContainer.appendChild(newPosition);
+}
+
+var p1 = new Car(new Victor(10,10), new Victor(0,2));
+
+appendPosition(p1Container, p1.position.x, p1.position.y);
