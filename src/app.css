@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body,
 #background {
   position: absolute;
@@ -15,18 +19,33 @@ body,
     repeating-linear-gradient(180deg, black, transparent 1px, transparent 20px);
 }
 
-#menu {
+#controls {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  transform: translate(-50%,-50%);
+  display: flex;
+  flex-wrap: wrap;
+  top: -1000px;
+
+  width: 60px;
+  height: 60px;
+}
+
+#controls > * {
+  width: 20px;
+  height: 20px;
+  background-color: purple;
+  display: inline-block;
+}
+
+#controls > *:hover {
+  background-color: blue;
 }
 
 .position {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: red;
-  display: inline-block;
+  background-color: inherit;
   position: absolute;
   transform: translate(-50%, -50%);
   z-index: 2;

@@ -1,20 +1,33 @@
-var Car = require('./car');
 var Victor = require('victor');
 var Bacon = require('baconjs');
+var Car = require('./car');
+var Gui = require('./gui');
 
-var scale = 20;
+var gui = new Gui();
 
-var move = document.querySelector('#move');
-var moveButton = document.querySelector('#moveButton');
-var p1Container = document.querySelector('#p1Container');
-
-var moveKeyupStream = Bacon.fromEvent(move, "keyup").map(() => move.value).toProperty(move.value);
-var moveButtonClickStream = Bacon.fromEvent(moveButton, "click");
-
-function parseToIntegerBase10(stringArray){
-  return stringArray.map(string => parseInt(string, 10));
+var game = {
+  players: [
+    new Car(new Victor(10,10), new Victor(2,0)),
+    new Car(new Victor(10,8), new Victor(2,0))
+  ],
+  start: function() {
+    this.currentPlayer.push(this.players[this.currentPlayerIndex]);
+  },
+  currentPlayerIndex: 0,
+  currentPlayer: new Bacon.Bus()
 }
 
+game.players.map(player => gui.addPlayer(player));
+
+var nextControlsPositionStream = game.currentPlayer
+  .map(player => player.position.clone().add(player.direction))
+  .log();
+
+nextControlsPositionStream.onValue(vector => gui.drawControls(vector));
+
+game.start();
+
+/*
 moveKeyupStream
   .sampledBy(moveButtonClickStream)
   .map(value => value.split(','))
@@ -22,37 +35,8 @@ moveKeyupStream
   .map(parseToIntegerBase10)
   .map(Victor.fromArray)
   .onValue(move => {
-    appendMove(p1Container, p1.position, move);
-    p1.move(move);
-    appendPosition(p1Container, p1.position);
+    gui_appendMove(p1Container, game.p1.position, move);
+    game.p1.move(move);
+    gui_appendPosition(p1Container, game.p1.position);
   });
-
-function appendMove(playerContainer, position, move){
-  var top = Math.min(position.y, position.y + move.y);
-  var left = Math.min(position.x, position.x + move.x);
-  var height = Math.abs(move.y);
-  var width = Math.abs(move.x);
-
-  var hasTopToTheLeft = (move.x > 0 && move.y > 0) || (move.x < 0 && move.y < 0);
-  var orientationClass = hasTopToTheLeft ? 'top-left' : 'top-right';
-
-  var moveElement = document.createElement('span');
-  moveElement.className = 'move ' + orientationClass;
-  moveElement.style.top = top * scale + "px";
-  moveElement.style.left = left * scale + "px";
-  moveElement.style.width = width * scale + "px";
-  moveElement.style.height = height * scale + "px";
-  playerContainer.appendChild(moveElement);
-}
-
-function appendPosition(playerContainer, position){
-  var newPositionElement = document.createElement('span');
-  newPositionElement.className = 'position';
-  newPositionElement.style.top = position.y * scale + "px";
-  newPositionElement.style.left = position.x * scale + "px";
-  playerContainer.appendChild(newPositionElement);
-}
-
-var p1 = new Car(new Victor(10,10), new Victor(0,2));
-
-appendPosition(p1Container, p1.position);
+*/
