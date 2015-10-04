@@ -28,13 +28,12 @@ body,
   background-color: red;
   display: inline-block;
   position: absolute;
-  transform: translate(50%, 50%);
+  transform: translate(-50%, -50%);
   z-index: 2;
 }
 
 .move {
   position: absolute;
-  transform: translate(50%, 50%);
   z-index: 1;
 }
 
