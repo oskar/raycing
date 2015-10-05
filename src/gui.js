@@ -1,6 +1,5 @@
 export default class Gui{
     constructor(){
-      this.scale = 20;
       this.body = document.querySelector('body');
       this.controls = document.querySelector('#controls');
       this.containers = [];
@@ -43,7 +42,7 @@ export default class Gui{
     }
 
     getPixelPosition(ordinate){
-      return ordinate * this.scale + "px";
+      return ordinate + "rem";
     }
 
     drawControls(vector){
