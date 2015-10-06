@@ -10,7 +10,6 @@ export default class Gui{
     this.viewportSize = new Victor(this.body.clientWidth, this.body.clientHeight)
     this.viewportCenter = new Victor(100,100);
     this.playerContainers = [];
-    this.colors = ['red', 'blue'];
 
     this.controlsContainer = document.createElement('span')
     this.controlsContainer.id = 'controls';
@@ -35,7 +34,8 @@ export default class Gui{
     document.addEventListener("mousewheel", event => this.zoom(event.wheelDelta));
 
     this.game = new Game();
-    this.game.players.map(player => this.addPlayer(player));
+    var colors = ['red', 'blue'];
+    this.game.players.map(player => this.addPlayer(player, colors.pop()));
 
     this.updateView();
     this.nextTurn();
@@ -69,23 +69,54 @@ export default class Gui{
     this.html.style.fontSize = this.scale + "px";
   }
 
-  addPlayer(player){
-    var container = document.createElement('span');
-    container.style.backgroundColor = this.colors.pop();
-    this.body.appendChild(container);
-    this.playerContainers.push(container);
-    this.appendPosition(container, player.position)
+  addPlayer(player, color){
+    var playerContainer = document.createElement('span');
+    playerContainer.style.backgroundColor = color;
+    this.body.appendChild(playerContainer);
+    this.playerContainers.push(playerContainer);
+    var positionElement = this.createPositionElement(player.position);
+    playerContainer.appendChild(positionElement);
   }
 
-  appendPosition(playerContainer, position){
-    var newPositionElement = document.createElement('span');
-    newPositionElement.className = 'position';
-    newPositionElement.style.top = this.getPixelPosition(position.y);
-    newPositionElement.style.left = this.getPixelPosition(position.x);
-    playerContainer.appendChild(newPositionElement);
+  drawControls(vectors){
+    while(this.controlsContainer.firstChild) {
+      this.controlsContainer.removeChild(this.controlsContainer.firstChild);
+    }
+
+    vectors
+      .map(v => this.createControl(v))
+      .forEach(control => this.controlsContainer.appendChild(control));
   }
 
-  appendMove(playerContainer, position, move){
+  movePlayer(vectorObject){
+    var playerContainer = this.playerContainers[this.game.currentPlayerIndex];
+    var moveElement = this.createMoveElement(this.game.currentPlayer.position, vectorObject.relative);
+    var player = this.game.movePlayer(vectorObject.relative);
+    var positionElement = this.createPositionElement(player.position);
+
+    playerContainer.appendChild(moveElement);
+    playerContainer.appendChild(positionElement);
+
+    this.nextTurn();
+  }
+
+  nextTurn(){
+    this.drawControls(this.game.vectorsForControls);
+  }
+
+  getPixelPosition(ordinate){
+    return (ordinate) + "rem";
+  }
+
+  createPositionElement(position){
+    var positionElement = document.createElement('span');
+    positionElement.className = 'position';
+    positionElement.style.top = this.getPixelPosition(position.y);
+    positionElement.style.left = this.getPixelPosition(position.x);
+    return positionElement;
+  }
+
+  createMoveElement(position, move){
     var top = Math.min(position.y, position.y + move.y);
     var left = Math.min(position.x, position.x + move.x);
     var height = Math.abs(move.y);
@@ -100,36 +131,14 @@ export default class Gui{
     moveElement.style.left = this.getPixelPosition(left);
     moveElement.style.width = this.getPixelPosition(width);
     moveElement.style.height = this.getPixelPosition(height);
-    playerContainer.appendChild(moveElement);
-  }
-
-  getPixelPosition(ordinate){
-    return (ordinate) + "rem";
-  }
-
-  drawControls(vectors){
-    while(this.controlsContainer.firstChild) {
-      this.controlsContainer.removeChild(this.controlsContainer.firstChild);
-    }
-
-    vectors.forEach(v => this.createControl(v));
+    return moveElement;
   }
 
   createControl(vectorObject){
-    var target = document.createElement('span');
-    target.style.top = this.getPixelPosition(vectorObject.absolute.y);
-    target.style.left = this.getPixelPosition(vectorObject.absolute.x);
-    target.addEventListener("click", (e) => {
-      var playerContainer = this.playerContainers[this.game.currentPlayerIndex];
-      var position = this.game.movePlayer(vectorObject.relative);
-      this.appendPosition(playerContainer, position);
-
-      this.nextTurn();
-    });
-    this.controlsContainer.appendChild(target);
-  }
-
-  nextTurn(){
-    this.drawControls(this.game.vectorsForControls);
+    var control = document.createElement('span');
+    control.style.top = this.getPixelPosition(vectorObject.absolute.y);
+    control.style.left = this.getPixelPosition(vectorObject.absolute.x);
+    control.addEventListener("click", () => this.movePlayer(vectorObject));
+    return control;
   }
 }

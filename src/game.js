@@ -4,7 +4,8 @@ var Victor = require('victor');
 export default class Game{
   constructor(){
     this.players = [
-      new Car(new Victor(100,100), new Victor(2,0))
+      new Car(new Victor(100,100), new Victor(2,0)),
+      new Car(new Victor(100,102), new Victor(2,0))
     ];
     this.currentPlayerIndex = 0;
   }
@@ -33,9 +34,9 @@ export default class Game{
 
   movePlayer(vector){
     this.currentPlayer.move(vector);
-    var position = this.currentPlayer.position;
+    var player = this.currentPlayer;
     this.setNextPlayer();
-    return position;
+    return player;
   }
 
   setNextPlayer(){
@@ -45,7 +46,9 @@ export default class Game{
     }
   }
 
-  isPossiblePosition(v){
-    return true;
+  isPossiblePosition(v) {
+    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length() === 0);
+    var noOtherCars = carsOnThisPosition.length === 0;
+    return noOtherCars;
   }
 }

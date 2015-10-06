@@ -1,7 +1,21 @@
 export default class Car {
   constructor(position, direction){
-    this.position = position;
+    this.positions = [position];
+    this.currentPositionIndex = 0;
     this.direction = direction;
+  }
+
+  get position(){
+    return this.positions[this.currentPositionIndex];
+  }
+
+  get lastPosition(){
+    return this.positions[this.currentPositionIndex - 1];
+  }
+
+  set position(value){
+    this.positions.push(value);
+    this.currentPositionIndex++;
   }
 
   move(vector) {
@@ -9,7 +23,7 @@ export default class Car {
       return;
     }
 
-    this.position.add(vector);
+    this.position = this.position.clone().add(vector);
     this.direction = vector;
   }
 
