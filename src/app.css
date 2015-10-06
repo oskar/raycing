@@ -18,6 +18,7 @@ body,
 }
 
 #background {
+  opacity: 0.5;
   background-image:
     repeating-linear-gradient(90deg, black, transparent 1px, transparent 1rem),
     repeating-linear-gradient(180deg, black, transparent 1px, transparent 1rem);

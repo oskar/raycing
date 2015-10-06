@@ -100,6 +100,14 @@ export default class Gui{
     this.nextTurn();
   }
 
+  controlHovered(control, vectorObject){
+    control.style.opacity = 1;
+  }
+
+  controlStopHovered(control, vectorObject){
+    control.style.opacity = "";
+  }
+
   nextTurn(){
     this.drawControls(this.game.vectorsForControls);
   }
@@ -139,6 +147,8 @@ export default class Gui{
     control.style.top = this.getPixelPosition(vectorObject.absolute.y);
     control.style.left = this.getPixelPosition(vectorObject.absolute.x);
     control.addEventListener("click", () => this.movePlayer(vectorObject));
+    control.addEventListener("mouseover", () => this.controlHovered(control, vectorObject));
+    control.addEventListener("mouseout", () => this.controlStopHovered(control, vectorObject));
     return control;
   }
 }
