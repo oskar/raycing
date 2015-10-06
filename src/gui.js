@@ -3,54 +3,70 @@ var Victor = require('victor');
 
 export default class Gui{
   constructor(){
-    this.scale = 20;
-    this.panValue = new Victor(0, 0); // Pan in pixels
+    this.html = document.querySelector('html');
     this.body = document.querySelector('body');
 
-    this.body.draggable = true;
-    var img = document.createElement('img');
-    img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-    this.body.ondragstart = event => {
-      this.lastDragPosition = new Victor(event.clientX, event.clientY);
-      event.dataTransfer.setDragImage(img, 0, 0)
-    };
-    this.body.addEventListener("drag", event => this.pan(new Victor(event.clientX, event.clientY)));
+    this.scale = 20;
+    this.viewportSize = new Victor(this.body.clientWidth, this.body.clientHeight)
+    this.viewportCenter = new Victor(100,100);
+    this.playerContainers = [];
+    this.colors = ['red', 'blue'];
 
-    this.html = document.querySelector('html');
     this.controlsContainer = document.createElement('span')
     this.controlsContainer.id = 'controls';
     this.body.appendChild(this.controlsContainer);
 
-    document.addEventListener("mousewheel", event => this.modifyScale(event.wheelDelta));
-    this.controls = document.querySelector('#controls');
-    this.playerContainers = [];
+    this.body.draggable = true;
+    var emptyDraggableIcon = document.createElement('img');
+    emptyDraggableIcon.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    this.body.ondragstart = event => {
+      this.lastDragPosition = new Victor(event.clientX, event.clientY);
+      event.dataTransfer.setDragImage(emptyDraggableIcon, 0, 0)
+    };
+    this.body.addEventListener("drag", event => {
+      var newDragPosition = new Victor(event.clientX, event.clientY);
+        // Wierd behaviour that sends 0,0 on drag end
+      if(newDragPosition.x === 0) return;
+      var vector = this.lastDragPosition.subtract(newDragPosition);
+      this.lastDragPosition = newDragPosition;
+      this.pan(vector);
+    });
 
-    this.colors = ['red', 'blue'];
+    document.addEventListener("mousewheel", event => this.zoom(event.wheelDelta));
 
     this.game = new Game();
     this.game.players.map(player => this.addPlayer(player));
+
+    this.updateView();
     this.nextTurn();
   }
 
-  pan(newDragPosition){
-    // Wierd behaviour that sends 0,0 on drag end
-    if(newDragPosition.x === 0) return;
-    var vector = this.lastDragPosition.subtract(newDragPosition);
-    this.lastDragPosition = newDragPosition;
-    this.panValue.x += vector.x;
-    this.panValue.y += vector.y;
-    this.body.style.top = this.panValue.y + "px";
-    this.body.style.left = this.panValue.x + "px";
+  get panScaleVector(){
+    return new Victor(this.scale, this.scale);
   }
 
-  modifyScale(delta){
+  pan(vector){
+    var scaledVector = vector.divide(this.panScaleVector);
+    this.viewportCenter.add(scaledVector);
+    this.updateView();
+  }
+
+  zoom(delta){
     if(delta > 20) delta = 20;
     if(delta < -20) delta = -20;
     var value = this.scale + delta/7;
     if(value < 5) value = 5;
     if(value > 100) value = 100;
     this.scale = value;
-    this.html.style.fontSize = Math.round(value) + "px";
+    this.updateView();
+  }
+
+  updateView(){
+    var scaledViewPort = this.viewportCenter.clone().multiply(this.panScaleVector);
+    var pos = this.viewportSize.clone().divide(new Victor(2,2)).subtract(scaledViewPort);
+    this.body.style.top = pos.y + "px";
+    this.body.style.left = pos.x + "px";
+    this.html.style.fontSize = this.scale + "px";
   }
 
   addPlayer(player){
@@ -88,7 +104,7 @@ export default class Gui{
   }
 
   getPixelPosition(ordinate){
-    return ordinate + "rem";
+    return (ordinate) + "rem";
   }
 
   drawControls(vectors){

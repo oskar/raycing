@@ -4,7 +4,7 @@ var Victor = require('victor');
 export default class Game{
   constructor(){
     this.players = [
-      new Car(new Victor(10,10), new Victor(2,0))
+      new Car(new Victor(100,100), new Victor(2,0))
     ];
     this.currentPlayerIndex = 0;
   }
