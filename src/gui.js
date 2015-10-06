@@ -4,13 +4,24 @@ var Victor = require('victor');
 export default class Gui{
   constructor(){
     this.scale = 20;
+    this.panValue = new Victor(0, 0); // Pan in pixels
     this.body = document.querySelector('body');
+
+    this.body.draggable = true;
+    var img = document.createElement('img');
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    this.body.ondragstart = event => {
+      this.lastDragPosition = new Victor(event.clientX, event.clientY);
+      event.dataTransfer.setDragImage(img, 0, 0)
+    };
+    this.body.addEventListener("drag", event => this.pan(new Victor(event.clientX, event.clientY)));
+
     this.html = document.querySelector('html');
     this.controlsContainer = document.createElement('span')
     this.controlsContainer.id = 'controls';
     this.body.appendChild(this.controlsContainer);
 
-    window.addEventListener("mousewheel", event => this.modifyScale(event.wheelDelta));
+    document.addEventListener("mousewheel", event => this.modifyScale(event.wheelDelta));
     this.controls = document.querySelector('#controls');
     this.playerContainers = [];
 
@@ -19,6 +30,17 @@ export default class Gui{
     this.game = new Game();
     this.game.players.map(player => this.addPlayer(player));
     this.nextTurn();
+  }
+
+  pan(newDragPosition){
+    // Wierd behaviour that sends 0,0 on drag end
+    if(newDragPosition.x === 0) return;
+    var vector = this.lastDragPosition.subtract(newDragPosition);
+    this.lastDragPosition = newDragPosition;
+    this.panValue.x += vector.x;
+    this.panValue.y += vector.y;
+    this.body.style.top = this.panValue.y + "px";
+    this.body.style.left = this.panValue.x + "px";
   }
 
   modifyScale(delta){
