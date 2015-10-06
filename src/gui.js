@@ -117,12 +117,9 @@ export default class Gui{
 
   createControl(vectorObject){
     var target = document.createElement('span');
-    target.attributes.x = vectorObject.relative.x;
-    target.attributes.y = vectorObject.relative.y;
     target.style.top = this.getPixelPosition(vectorObject.absolute.y);
     target.style.left = this.getPixelPosition(vectorObject.absolute.x);
     target.addEventListener("click", (e) => {
-      var attributes = e.target.attributes;
       var playerContainer = this.playerContainers[this.game.currentPlayerIndex];
       var position = this.game.movePlayer(vectorObject.relative);
       this.appendPosition(playerContainer, position);
