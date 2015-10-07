@@ -4,17 +4,8 @@ var Victor = require('victor');
 export default class Gui{
   constructor(){
     this.html = document.querySelector('html');
+
     this.body = document.querySelector('body');
-
-    this.scale = 20;
-    this.viewportSize = new Victor(this.body.clientWidth, this.body.clientHeight)
-    this.viewportCenter = new Victor(100,100);
-    this.playerContainers = [];
-
-    this.controlsContainer = document.createElement('span')
-    this.controlsContainer.id = 'controls';
-    this.body.appendChild(this.controlsContainer);
-
     this.body.draggable = true;
     var emptyDraggableIcon = document.createElement('img');
     emptyDraggableIcon.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
@@ -31,19 +22,65 @@ export default class Gui{
       this.pan(vector);
     });
 
+    this.scale = 20;
+    this.viewportSize = new Victor(this.body.clientWidth, this.body.clientHeight)
+    this.viewportCenter = new Victor(100,100);
+
     document.addEventListener("mousewheel", event => this.zoom(event.wheelDelta));
+
+    this.overlay = document.createElement('div');
+    this.overlay.id = 'overlay';
+    this.body.appendChild(this.overlay);
+
+    this.menu = document.createElement('div');
+    this.menu.id = 'menu';
+    this.menuText = document.createElement('div');
+    this.menuText.id = 'menuText';
+    this.menu.appendChild(this.menuText);
+    this.button = document.createElement('div');
+    this.button.id = 'button';
+    var text = document.createTextNode("New game");
+    this.button.appendChild(text);
+    this.button.addEventListener("click", () => this.newGame());
+    this.menu.appendChild(this.button);
+    this.body.appendChild(this.menu);
+
+    this.background = document.createElement('span');
+    this.background.id = 'background';
+    this.body.appendChild(this.background);
+
+    this.singleGameEntities = document.createElement('div');
+    this.singleGameEntities.id = 'singleGameEntities';
+    this.body.appendChild(this.singleGameEntities);
+  }
+
+  newGame() {
+    this.emptyElement(this.singleGameEntities);
+    this.menu.style.display = 'none';
+    this.overlay.style.display = 'none';
+    this.controlsContainer = document.createElement('span');
+    this.controlsContainer.id = 'controls';
+    this.singleGameEntities.appendChild(this.controlsContainer);
 
     this.game = new Game();
     var startZone = this.createStartZone(this.game.start);
-    this.body.appendChild(startZone);
+    this.singleGameEntities.appendChild(startZone);
     var endZone = this.createEndZone(this.game.end);
-    this.body.appendChild(endZone);
+    this.singleGameEntities.appendChild(endZone);
 
     var colors = ['red', 'blue'];
-    this.game.players.map(player => this.addPlayer(player, colors.pop()));
+    this.playerContainers = this.game.players.map(player => this.createPlayerContainerElement(player, colors.pop()));
+    this.playerContainers.forEach(container => this.singleGameEntities.appendChild(container));
+
+    this.singleGameEntities.appendChild(this.controlsContainer);
 
     this.updateView();
     this.nextTurn();
+  }
+
+  endGame(){
+    this.menu.style.display = 'initial';
+    this.overlay.style.display = 'initial';
   }
 
   get panScaleVector(){
@@ -74,19 +111,8 @@ export default class Gui{
     this.html.style.fontSize = this.scale + "px";
   }
 
-  addPlayer(player, color){
-    var playerContainer = document.createElement('span');
-    playerContainer.style.backgroundColor = color;
-    this.body.appendChild(playerContainer);
-    this.playerContainers.push(playerContainer);
-    var positionElement = this.createPositionElement(player.position);
-    playerContainer.appendChild(positionElement);
-  }
-
   drawControls(vectors){
-    while(this.controlsContainer.firstChild) {
-      this.controlsContainer.removeChild(this.controlsContainer.firstChild);
-    }
+    this.emptyElement(this.controlsContainer);
 
     vectors
       .map(v => this.createControl(v))
@@ -97,7 +123,9 @@ export default class Gui{
     var playerContainer = this.playerContainers[this.game.currentPlayerIndex];
     var moveElement = this.createMoveElement(this.game.currentPlayer.position, vectorObject.relative);
     var player = this.game.movePlayer(vectorObject.relative);
-    console.log(player.isInEndZone);
+    if(player.isInEndZone){
+      this.endGame();
+    }
     var positionElement = this.createPositionElement(player.position);
 
     playerContainer.appendChild(moveElement);
@@ -120,6 +148,15 @@ export default class Gui{
 
   getPixelPosition(ordinate){
     return (ordinate) + "rem";
+  }
+
+  createPlayerContainerElement(player, color){
+    var playerContainer = document.createElement('span');
+    playerContainer.style.backgroundColor = color;
+    this.body.appendChild(playerContainer);
+    var positionElement = this.createPositionElement(player.position);
+    playerContainer.appendChild(positionElement);
+    return playerContainer;
   }
 
   createPositionElement(position){
@@ -179,5 +216,11 @@ export default class Gui{
     control.style.width = this.getPixelPosition(diagonal.x);
     control.className = 'zone';
     return control;
+  }
+
+  emptyElement(element){
+    while(element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
   }
 }
