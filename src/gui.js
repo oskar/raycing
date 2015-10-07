@@ -23,10 +23,12 @@ export default class Gui{
     });
 
     this.scale = 20;
+    this.controls = [];
     this.viewportSize = new Victor(this.body.clientWidth, this.body.clientHeight)
     this.viewportCenter = new Victor(100,100);
 
-    document.addEventListener("mousewheel", event => this.zoom(event.wheelDelta));
+    document.addEventListener('mousewheel', event => this.zoom(event.wheelDelta));
+    document.addEventListener('keydown', event => this.keydown(event.keyCode));
 
     this.overlay = document.createElement('div');
     this.overlay.id = 'overlay';
@@ -52,6 +54,52 @@ export default class Gui{
     this.singleGameEntities = document.createElement('div');
     this.singleGameEntities.id = 'singleGameEntities';
     this.body.appendChild(this.singleGameEntities);
+  }
+
+  keydown(keyCode){
+    var delta = 0;
+    switch(keyCode){
+      case(37):
+      case(65):
+        // l
+        if(this.currentSelectedMoveIndex % 3 !== 0) {
+          delta = -1;
+        }
+      break;
+      case(38):
+      case(87):
+        // u
+        if(this.currentSelectedMoveIndex < 6) {
+          delta = 3;
+        }
+        break;
+      case(39):
+      case(68):
+        // r
+        if(this.currentSelectedMoveIndex % 3 !== 2) {
+          delta = 1;
+        }
+        break;
+      case(40):
+      case(83):
+        // d
+        if(this.currentSelectedMoveIndex > 2) {
+          delta = -3;
+        }
+        break;
+      case(13):
+          console.log(this.game.vectorsForControls, this.currentSelectedMoveIndex);
+          this.movePlayer(this.game.vectorsForControls[this.currentSelectedMoveIndex]);
+        break;
+    }
+    this.setCurrentSelectedMoveIndex(this.currentSelectedMoveIndex + delta);
+  }
+
+  setCurrentSelectedMoveIndex(currentSelectedMoveIndex){
+    this.currentSelectedMoveIndex = currentSelectedMoveIndex;
+    this.controls.forEach((control, i) => {
+      control.style.opacity = this.currentSelectedMoveIndex === i ? '1' : '0.5';
+    })
   }
 
   newGame() {
@@ -122,9 +170,9 @@ export default class Gui{
   drawControls(vectors){
     this.emptyElement(this.controlsContainer);
 
-    vectors
-      .map(v => this.createControl(v))
-      .forEach(control => this.controlsContainer.appendChild(control));
+    this.controls = vectors.map(v => this.createControl(v));
+    this.setCurrentSelectedMoveIndex(Math.floor(vectors.length / 2));
+    this.controls.forEach(control => this.controlsContainer.appendChild(control));
   }
 
   movePlayer(vectorObject){

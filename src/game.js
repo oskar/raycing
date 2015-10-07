@@ -4,7 +4,7 @@ var Victor = require('victor');
 export default class Game{
   constructor(){
     this.players = [
-      //new Car(new Victor(85,99), new Victor(2,0)),
+      new Car(new Victor(85,99), new Victor(2,0)),
       new Car(new Victor(85,101), new Victor(2,0))
     ];
     this.start = {
@@ -25,8 +25,8 @@ export default class Game{
   get vectorsForControls(){
     var player = this.currentPlayer;
     var vectorsForControls = [];
-    for(var x = -1; x <= 1; x++){
-      for(var y = -1; y <= 1; y++){
+    for(var y = 1; y >= -1; y--){
+      for(var x = -1; x <= 1; x++){
         var playerRelativeVector = new Victor(x,y).clone().add(player.direction);
         var absoluteVector = playerRelativeVector.clone().add(player.position);
         if(this.isPossiblePosition(absoluteVector)) {
