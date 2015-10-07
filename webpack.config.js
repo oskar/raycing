@@ -1,3 +1,6 @@
+var autoprefixer = require('autoprefixer');
+var precss      = require('precss');
+
 module.exports = {
     entry: "./src/app.js",
     output: {
@@ -8,7 +11,7 @@ module.exports = {
         loaders: [
             {
               test: /\.css$/,
-              loader: "style!css"
+              loader: "style-loader!css-loader!postcss-loader"
             },
             {
               test: /\.jsx?$/,
@@ -16,6 +19,9 @@ module.exports = {
               loader: 'babel'
             }
         ]
+    },
+    postcss: function () {
+        return [autoprefixer, precss];
     },
     devtool: "#inline-source-map"
 };
