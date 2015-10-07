@@ -88,7 +88,6 @@ export default class Gui{
         }
         break;
       case(13):
-          console.log(this.game.vectorsForControls, this.currentSelectedMoveIndex);
           this.movePlayer(this.game.vectorsForControls[this.currentSelectedMoveIndex]);
         break;
     }
