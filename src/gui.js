@@ -106,6 +106,14 @@ export default class Gui{
   updateView(){
     var scaledViewPort = this.viewportCenter.clone().multiply(this.panScaleVector);
     var pos = this.viewportSize.clone().divide(new Victor(2,2)).subtract(scaledViewPort);
+    if(pos.x > 0){
+      pos.x = 0;
+      this.viewportCenter.x = this.viewportSize.x / (2 * this.scale);
+    }
+    if(pos.y > 0){
+      pos.y = 0;
+      this.viewportCenter.y = this.viewportSize.y / (2 * this.scale);
+    }
     this.body.style.top = pos.y + "px";
     this.body.style.left = pos.x + "px";
     this.html.style.fontSize = this.scale + "px";
