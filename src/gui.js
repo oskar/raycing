@@ -34,6 +34,11 @@ export default class Gui{
     document.addEventListener("mousewheel", event => this.zoom(event.wheelDelta));
 
     this.game = new Game();
+    var startZone = this.createStartZone(this.game.start);
+    this.body.appendChild(startZone);
+    var endZone = this.createEndZone(this.game.end);
+    this.body.appendChild(endZone);
+
     var colors = ['red', 'blue'];
     this.game.players.map(player => this.addPlayer(player, colors.pop()));
 
@@ -92,6 +97,7 @@ export default class Gui{
     var playerContainer = this.playerContainers[this.game.currentPlayerIndex];
     var moveElement = this.createMoveElement(this.game.currentPlayer.position, vectorObject.relative);
     var player = this.game.movePlayer(vectorObject.relative);
+    console.log(player.isInEndZone);
     var positionElement = this.createPositionElement(player.position);
 
     playerContainer.appendChild(moveElement);
@@ -149,6 +155,29 @@ export default class Gui{
     control.addEventListener("click", () => this.movePlayer(vectorObject));
     control.addEventListener("mouseover", () => this.controlHovered(control, vectorObject));
     control.addEventListener("mouseout", () => this.controlStopHovered(control, vectorObject));
+    return control;
+  }
+
+  createStartZone(start){
+    var control = this.createZone(start.topLeft, start.bottomRight);
+    control.id = 'start';
+    return control;
+  }
+
+  createEndZone(end) {
+    var control = this.createZone(end.topLeft, end.bottomRight);
+    control.id = 'end';
+    return control;
+  }
+
+  createZone(topLeft, bottomRight) {
+    var diagonal = bottomRight.clone().subtract(topLeft);
+    var control = document.createElement('span');
+    control.style.top = this.getPixelPosition(topLeft.y);
+    control.style.left = this.getPixelPosition(topLeft.x);
+    control.style.height = this.getPixelPosition(diagonal.y);
+    control.style.width = this.getPixelPosition(diagonal.x);
+    control.className = 'zone';
     return control;
   }
 }

@@ -24,6 +24,14 @@ body,
     repeating-linear-gradient(180deg, black, transparent 1px, transparent 1rem);
 }
 
+#end {
+  background-color: green;
+}
+
+#start {
+  background-color: yellow;
+}
+
 #controls > * {
   position: absolute;
   background-color: purple;
@@ -37,6 +45,12 @@ body,
   border-radius: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
+}
+
+.zone{
+  position: absolute;
+  opacity: 0.5;
+  border: 2px solid black;
 }
 
 .position {
