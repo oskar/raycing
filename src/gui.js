@@ -1,5 +1,6 @@
 var Game = require('./game');
 var Victor = require('victor');
+var Bezier = require('paths-js/bezier');
 
 export default class Gui{
   constructor(){
@@ -277,5 +278,15 @@ export default class Gui{
     while(element.firstChild) {
       element.removeChild(element.firstChild);
     }
+  }
+
+  createPath(vectors){
+    var points = vectors.map(p => p.toArray());
+    var polygon = Bezier({
+      points: points,
+      tension: 0.4
+    });
+    var dom = new DOMParser().parseFromString('<svg xmlns="http://www.w3.org/2000/svg"><path d="' + polygon.path.print() + '"></path></svg>', 'text/xml');
+    return dom.documentElement;
   }
 }
