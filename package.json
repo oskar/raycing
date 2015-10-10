@@ -4,7 +4,7 @@
   "description": "routenetsracing",
   "main": "main.js",
   "scripts": {
-    "postinstall": "webpack-dev-server",
+    "postinstall": "bower install && webpack-dev-server",
     "test": "karma start karma.conf.js"
   },
   "repository": {
