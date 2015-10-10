@@ -1,5 +1,6 @@
 var autoprefixer = require('autoprefixer');
-var precss      = require('precss');
+var precss = require('precss');
+var webpack = require("webpack");
 
 module.exports = {
     entry: "./src/app.js",
@@ -7,6 +8,14 @@ module.exports = {
         path: __dirname,
         filename: "app.js"
     },
+    resolve: {
+        root: [path.join(__dirname, "bower_components")]
+    },
+    plugins: [
+        new webpack.ResolverPlugin(
+            new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
+        )
+    ],
     module: {
         loaders: [
             {
