@@ -1,6 +1,7 @@
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var webpack = require("webpack");
+var path = require("path");
 
 module.exports = {
     entry: "./src/app.js",
