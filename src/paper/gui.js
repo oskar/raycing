@@ -7,18 +7,13 @@ var victorToPoint = require('./utils').victorToPoint;
 
 export default class Gui{
   constructor(canvas){
+    this.initPaper();
     this.scale = 20;
     this.game;
     this.players;
-    this.controls = [];
-
-    var body = document.body;
-    var canvas = document.createElement('canvas');
-    canvas.setAttribute('width', 1000);
-    canvas.setAttribute('height', 1000);
-    body.appendChild(canvas);
-
-    Paper.setup(canvas);
+    this.players = [];
+    this.controls = new Paper.Group();
+    this.groups = new Paper.Group([this.controls]);
 
     var tool = new Paper.Tool();
     tool.onMouseDown = e => this.onMouseDown(e);
@@ -30,8 +25,18 @@ export default class Gui{
     return new Victor(this.scale, this.scale);
   }
 
+  initPaper(){
+    var body = document.body;
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('width', 1000);
+    canvas.setAttribute('height', 1000);
+    body.appendChild(canvas);
+
+    Paper.setup(canvas);
+  }
+
   onMouseDown(event){
-    var itemClicked = event.getItem();
+    var itemClicked = event.getItem().hitTest(event.point).item;
     if(itemClicked && itemClicked.movePlayerData){
       this.movePlayer(itemClicked.movePlayerData);
     }
@@ -42,11 +47,9 @@ export default class Gui{
 
     var colors = ['#ff0000', '#0000ff'];
     this.players = this.game.players.map(player => new Player(colors.pop(), victorToPoint(player.position.clone().multiply(this.scaleVector))));
+    this.players.forEach(p => this.groups.addChild(p.groups));
     this.nextTurn();
-  }
-
-  nextTurn(){
-    this.drawControls(this.game.vectorsForControls);
+    this.render();
   }
 
   movePlayer(relativeVector){
@@ -55,14 +58,20 @@ export default class Gui{
     if(player.isInEndZone){
       this.endGame();
     }
-    guiPlayer.addPosition(player.position.clone().multiply(this.scaleVector));
+    guiPlayer.addPosition(victorToPoint(player.position.clone().multiply(this.scaleVector)));
     this.nextTurn();
+    this.render();
+  }
+
+  nextTurn(){
+    this.drawControls(this.game.vectorsForControls);
   }
 
   drawControls(vectors){
-    this.controls.forEach(c => c.remove());
-    this.controls = vectors.map(v => this.createControl(v));
-    this.render();
+    this.controls.removeChildren();
+    vectors
+      .map(v => this.createControl(v))
+      .forEach(control => this.controls.addChild(control));
   }
 
   createControl(victor){
