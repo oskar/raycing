@@ -4,6 +4,8 @@ var css = require('./app.css');
 var Player = require('./player');
 var Game = require('../game');
 var victorToPoint = require('./utils').victorToPoint;
+var changeCenter = require('./utils').changeCenter;
+var changeZoom = require('./utils').changeZoom;
 
 export default class Gui{
   constructor(canvas){
@@ -20,6 +22,7 @@ export default class Gui{
 
     var tool = new Paper.Tool();
     tool.onMouseDown = e => this.onMouseDown(e);
+    tool.onMouseDrag = e => this.onMouseDrag(e);
 
     this.drawGrid(this.width, this.height);
     this.newGame();
@@ -40,10 +43,25 @@ export default class Gui{
   }
 
   onMouseDown(event){
-    var itemClicked = event.getItem().hitTest(event.point).item;
+    var item = event.getItem();
+    if(!item){
+      return;
+    }
+    var itemClicked = item.hitTest(event.point).item;
     if(itemClicked && itemClicked.movePlayerData){
       this.movePlayer(itemClicked.movePlayerData);
     }
+  }
+
+  onMouseDrag(event){
+    var offset = changeCenter(Paper.view.center, event.delta, 0.6);
+    if(Paper.view.center.x - Paper.view.size.width / 2 + offset.x < 0) {
+      offset.x = 0;
+    }
+    if(Paper.view.center.y - Paper.view.size.height / 2 + offset.y < 0) {
+      offset.y = 0;
+    }
+    Paper.view.scrollBy(offset);
   }
 
   newGame(){
