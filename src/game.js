@@ -4,8 +4,8 @@ var Victor = require('victor');
 export default class Game{
   constructor(){
     this.players = [
-      new Car(new Victor(85,99), new Victor(2,0)),
-      new Car(new Victor(85,101), new Victor(2,0))
+      new Car(new Victor(2, 2), new Victor(2,0)),
+      new Car(new Victor(2, 4), new Victor(2,0))
     ];
     this.start = {
       topLeft: new Victor(70,95),
@@ -62,6 +62,7 @@ export default class Game{
   }
 
   isInZone(zone, position){
+    return false;
     var isBetweenX = zone.topLeft.x <= position.x && position.x <= zone.bottomRight.x;
     var isBetweenY = zone.topLeft.y <= position.y && position.y <= zone.bottomRight.y;
     return isBetweenY && isBetweenX;
