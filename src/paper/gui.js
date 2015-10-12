@@ -70,9 +70,8 @@ export default class Gui{
     var viewPosition = Paper.view.viewToProject(mousePosition);
     var zoomAndOffset = changeZoom(Paper.view.zoom, e.deltaY, Paper.view.center, viewPosition);
     Paper.view.zoom = Math.max(zoomAndOffset.newZoom, this.maxZoom);
-    Paper.view.center = zoomAndOffset.newCenter;
+    Paper.view.center = Paper.view.center.add(zoomAndOffset.offset);
     this.limitView();
-    this.render();
   }
 
   limitView(){
@@ -82,7 +81,7 @@ export default class Gui{
     if(Paper.view.bounds.top < this.viewBounds.top) newCenter.y = this.viewBounds.top + Paper.view.bounds.height / 2;
     if(Paper.view.bounds.bottom > this.viewBounds.bottom) newCenter.y = this.viewBounds.bottom - Paper.view.bounds.height / 2;
     Paper.view.center = newCenter;
-    console.log({left:Paper.view.bounds.left, top:Paper.view.bounds.top, right:Paper.view.bounds.right, bottom:Paper.view.bounds.bottom});
+    this.render();
   }
 
   newGame(){

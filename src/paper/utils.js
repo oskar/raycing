@@ -14,6 +14,6 @@ export function changeZoom(oldZoom, delta, center, position){
   var newZoom = delta < 0 ? oldZoom * factor : oldZoom / factor;
   var beta = oldZoom / newZoom;
   var pc = position.subtract(center);
-  var newCenter = position.subtract(pc.multiply(beta)).subtract(center);
-  return {newZoom, newCenter};
+  var offset = position.subtract(pc.multiply(beta)).subtract(center);
+  return {newZoom, offset};
 }
