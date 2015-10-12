@@ -12,6 +12,8 @@ export default class Gui{
     this.width = document.body.clientWidth;
     this.height = document.body.clientHeight;
     this.scale = 20;
+    this.viewBounds = new Paper.Rectangle(0, 0, 2000, 2000);
+    this.maxZoom = this.width / this.viewBounds.width;
     this.initPaper();
     this.game;
     this.players;
@@ -24,7 +26,7 @@ export default class Gui{
     tool.onMouseDown = e => this.onMouseDown(e);
     tool.onMouseDrag = e => this.onMouseDrag(e);
 
-    this.drawGrid(this.width, this.height);
+    this.drawGrid();
     this.newGame();
   }
 
@@ -38,6 +40,10 @@ export default class Gui{
     canvas.setAttribute('width', this.width);
     canvas.setAttribute('height', this.height);
     body.appendChild(canvas);
+    canvas.addEventListener('mousewheel', e => {
+      e.preventDefault();
+      this.mousewheel(e);
+    });
 
     Paper.setup(canvas);
   }
@@ -55,13 +61,28 @@ export default class Gui{
 
   onMouseDrag(event){
     var offset = changeCenter(Paper.view.center, event.delta, 0.6);
-    if(Paper.view.center.x - Paper.view.size.width / 2 + offset.x < 0) {
-      offset.x = 0;
-    }
-    if(Paper.view.center.y - Paper.view.size.height / 2 + offset.y < 0) {
-      offset.y = 0;
-    }
     Paper.view.scrollBy(offset);
+    this.limitView();
+  }
+
+  mousewheel(e){
+    var mousePosition = new Paper.Point(e.offsetX, e.offsetY);
+    var viewPosition = Paper.view.viewToProject(mousePosition);
+    var zoomAndOffset = changeZoom(Paper.view.zoom, e.deltaY, Paper.view.center, viewPosition);
+    Paper.view.zoom = Math.max(zoomAndOffset.newZoom, this.maxZoom);
+    Paper.view.center = zoomAndOffset.newCenter;
+    this.limitView();
+    this.render();
+  }
+
+  limitView(){
+    var newCenter = Paper.view.center.clone();
+    if(Paper.view.bounds.left < this.viewBounds.left) newCenter.x = this.viewBounds.left + Paper.view.bounds.width / 2;
+    if(Paper.view.bounds.right > this.viewBounds.right) newCenter.x = this.viewBounds.right - Paper.view.bounds.width / 2;
+    if(Paper.view.bounds.top < this.viewBounds.top) newCenter.y = this.viewBounds.top + Paper.view.bounds.height / 2;
+    if(Paper.view.bounds.bottom > this.viewBounds.bottom) newCenter.y = this.viewBounds.bottom - Paper.view.bounds.height / 2;
+    Paper.view.center = newCenter;
+    console.log({left:Paper.view.bounds.left, top:Paper.view.bounds.top, right:Paper.view.bounds.right, bottom:Paper.view.bounds.bottom});
   }
 
   newGame(){
@@ -109,20 +130,21 @@ export default class Gui{
     return circle;
   }
 
-  drawGrid(width, height){
+  drawGrid(){
     var grid = new Paper.Group();
     this.backGround.addChild(grid);
-    for(var x = 0; x < width; x += this.scale){
+    for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += this.scale){
+      console.log(x);
       var line = new Paper.Path.Line({
-        segments: [[x, 0], [x, height]],
+        segments: [[x, 0], [x, this.viewBounds.height]],
         strokeColor: 'lightblue',
         strokeWidth: 1
       });
       grid.addChild(line);
     }
-    for(var y = 0; y < height; y += this.scale){
+    for(var y = this.viewBounds.left; y < this.viewBounds.right; y += this.scale){
       var line = new Paper.Path.Line({
-        segments: [[0, y], [width, y]],
+        segments: [[0, y], [this.viewBounds.width, y]],
         strokeColor: 'lightblue',
         strokeWidth: 1
       });
