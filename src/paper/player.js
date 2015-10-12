@@ -16,9 +16,13 @@ export default class Player{
   addPosition(position){
     this.path.add(position);
     this.path.smooth();
+    var circle = this.createPositionElement(position);
+    this.positions.addChild(circle);
+  }
 
+  createPositionElement(position){
     var circle = new Paper.Path.Circle(position, 5);
     circle.fillColor = this.color;
-    this.positions.addChild(circle);
+    return circle;
   }
 }

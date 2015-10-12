@@ -34,6 +34,10 @@ export default class Gui{
     return new Victor(this.scale, this.scale);
   }
 
+  get currentPlayer(){
+    return this.players[this.game.currentPlayerIndex];
+  }
+
   initPaper(){
     var body = document.body;
     var canvas = document.createElement('canvas');
@@ -106,33 +110,23 @@ export default class Gui{
   }
 
   nextTurn(){
-    this.drawControls(this.game.vectorsForControls);
-  }
-
-  drawControls(vectors){
     this.controls.removeChildren();
-    vectors
+    this.game.vectorsForControls
       .map(v => this.createControl(v))
       .forEach(control => this.controls.addChild(control));
   }
 
   createControl(victor){
-    var circle = new Paper.Path.Circle({
-      center: victorToPoint(victor.absolute).multiply(this.scale),
-      fillColor: '#00ff00',
-      strokeColor: 'black',
-      strokeWidth: 2,
-      opacity: 0.5,
-      radius: this.scale/2,
-      movePlayerData: victor.relative
-    });
+    var circle = this.currentPlayer.createPositionElement(victorToPoint(victor.absolute).multiply(this.scale));
+    circle.opacity = 0.5;
+    circle.movePlayerData = victor.relative;
     return circle;
   }
 
   drawGrid(){
     var grid = new Paper.Group();
     this.backGround.addChild(grid);
-    for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += this.scale){
+    for(var x = this.viewBounds.top - this.scale / 2; x < this.viewBounds.bottom; x += this.scale){
       console.log(x);
       var line = new Paper.Path.Line({
         segments: [[x, 0], [x, this.viewBounds.height]],
@@ -141,7 +135,7 @@ export default class Gui{
       });
       grid.addChild(line);
     }
-    for(var y = this.viewBounds.left; y < this.viewBounds.right; y += this.scale){
+    for(var y = this.viewBounds.left - this.scale / 2; y < this.viewBounds.right; y += this.scale){
       var line = new Paper.Path.Line({
         segments: [[0, y], [this.viewBounds.width, y]],
         strokeColor: 'lightblue',
