@@ -1,4 +1,5 @@
-var css = require('./app.css');
-var Gui = require('./gui');
+var paperGui = require('./paper/gui');
 
-var gui = new Gui();
+window.onload = () => {
+  var gui = new paperGui();
+}
