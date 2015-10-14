@@ -20,6 +20,7 @@ export default class Gui{
     this.players = [];
     this.backGround = new Paper.Group();
     this.controls = new Paper.Group();
+    this.course = new Paper.Group();
     this.foreGround = new Paper.Group([this.controls]);
 
     var tool = new Paper.Tool();
@@ -91,6 +92,32 @@ export default class Gui{
   newGame(){
     this.game = new Game();
 
+    var trackSegments = this.game.track.map(v => victorToPoint(v).multiply(this.scale));
+    var track = new Paper.Path(trackSegments);
+    track.closed = true;
+    track.fillColor = 'grey';
+    track.strokeColor = 'black';
+    track.opacity = '0.7';
+    this.course.addChild(track);
+
+    var startArea = new Paper.Path.Rectangle(new Paper.Rectangle(
+      victorToPoint(this.game.start.topLeft).multiply(this.scale),
+      victorToPoint(this.game.start.bottomRight).multiply(this.scale)
+    ));
+    startArea.fillColor = 'green';
+    startArea.strokeColor = 'black';
+    startArea.opacity = '0.7';
+    this.course.addChild(startArea);
+
+    var endArea = new Paper.Path.Rectangle(new Paper.Rectangle(
+      victorToPoint(this.game.end.topLeft).multiply(this.scale),
+      victorToPoint(this.game.end.bottomRight).multiply(this.scale)
+    ));
+    endArea.fillColor = 'yellow';
+    endArea.strokeColor = 'black';
+    endArea.opacity = '0.7';
+    this.course.addChild(endArea);
+
     var colors = ['#ff0000', '#0000ff'];
     this.players = this.game.players.map(player => new Player(colors.pop(), victorToPoint(player.position).multiply(this.scale)));
     this.players.forEach(p => this.foreGround.addChild(p.groups));
@@ -127,7 +154,6 @@ export default class Gui{
     var grid = new Paper.Group();
     this.backGround.addChild(grid);
     for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += this.scale){
-      console.log(x);
       var line = new Paper.Path.Line({
         segments: [[x, 0], [x, this.viewBounds.height]],
         strokeColor: 'lightblue',

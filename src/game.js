@@ -4,17 +4,27 @@ var Victor = require('victor');
 export default class Game{
   constructor(){
     this.players = [
-      new Car(new Victor(2, 2), new Victor(2,0)),
-      new Car(new Victor(2, 4), new Victor(2,0))
+      new Car(new Victor(3, 5), new Victor(2,0)),
+      //new Car(new Victor(3, 7), new Victor(2,0))
     ];
     this.start = {
-      topLeft: new Victor(70,95),
-      bottomRight: new Victor(85,105)
+      topLeft: new Victor(2,2),
+      bottomRight: new Victor(3,10)
     }
     this.end = {
-      topLeft: new Victor(110,95),
-      bottomRight: new Victor(125,105)
+      topLeft: new Victor(2,22),
+      bottomRight: new Victor(10,30)
     }
+    this.track = [
+      [1,1],
+      [50,1],
+      [50,31],
+      [1,31],
+      [1,21],
+      [40,21],
+      [40,11],
+      [1,11],
+    ].map(s => new Victor(s[0], s[1]));
     this.currentPlayerIndex = 0;
   }
 
