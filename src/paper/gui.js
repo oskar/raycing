@@ -126,7 +126,7 @@ export default class Gui{
   drawGrid(){
     var grid = new Paper.Group();
     this.backGround.addChild(grid);
-    for(var x = this.viewBounds.top - this.scale / 2; x < this.viewBounds.bottom; x += this.scale){
+    for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += this.scale){
       console.log(x);
       var line = new Paper.Path.Line({
         segments: [[x, 0], [x, this.viewBounds.height]],
@@ -135,7 +135,7 @@ export default class Gui{
       });
       grid.addChild(line);
     }
-    for(var y = this.viewBounds.left - this.scale / 2; y < this.viewBounds.right; y += this.scale){
+    for(var y = this.viewBounds.left; y < this.viewBounds.right; y += this.scale){
       var line = new Paper.Path.Line({
         segments: [[0, y], [this.viewBounds.width, y]],
         strokeColor: 'lightblue',
