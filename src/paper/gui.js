@@ -92,27 +92,20 @@ export default class Gui{
   newGame(){
     this.game = new Game();
 
-    var trackSegments = this.game.track.map(v => victorToPoint(v).multiply(this.scale));
-    var track = new Paper.Path(trackSegments);
+    var track = new Paper.Path(this.game.track);
     track.closed = true;
     track.fillColor = 'grey';
     track.strokeColor = 'black';
     track.opacity = '0.7';
     this.course.addChild(track);
 
-    var startArea = new Paper.Path.Rectangle(new Paper.Rectangle(
-      victorToPoint(this.game.start.topLeft).multiply(this.scale),
-      victorToPoint(this.game.start.bottomRight).multiply(this.scale)
-    ));
+    var startArea = new Paper.Path.Rectangle(this.game.start);
     startArea.fillColor = 'green';
     startArea.strokeColor = 'black';
     startArea.opacity = '0.7';
     this.course.addChild(startArea);
 
-    var endArea = new Paper.Path.Rectangle(new Paper.Rectangle(
-      victorToPoint(this.game.end.topLeft).multiply(this.scale),
-      victorToPoint(this.game.end.bottomRight).multiply(this.scale)
-    ));
+    var endArea = new Paper.Path.Rectangle(this.game.end);
     endArea.fillColor = 'yellow';
     endArea.strokeColor = 'black';
     endArea.opacity = '0.7';
