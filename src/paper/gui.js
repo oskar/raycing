@@ -1,9 +1,7 @@
 var Paper = require('paper');
-var Victor = require('victor');
 var css = require('./app.css');
 var Player = require('./player');
 var Game = require('../game');
-var victorToPoint = require('./utils').victorToPoint;
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
 
@@ -11,7 +9,6 @@ export default class Gui{
   constructor(canvas){
     this.width = document.body.clientWidth;
     this.height = document.body.clientHeight;
-    this.scale = 20;
     this.viewBounds = new Paper.Rectangle(0, 0, 2000, 2000);
     this.maxZoom = this.width / this.viewBounds.width;
     this.initPaper();
@@ -29,10 +26,6 @@ export default class Gui{
 
     this.drawGrid();
     this.newGame();
-  }
-
-  get scaleVector(){
-    return new Victor(this.scale, this.scale);
   }
 
   get currentPlayer(){
@@ -112,7 +105,7 @@ export default class Gui{
     this.course.addChild(endArea);
 
     var colors = ['#ff0000', '#0000ff'];
-    this.players = this.game.players.map(player => new Player(colors.pop(), victorToPoint(player.position).multiply(this.scale)));
+    this.players = this.game.players.map(player => new Player(colors.pop(), player.position));
     this.players.forEach(p => this.foreGround.addChild(p.groups));
     this.nextTurn();
     this.render();
@@ -124,7 +117,7 @@ export default class Gui{
     if(player.isInEndZone){
       this.endGame();
     }
-    guiPlayer.addPosition(victorToPoint(player.position).multiply(this.scale));
+    guiPlayer.addPosition(player.position);
     this.nextTurn();
     this.render();
   }
@@ -136,17 +129,17 @@ export default class Gui{
       .forEach(control => this.controls.addChild(control));
   }
 
-  createControl(victor){
-    var circle = this.currentPlayer.createPositionElement(victorToPoint(victor.absolute).multiply(this.scale));
+  createControl(controlObject){
+    var circle = this.currentPlayer.createPositionElement(controlObject.absolute);
     circle.opacity = 0.5;
-    circle.movePlayerData = victor.relative;
+    circle.movePlayerData = controlObject.relative;
     return circle;
   }
 
   drawGrid(){
     var grid = new Paper.Group();
     this.backGround.addChild(grid);
-    for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += this.scale){
+    for(var x = this.viewBounds.top; x < this.viewBounds.bottom; x += 20){
       var line = new Paper.Path.Line({
         segments: [[x, 0], [x, this.viewBounds.height]],
         strokeColor: 'lightblue',
@@ -154,7 +147,7 @@ export default class Gui{
       });
       grid.addChild(line);
     }
-    for(var y = this.viewBounds.left; y < this.viewBounds.right; y += this.scale){
+    for(var y = this.viewBounds.left; y < this.viewBounds.right; y += 20){
       var line = new Paper.Path.Line({
         segments: [[0, y], [this.viewBounds.width, y]],
         strokeColor: 'lightblue',

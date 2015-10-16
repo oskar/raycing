@@ -1,9 +1,5 @@
 var Paper = require('paper');
 
-export function victorToPoint(victor){
-  return new Paper.Point(victor.x, victor.y);
-}
-
 export function changeCenter(oldCenter, offset, factor) {
   offset = offset.multiply(factor);
   return offset;

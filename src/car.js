@@ -28,7 +28,6 @@ export default class Car {
   }
 
   isValidMove(direction, move) {
-    return direction.absDistanceX(move) <= 1 &&
-           direction.absDistanceY(move) <= 1;
+    return true;
   }
 }
