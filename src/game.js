@@ -1,20 +1,15 @@
 var Car = require('./car');
-var Victor = require('victor');
+var Paper = require('paper');
 
 export default class Game{
   constructor(){
+    this.scale = 20;
     this.players = [
-      new Car(new Victor(3, 5), new Victor(2,0)),
+      new Car(new Paper.Point(60, 100), new Paper.Point(40,0)),
       //new Car(new Victor(3, 7), new Victor(2,0))
     ];
-    this.start = {
-      topLeft: new Victor(2,2),
-      bottomRight: new Victor(3,10)
-    }
-    this.end = {
-      topLeft: new Victor(2,22),
-      bottomRight: new Victor(10,30)
-    }
+    this.start = new Paper.Rectangle(40, 40, 40, 160);
+    this.end = new Paper.Rectangle(40, 440, 80, 160);
     this.track = [
       [1,1],
       [50,1],
@@ -24,7 +19,7 @@ export default class Game{
       [40,21],
       [40,11],
       [1,11],
-    ].map(s => new Victor(s[0], s[1]));
+    ].map(s => new Paper.Point(s[0] * 20, s[1] * 20));
     this.currentPlayerIndex = 0;
   }
 
@@ -37,7 +32,7 @@ export default class Game{
     var vectorsForControls = [];
     for(var y = 1; y >= -1; y--){
       for(var x = -1; x <= 1; x++){
-        var playerRelativeVector = new Victor(x,y).clone().add(player.direction);
+        var playerRelativeVector = new Paper.Point(this.scale * x, this.scale * y).clone().add(player.direction);
         var absoluteVector = playerRelativeVector.clone().add(player.position);
         if(this.isPossiblePosition(absoluteVector)) {
           vectorsForControls.push({
@@ -66,7 +61,7 @@ export default class Game{
   }
 
   isPossiblePosition(v) {
-    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length() === 0);
+    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length === 0);
     var noOtherCars = carsOnThisPosition.length === 0;
     return noOtherCars;
   }
