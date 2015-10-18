@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "postinstall": "bower install && webpack-dev-server",
-    "test": "karma start karma.conf.js"
+    "test": "karma start karma.conf.js",
+    "gh": "webpack"
   },
   "repository": {
     "type": "git",
