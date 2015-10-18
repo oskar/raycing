@@ -2,25 +2,12 @@ var Car = require('./car');
 var Paper = require('paper');
 
 export default class Game{
-  constructor(){
+  constructor(map){
     this.scale = 20;
-    this.players = [
-      new Car(new Paper.Point(60, 100), new Paper.Point(40,0)),
-      new Car(new Paper.Point(60, 140), new Paper.Point(40,0))
-    ];
-    this.start = new Paper.Rectangle(40, 40, 40, 160);
-    this.end = new Paper.Rectangle(40, 440, 80, 160);
-    var trackSegments = [
-      [1,1],
-      [50,1],
-      [50,31],
-      [1,31],
-      [1,21],
-      [40,21],
-      [40,11],
-      [1,11],
-    ].map(s => new Paper.Point(s[0] * 20, s[1] * 20));
-    this.track = new Paper.Path(trackSegments);
+    this.players = [];
+    this.start = map.start;
+    this.end = map.end;
+    this.track = map.track;
     this.currentPlayerIndex = 0;
   }
 
@@ -49,6 +36,10 @@ export default class Game{
     }
 
     return vectorsForControls;
+  }
+
+  addPlayer(point, direction){
+    this.players.push(new Car(point, direction));
   }
 
   movePlayer(vector){

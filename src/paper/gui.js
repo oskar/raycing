@@ -2,6 +2,7 @@ var Paper = require('paper');
 var css = require('./app.css');
 var Player = require('./player');
 var Game = require('../game');
+var MapEditor = require('./mapEditor');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
 
@@ -13,19 +14,20 @@ export default class Gui{
     this.maxZoom = this.width / this.viewBounds.width;
     this.initPaper();
     this.game;
-    this.players;
+    this.nbrOfPlayers = 2;
     this.players = [];
+    this.colors = ['#ff0000', '#0000ff'];
     this.backGround = new Paper.Group();
     this.controls = new Paper.Group();
     this.course = new Paper.Group();
     this.foreGround = new Paper.Group([this.controls]);
-
-    var tool = new Paper.Tool();
-    tool.onMouseDown = e => this.onMouseDown(e);
-    tool.onMouseDrag = e => this.onMouseDrag(e);
+    this.playerAddingControls;
+    this.mouseControls;
+    this.canvas;
 
     this.drawGrid();
-    this.newGame();
+    var mapEditor = new MapEditor();
+    mapEditor.onDone(map =>this.newGame(map))
   }
 
   get currentPlayer(){
@@ -34,16 +36,11 @@ export default class Gui{
 
   initPaper(){
     var body = document.body;
-    var canvas = document.createElement('canvas');
-    canvas.setAttribute('width', this.width);
-    canvas.setAttribute('height', this.height);
-    body.appendChild(canvas);
-    canvas.addEventListener('mousewheel', e => {
-      e.preventDefault();
-      this.mousewheel(e);
-    });
-
-    Paper.setup(canvas);
+    this.canvas = document.createElement('canvas');
+    this.canvas.setAttribute('width', this.width);
+    this.canvas.setAttribute('height', this.height);
+    body.appendChild(this.canvas);
+    Paper.setup(this.canvas);
   }
 
   onMouseDown(event){
@@ -82,8 +79,8 @@ export default class Gui{
     this.render();
   }
 
-  newGame(){
-    this.game = new Game();
+  newGame(map){
+    this.game = new Game(map);
 
     var track = this.game.track;
     track.closed = true;
@@ -92,23 +89,41 @@ export default class Gui{
     track.opacity = '0.7';
     this.course.addChild(track);
 
-    var startArea = new Paper.Path.Rectangle(this.game.start);
+    var startArea = this.game.start;
     startArea.fillColor = 'green';
     startArea.strokeColor = 'black';
     startArea.opacity = '0.7';
     this.course.addChild(startArea);
 
-    var endArea = new Paper.Path.Rectangle(this.game.end);
+    var endArea = this.game.end;
     endArea.fillColor = 'yellow';
     endArea.strokeColor = 'black';
     endArea.opacity = '0.7';
     this.course.addChild(endArea);
+    this.playerAddingControls = new Paper.Tool();
+    this.playerAddingControls.onMouseDown = e => this.addPlayerClickEvent(e);
+  }
 
-    var colors = ['#ff0000', '#0000ff'];
-    this.players = this.game.players.map(player => new Player(colors.pop(), player.position));
+  addPlayerClickEvent(event){
+    var point = new Paper.Point(Math.ceil(event.point.x / 20) * 20, Math.ceil(event.point.y / 20) * 20);
+    this.game.addPlayer(point, new Paper.Point(0, 0));
+    this.players.push(new Player(this.colors.pop(), point));
+    if(this.players.length === this.nbrOfPlayers){
+      this.startGame();
+    }
+  }
+
+  startGame(){
+    this.playerAddingControls.remove();
     this.players.forEach(p => this.foreGround.addChild(p.groups));
+    this.mouseControls = new Paper.Tool();
+    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
+    this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
+    this.canvas.addEventListener('mousewheel', e => {
+      e.preventDefault();
+      this.mousewheel(e);
+    });
     this.nextTurn();
-    this.render();
   }
 
   movePlayer(relativeVector){

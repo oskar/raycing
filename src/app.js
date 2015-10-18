@@ -1,5 +1,5 @@
-var paperGui = require('./paper/gui');
+var PaperGui = require('./paper/gui');
 
 window.onload = () => {
-  var gui = new paperGui();
+  var gui = new PaperGui();
 }
