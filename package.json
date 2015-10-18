@@ -38,6 +38,5 @@
     "webpack-dev-server": "1.12.0"
   },
   "dependencies": {
-    "victor": "1.1.0"
   }
 }

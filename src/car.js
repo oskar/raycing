@@ -3,6 +3,7 @@ export default class Car {
     this.positions = [position];
     this.currentPositionIndex = 0;
     this.direction = direction;
+    this.isAlive = true;
   }
 
   get position(){

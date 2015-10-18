@@ -6,11 +6,11 @@ export default class Game{
     this.scale = 20;
     this.players = [
       new Car(new Paper.Point(60, 100), new Paper.Point(40,0)),
-      //new Car(new Victor(3, 7), new Victor(2,0))
+      new Car(new Paper.Point(60, 140), new Paper.Point(40,0))
     ];
     this.start = new Paper.Rectangle(40, 40, 40, 160);
     this.end = new Paper.Rectangle(40, 440, 80, 160);
-    this.track = [
+    var trackSegments = [
       [1,1],
       [50,1],
       [50,31],
@@ -20,6 +20,7 @@ export default class Game{
       [40,11],
       [1,11],
     ].map(s => new Paper.Point(s[0] * 20, s[1] * 20));
+    this.track = new Paper.Path(trackSegments);
     this.currentPlayerIndex = 0;
   }
 
@@ -42,6 +43,11 @@ export default class Game{
         }
       }
     }
+
+    if(vectorsForControls.length === 0) {
+      player.isAlive = false;
+    }
+
     return vectorsForControls;
   }
 
@@ -63,7 +69,8 @@ export default class Game{
   isPossiblePosition(v) {
     var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length === 0);
     var noOtherCars = carsOnThisPosition.length === 0;
-    return noOtherCars;
+    var isOnTrack = this.track.contains(v);
+    return noOtherCars && isOnTrack;
   }
 
   isInZone(zone, position){

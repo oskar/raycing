@@ -85,7 +85,7 @@ export default class Gui{
   newGame(){
     this.game = new Game();
 
-    var track = new Paper.Path(this.game.track);
+    var track = this.game.track;
     track.closed = true;
     track.fillColor = 'grey';
     track.strokeColor = 'black';
