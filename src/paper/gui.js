@@ -18,8 +18,8 @@ export default class Gui{
     this.players = [];
     this.colors = ['#ff0000', '#0000ff'];
     this.backGround = new Paper.Group();
-    this.controls = new Paper.Group();
     this.course = new Paper.Group();
+    this.controls = new Paper.Group();
     this.foreGround = new Paper.Group([this.controls]);
     this.playerAddingControls;
     this.mouseControls;
@@ -27,7 +27,7 @@ export default class Gui{
 
     this.drawGrid();
     var mapEditor = new MapEditor();
-    mapEditor.onDone(map =>this.newGame(map))
+    mapEditor.onDone(map => this.newGame(map));
   }
 
   get currentPlayer(){
