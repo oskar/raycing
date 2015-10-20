@@ -105,7 +105,9 @@ export default class Gui{
   }
 
   addPlayerClickEvent(event){
-    var point = new Paper.Point(Math.ceil(event.point.x / 20) * 20, Math.ceil(event.point.y / 20) * 20);
+    var x = Math.round(event.point.x / 20) * 20;
+    var y = Math.round(event.point.y / 20) * 20;
+    var point = new Paper.Point(x, y);
     this.game.addPlayer(point, new Paper.Point(0, 0));
     this.players.push(new Player(this.colors.pop(), point));
     if(this.players.length === this.nbrOfPlayers){
