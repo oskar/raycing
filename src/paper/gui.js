@@ -76,7 +76,19 @@ export default class Gui{
     if(Paper.view.bounds.top < this.viewBounds.top) newCenter.y = this.viewBounds.top + Paper.view.bounds.height / 2;
     if(Paper.view.bounds.bottom > this.viewBounds.bottom) newCenter.y = this.viewBounds.bottom - Paper.view.bounds.height / 2;
     Paper.view.center = newCenter;
-    this.render();
+  }
+
+  addPlayerClickEvent(event){
+    var x = Math.round(event.point.x / 20) * 20;
+    var y = Math.round(event.point.y / 20) * 20;
+    var point = new Paper.Point(x, y);
+    if(this.game.start.contains(point)){
+      this.game.addPlayer(point, new Paper.Point(0, 0));
+      this.players.push(new Player(this.colors.pop(), point));
+      if(this.players.length === this.nbrOfPlayers){
+        this.startGame();
+      }
+    }
   }
 
   newGame(map){
@@ -104,19 +116,6 @@ export default class Gui{
     this.playerAddingControls.onMouseDown = e => this.addPlayerClickEvent(e);
   }
 
-  addPlayerClickEvent(event){
-    var x = Math.round(event.point.x / 20) * 20;
-    var y = Math.round(event.point.y / 20) * 20;
-    var point = new Paper.Point(x, y);
-    if(this.game.start.contains(point)){
-      this.game.addPlayer(point, new Paper.Point(0, 0));
-      this.players.push(new Player(this.colors.pop(), point));
-      if(this.players.length === this.nbrOfPlayers){
-        this.startGame();
-      }
-    }
-  }
-
   startGame(){
     this.playerAddingControls.remove();
     this.players.forEach(p => this.foreGround.addChild(p.groups));
@@ -127,22 +126,30 @@ export default class Gui{
       e.preventDefault();
       this.mousewheel(e);
     });
-    this.nextTurn();
+    this.game.startGame();
+    this.drawControls();
   }
 
   movePlayer(relativeVector){
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
     if(player.isInEndZone){
-      this.endGame();
+      this.endGame(player);
     }
     guiPlayer.addPosition(player.position);
     this.nextTurn();
-    this.render();
   }
 
   nextTurn(){
+    this.game.nextTurn();
     this.controls.removeChildren();
+    if(!this.game.currentPlayer.isAlive){
+      this.nextTurn();
+    }
+    this.drawControls();
+  }
+
+  drawControls(){
     this.game.vectorsForControls
       .map(v => this.createControl(v))
       .forEach(control => this.controls.addChild(control));
@@ -153,6 +160,10 @@ export default class Gui{
     circle.opacity = 0.5;
     circle.movePlayerData = controlObject.relative;
     return circle;
+  }
+
+  endGame(player){
+    console.log(player);
   }
 
   drawGrid(){
@@ -174,9 +185,5 @@ export default class Gui{
       });
       grid.addChild(line);
     }
-  }
-
-  render(){
-    Paper.view.draw();
   }
 }

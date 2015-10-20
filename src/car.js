@@ -4,6 +4,7 @@ export default class Car {
     this.currentPositionIndex = 0;
     this.direction = direction;
     this.isAlive = true;
+    this.isInEndZone = false;
   }
 
   get position(){

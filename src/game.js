@@ -9,13 +9,18 @@ export default class Game{
     this.end = map.end;
     this.track = map.track;
     this.currentPlayerIndex = 0;
+    this.vectorsForControls = [];
   }
 
   get currentPlayer(){
     return this.players[this.currentPlayerIndex];
   }
 
-  get vectorsForControls(){
+  startGame(){
+    this.setVectorsForControls();
+  }
+
+  setVectorsForControls(){
     var player = this.currentPlayer;
     var vectorsForControls = [];
     for(var y = 1; y >= -1; y--){
@@ -35,7 +40,7 @@ export default class Game{
       player.isAlive = false;
     }
 
-    return vectorsForControls;
+    this.vectorsForControls = vectorsForControls;
   }
 
   addPlayer(point, direction){
@@ -46,8 +51,12 @@ export default class Game{
     this.currentPlayer.move(vector);
     var player = this.currentPlayer;
     player.isInEndZone = this.isInZone(this.end, player.position);
-    this.setNextPlayer();
     return player;
+  }
+
+  nextTurn(){
+    this.setNextPlayer();
+    this.setVectorsForControls();
   }
 
   setNextPlayer(){
@@ -65,9 +74,6 @@ export default class Game{
   }
 
   isInZone(zone, position){
-    return false;
-    var isBetweenX = zone.topLeft.x <= position.x && position.x <= zone.bottomRight.x;
-    var isBetweenY = zone.topLeft.y <= position.y && position.y <= zone.bottomRight.y;
-    return isBetweenY && isBetweenX;
+    return zone.contains(position);
   }
 }
