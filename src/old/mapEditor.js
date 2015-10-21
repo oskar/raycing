@@ -1,7 +1,8 @@
 var Paper = require('paper');
 
 export default class MapEditor{
-  constructor(){
+  constructor(callback){
+    this.callback = callback;
     this.track = new Paper.Path();
     this.track.strokeColor = 'black';
     this.start = new Paper.Path();
@@ -43,9 +44,5 @@ export default class MapEditor{
       end: this.end.intersect(this.track)
     }
     this.callback(map);
-  }
-
-  onDone(callback){
-    this.callback = callback;
   }
 }
