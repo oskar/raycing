@@ -1,3 +1,4 @@
+.menu,
 body {
   margin: 0;
   position: absolute;
@@ -6,4 +7,41 @@ body {
   left: 0;
   right: 0;
   overflow: hidden;
+}
+
+.menu {
+  display: none;
+  background-color: rgba(0,0,0,0.4);
+  font-family: monospace;
+  font-size: 35px;
+}
+
+.container {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.createMapButton {
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 3px;
+  border: 3px solid black;
+  cursor: pointer;
+}
+
+.createMapButton:hover {
+  text-decoration: underline;
+}
+
+.selectMap > * + * {
+  margin-top: 20px;
+}
+
+.mapDiv {
+  font-size: 0.5em;
+  cursor: pointer;
 }

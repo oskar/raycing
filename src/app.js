@@ -1,14 +1,9 @@
-var css = require('./app.css');
 require('./views/view');
 var Menu = require('./views/menu');
 var MapEditor = require('./views/mapEditor');
 var GameGui = require('./views/gameGui');
 
-var currentView;
-
-window.onload = () => {
-  currentView = new Menu(data => onDone(data));
-}
+var currentView = new Menu(data => onDone(data));
 
 function onDone(data){
   currentView.dispose();

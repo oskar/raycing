@@ -12,61 +12,25 @@ export default class Menu{
       }
     ];
 
-    this.mouseTools = new Paper.Tool();
-    this.mouseTools.onMouseUp = event => this.onMouseUp(event);
+    this.menu = document.querySelector('#menu');
+    this.menu.style.display = 'initial';
 
-    this.content = new Paper.Group();
-    this.content.fillColor = 'black';
+    var createMapButton = document.querySelector('#createMapButton');
+    createMapButton.addEventListener('click', () => this.onDone({ view: 'Create map' }));
 
-    var selectMapText = new Paper.PointText(new Paper.Point(200, 95));
-    selectMapText.fontFamily = 'monospace';
-    selectMapText.fontSize = '40px';
-    selectMapText.content = 'Select map';
-
-    this.content.addChild(selectMapText);
-
-    var createMapText = new Paper.PointText(new Paper.Point(600, 95));
-    createMapText.fontFamily = 'monospace';
-    createMapText.fontSize = '40px';
-    createMapText.content = 'Create map';
-    createMapText.clickData = { view: 'Create map' };
-
-    this.content.addChild(createMapText);
+    var selectMap = document.querySelector('#selectMap');
 
     this.maps.forEach((m, i) => {
-      var mapGroup = new Paper.Group();
-      mapGroup.clickData = { view: 'Game', params: m };
-      var mapText = new Paper.PointText(new Paper.Point(200, 157 + 60 * i));
-      mapText.fontSize = '20px';
-      mapText.content = m.name;
-      mapGroup.addChild(mapText);
-      this.content.addChild(mapGroup);
+      var mapDiv = document.createElement('div');
+      mapDiv.className = "mapDiv";
+      var textNode = document.createTextNode(m.name);
+      mapDiv.appendChild(textNode);
+      selectMap.appendChild(mapDiv);
+      mapDiv.addEventListener('click', () => this.onDone({ view: 'Game', params: m }));
     });
-
-    Paper.view.draw();
-  }
-
-  onMouseUp(event){
-    var clickData;
-    var item = event.getItem();
-    if(item){
-      var itemClicked = item.hitTest(event.point).item;
-      if(itemClicked){
-        if(itemClicked.clickData){
-          clickData = itemClicked.clickData;
-        }
-        if(itemClicked.parent && itemClicked.parent.clickData){
-          clickData = itemClicked.parent.clickData;
-        }
-        if(clickData){
-          this.onDone(clickData);
-        }
-      }
-    }
   }
 
   dispose(){
-    this.mouseTools.remove();
-    this.content.remove();
+    this.menu.style.display = '';
   }
 }
