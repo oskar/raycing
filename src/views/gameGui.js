@@ -18,8 +18,8 @@ export default class GameGui{
       this.foreGround,
       this.controls
     ]);
-    this.playerAddingControls = new Paper.Tool();
-    this.playerAddingControls.onMouseDown = e => this.addPlayerClickEvent(e);
+    this.mouseControls = new Paper.Tool();
+    this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
     this.game = new Game(params);
 
@@ -60,7 +60,14 @@ export default class GameGui{
     }
   }
 
-  onMouseUp(event){
+  startGame(){
+    this.players.forEach(p => this.foreGround.appendBottom(p.groups));
+    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
+    this.game.startGame();
+    this.drawControls();
+  }
+
+  onMouseDown(event){
     var item = event.getItem();
     if(!item){
       return;
@@ -69,15 +76,6 @@ export default class GameGui{
     if(itemClicked && itemClicked.movePlayerData){
       this.movePlayer(itemClicked.movePlayerData);
     }
-  }
-
-  startGame(){
-    setTimeout(() => this.playerAddingControls.remove());
-    this.players.forEach(p => this.foreGround.appendBottom(p.groups));
-    var mouseControls = view.createGameControls();
-    mouseControls.onMouseUp = e => this.onMouseUp(e);
-    this.game.startGame();
-    this.drawControls();
   }
 
   movePlayer(relativeVector){
@@ -113,12 +111,11 @@ export default class GameGui{
   }
 
   endGame(player){
-    this.callback(player);
+    this.callback({ view: 'Menu', params: player });
   }
 
   dispose(){
     this.elements.remove();
-    this.playerAddingControls.remove();
-    this.view.removeMouseWheelListener();
+    setTimeout(() => this.mouseControls.remove());
   }
 }

@@ -1,9 +1,10 @@
 var Paper = require('paper');
 
 export default class Menu{
-  constructor(onDone){
+  constructor(onDone, params){
+    console.log(params);
     this.onDone = onDone;
-    this.maps = [
+    this.savedMaps = [
       {
         name: "Test 1"
       },
@@ -18,19 +19,22 @@ export default class Menu{
     var createMapButton = document.querySelector('#createMapButton');
     createMapButton.addEventListener('click', () => this.onDone({ view: 'Create map' }));
 
-    var selectMap = document.querySelector('#selectMap');
+    this.maps = document.querySelector('#maps');
 
-    this.maps.forEach((m, i) => {
+    this.savedMaps.forEach((m, i) => {
       var mapDiv = document.createElement('div');
       mapDiv.className = "mapDiv";
       var textNode = document.createTextNode(m.name);
       mapDiv.appendChild(textNode);
-      selectMap.appendChild(mapDiv);
+      this.maps.appendChild(mapDiv);
       mapDiv.addEventListener('click', () => this.onDone({ view: 'Game', params: m }));
     });
   }
 
   dispose(){
     this.menu.style.display = '';
+    while (this.maps.firstChild) {
+      this.maps.removeChild(this.maps.firstChild);
+    }
   }
 }

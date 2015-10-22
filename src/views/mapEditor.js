@@ -43,6 +43,8 @@ export default class MapEditor{
       start: this.start.intersect(this.track),
       end: this.end.intersect(this.track)
     }
+    var dataURL = document.querySelector('canvas').toDataURL("image/png");
+    localStorage.setItem('test', JSON.stringify({ dataURL, map }));
     this.callback({ view: 'Game', params: map });
   }
 

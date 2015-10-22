@@ -15,5 +15,8 @@ function onDone(data){
     case 'Game':
       currentView = new GameGui(data => onDone(data), data.params);
       break;
+    default:
+      currentView = new Menu(data => onDone(data), data.params);
+      break;
   }
 }
