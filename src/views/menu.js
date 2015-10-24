@@ -1,7 +1,9 @@
 var Paper = require('paper');
+var view = require('./view');
 
 export default class Menu{
   constructor(onDone, params){
+    view.reset();
     this.onDone = onDone;
     this.savedMaps = [];
     for (var i = 0; i < localStorage.length; i++){

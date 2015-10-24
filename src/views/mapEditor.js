@@ -38,12 +38,25 @@ export default class MapEditor{
 
   done(){
     this.mouseControls.remove();
-    var startZone = this.start.intersect(this.track);
-    var endZone = this.end.intersect(this.track);
+    
+    var track = this.track;
+    track.closed = true;
+    track.fillColor = 'grey';
+    track.strokeColor = 'black';
+    track.opacity = '0.7';
+    var startArea = this.start.intersect(this.track);
+    startArea.fillColor = 'green';
+    startArea.strokeColor = 'black';
+    startArea.opacity = '0.7';
+    var endArea = this.end.intersect(this.track);
+    endArea.fillColor = 'yellow';
+    endArea.strokeColor = 'black';
+    endArea.opacity = '0.7';
+
     var map = {
-      track: this.track,
-      start: startZone,
-      end: endZone
+      track: track,
+      start: startArea,
+      end: endArea
     }
     this.start.remove();
     this.end.remove();
@@ -52,15 +65,20 @@ export default class MapEditor{
 
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
     this.elements.remove();
-    localStorage.setItem('map-' + (new Date()).toISOString(), JSON.stringify({ dataURL, map }));
+    var key = 'map-' + (new Date()).toISOString();
+    var value = {
+      dataURL,
+      map: this.paperToStorage(map)
+    };
+    localStorage.setItem(key, JSON.stringify(value));
     this.callback({ view: 'Menu' });
   }
 
   paperToStorage(map){
     return {
-      track: map.track[1].segments,
-      start: map.start[1].segments,
-      end: map.end[1].segments,
+      track: map.track.segments,
+      start: map.start.segments,
+      end: map.end.segments,
     }
   }
 

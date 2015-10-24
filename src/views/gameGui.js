@@ -5,6 +5,7 @@ var view = require('./view');
 
 export default class GameGui{
   constructor(callback, params){
+    console.log(params);
     this.callback = callback;
     this.game;
     this.nbrOfPlayers = 2;
