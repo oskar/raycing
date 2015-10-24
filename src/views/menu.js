@@ -2,16 +2,14 @@ var Paper = require('paper');
 
 export default class Menu{
   constructor(onDone, params){
-    console.log(params);
     this.onDone = onDone;
-    this.savedMaps = [
-      {
-        name: "Test 1"
-      },
-      {
-        name: "Test 2"
+    this.savedMaps = [];
+    for (var i = 0; i < localStorage.length; i++){
+      var key = localStorage.key(i);
+      if(key.startsWith('map')){
+        this.savedMaps.push(JSON.parse(localStorage.getItem(key)));
       }
-    ];
+    }
 
     this.menu = document.querySelector('#menu');
     this.menu.style.display = 'initial';
@@ -21,13 +19,14 @@ export default class Menu{
 
     this.maps = document.querySelector('#maps');
 
-    this.savedMaps.forEach((m, i) => {
+    this.savedMaps.forEach(map => {
       var mapDiv = document.createElement('div');
       mapDiv.className = "mapDiv";
-      var textNode = document.createTextNode(m.name);
-      mapDiv.appendChild(textNode);
+      var img = document.createElement('img');
+      img.src = map.dataURL;
+      img.addEventListener('click', () => this.onDone({ view: 'Game', params: map.map }));
+      mapDiv.appendChild(img);
       this.maps.appendChild(mapDiv);
-      mapDiv.addEventListener('click', () => this.onDone({ view: 'Game', params: m }));
     });
   }
 

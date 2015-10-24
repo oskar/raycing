@@ -1,4 +1,5 @@
 var Paper = require('paper');
+var view = require('./view');
 
 export default class MapEditor{
   constructor(callback){
@@ -36,16 +37,31 @@ export default class MapEditor{
   }
 
   done(){
-    this.elements.remove();
     this.mouseControls.remove();
+    var startZone = this.start.intersect(this.track);
+    var endZone = this.end.intersect(this.track);
     var map = {
       track: this.track,
-      start: this.start.intersect(this.track),
-      end: this.end.intersect(this.track)
+      start: startZone,
+      end: endZone
     }
+    this.start.remove();
+    this.end.remove();
+    view.setView(this.track.bounds);
+    Paper.view.draw();
+
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
-    localStorage.setItem('test', JSON.stringify({ dataURL, map }));
-    this.callback({ view: 'Game', params: map });
+    this.elements.remove();
+    localStorage.setItem('map-' + (new Date()).toISOString(), JSON.stringify({ dataURL, map }));
+    this.callback({ view: 'Menu' });
+  }
+
+  paperToStorage(map){
+    return {
+      track: map.track[1].segments,
+      start: map.start[1].segments,
+      end: map.end[1].segments,
+    }
   }
 
   dispose(){

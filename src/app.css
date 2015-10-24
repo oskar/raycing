@@ -14,6 +14,7 @@ body {
   background-color: rgba(0,0,0,0.4);
   font-family: monospace;
   font-size: 35px;
+  text-align: center;
 }
 
 .container {
@@ -21,8 +22,6 @@ body {
   top: 20%;
   left: 20%;
   right: 20%;
-  display: flex;
-  justify-content: space-around;
 }
 
 .createMapButton {
@@ -37,11 +36,16 @@ body {
   text-decoration: underline;
 }
 
-#maps > * {
+.mapDiv {
   margin-top: 20px;
+  font-size: 0.5em;
 }
 
-.mapDiv {
-  font-size: 0.5em;
+img {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid black;
   cursor: pointer;
 }
