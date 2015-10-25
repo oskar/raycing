@@ -14,7 +14,7 @@ var mouseControls;
 
 Paper.view.draw();
 
-var outerBounds = new Paper.Rectangle(-width, -height, width * 2, height * 2);
+var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
 background.addChild(createGrid(outerBounds));
 var initialBounds = Paper.view.bounds.clone();
 

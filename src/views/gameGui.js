@@ -5,7 +5,6 @@ var view = require('./view');
 
 export default class GameGui{
   constructor(callback, params){
-    console.log(params);
     this.callback = callback;
     this.game;
     this.nbrOfPlayers = 2;
@@ -42,6 +41,8 @@ export default class GameGui{
     endArea.strokeColor = 'black';
     endArea.opacity = '0.7';
     this.course.addChild(endArea);
+
+    view.setView(track.bounds);
   }
 
   get currentPlayer(){
