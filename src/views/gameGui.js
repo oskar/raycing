@@ -42,7 +42,9 @@ export default class GameGui{
     endArea.opacity = '0.7';
     this.course.addChild(endArea);
 
-    view.setView(track.bounds);
+    this.setViewToTrack();
+
+    document.addEventListener('mousewheel', event => this.mousewheel(event.wheelDelta));
   }
 
   get currentPlayer(){
@@ -80,6 +82,14 @@ export default class GameGui{
     }
   }
 
+  mousewheel(delta){
+    if(delta < 0) {
+      this.setViewToTrack();
+    } else if(delta > 0) {
+      this.setViewToControls();
+    }
+  }
+
   movePlayer(relativeVector){
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
@@ -103,8 +113,16 @@ export default class GameGui{
     this.game.vectorsForControls
       .map(v => this.createControl(v))
       .forEach(control => this.controls.addChild(control));
+    this.setViewToControls();
+  }
+
+  setViewToControls(){
     var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
-    view.setView(playerBounds);
+    view.setView(playerBounds.expand(50));
+  }
+
+  setViewToTrack(){
+    view.setView(this.game.track.bounds.expand(50));
   }
 
   createControl(controlObject){
