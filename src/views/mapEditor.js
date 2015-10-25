@@ -38,7 +38,7 @@ export default class MapEditor{
 
   done(){
     this.mouseControls.remove();
-    
+
     var track = this.track;
     track.closed = true;
     track.fillColor = 'grey';
@@ -58,12 +58,13 @@ export default class MapEditor{
       start: startArea,
       end: endArea
     }
+
+    view.setView(this.track.bounds);
     this.start.remove();
     this.end.remove();
-    view.setView(this.track.bounds);
     Paper.view.draw();
-
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
+    
     this.elements.remove();
     var key = 'map-' + (new Date()).toISOString();
     var value = {
