@@ -64,7 +64,7 @@ export default class MapEditor{
     this.end.remove();
     Paper.view.draw();
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
-    
+
     this.elements.remove();
     var key = 'map-' + (new Date()).toISOString();
     var value = {

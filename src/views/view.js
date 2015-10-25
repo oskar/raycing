@@ -59,9 +59,10 @@ export function setView(bounds){
     }
   }
   size = size.multiply(1.2);
-  Paper.view.viewSize = size;
   Paper.view.center = bounds.center;
-  console.log('New view:', Paper.view.center, Paper.view.size);
+  var newZoom = Paper.view.viewSize.width/size.width;
+  Paper.view.zoom = newZoom > 1 ? newZoom : 1;
+  console.log('New view:', Paper.view.center, Paper.view.zoom);
 }
 
 export function reset(){
