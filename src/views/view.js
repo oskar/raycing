@@ -48,6 +48,7 @@ function createGrid(viewBounds){
 }
 
 export function setView(bounds){
+  bounds = bounds.expand(50);
   var aspectRatio = width/height;
   var size = bounds.size.clone();
   var newRatio = size.width/size.height;
@@ -58,7 +59,7 @@ export function setView(bounds){
       size.height = size.height * newRatio/aspectRatio;
     }
   }
-  size = size.multiply(1.2);
+  size = size.multiply(1.4);
   Paper.view.center = bounds.center;
   var newZoom = Paper.view.viewSize.width/size.width;
   Paper.view.zoom = newZoom > 1 ? newZoom : 1;

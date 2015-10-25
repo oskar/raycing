@@ -103,6 +103,8 @@ export default class GameGui{
     this.game.vectorsForControls
       .map(v => this.createControl(v))
       .forEach(control => this.controls.addChild(control));
+    var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
+    view.setView(playerBounds);
   }
 
   createControl(controlObject){
