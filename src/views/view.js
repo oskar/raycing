@@ -59,10 +59,10 @@ export function setView(bounds){
       size.height = size.height * newRatio/aspectRatio;
     }
   }
-  Paper.view.center = bounds.center;
   var newZoom = Paper.view.viewSize.width/size.width;
-  Paper.view.zoom = newZoom > 1 ? newZoom : 1;
-  console.log('New view:', Paper.view.center, Paper.view.zoom);
+  newZoom = newZoom > 1 ? newZoom : 1;
+  console.log('New view:', bounds.center, newZoom);
+  animateView(bounds.center, newZoom);
 }
 
 export function reset(){
@@ -72,4 +72,26 @@ export function reset(){
 function isSameBounds(view1, view2){
   var diff = view1.center.subtract(view2.center).length
   return diff < 1;
+}
+
+function animateView(center, zoom){
+  var totalTime = 0.5;
+  var deltaCenter = center.clone().subtract(Paper.view.center).divide(totalTime);
+  var deltaZoom = (zoom - Paper.view.zoom) / totalTime;
+  var elapsedTime = 0;
+  var animating = true;
+  Paper.view.onFrame = event => {
+    if(!animating) return;
+    elapsedTime += event.delta;
+    if(elapsedTime > totalTime){
+      Paper.view.center = center;
+      Paper.view.zoom = zoom;
+      animating = false;
+      return;
+    }
+    if(event.delta > 0){
+      Paper.view.center = Paper.view.center.add(deltaCenter.multiply(event.delta));
+      Paper.view.zoom = Paper.view.zoom + (deltaZoom * event.delta);
+    }
+  }
 }
