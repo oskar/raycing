@@ -4,6 +4,7 @@
 
 .menu,
 body {
+  background-color: black;
   -webkit-user-select: none;
   touch-action: none;
   -webkit-user-drag: none;

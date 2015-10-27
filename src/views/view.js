@@ -1,6 +1,7 @@
 var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
+var bezierEasing = require('bezier-easing');
 
 var canvas = document.createElement('canvas');
 
@@ -9,43 +10,16 @@ var height = document.body.clientHeight;
 
 initPaper(canvas, width, height);
 
-var background = new Paper.Group();
 var mouseControls;
 
-Paper.view.draw();
-
 var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
-background.addChild(createGrid(outerBounds));
+
+var background = new Paper.Group(createGrid(outerBounds));
+background.clipped = true;
+
 var initialBounds = Paper.view.bounds.clone();
 
-function initPaper(canvas, width, height){
-  canvas.setAttribute('width', width);
-  canvas.setAttribute('height', height);
-  document.body.appendChild(canvas);
-  Paper.setup(canvas);
-}
-
-function createGrid(viewBounds){
-  var grid = new Paper.Group();
-  for(var x = viewBounds.left; x < viewBounds.right; x += 20){
-    var line = new Paper.Path.Line({
-      segments: [[x, viewBounds.top], [x, viewBounds.bottom]],
-      strokeColor: 'lightblue',
-      strokeWidth: 1
-    });
-    grid.addChild(line);
-  }
-  for(var y = viewBounds.top; y < viewBounds.bottom; y += 20){
-    var line = new Paper.Path.Line({
-      segments: [[viewBounds.left, y], [viewBounds.right, y]],
-      strokeColor: 'lightblue',
-      strokeWidth: 1
-    });
-    grid.addChild(line);
-  }
-
-  return grid;
-}
+Paper.view.draw();
 
 export function setView(bounds){
   if(isSameBounds(Paper.view.bounds, bounds)) return;
@@ -69,29 +43,70 @@ export function reset(){
   setView(initialBounds);
 }
 
+export function addCourse(element){
+  background.appendBottom(element);
+}
+
+function initPaper(canvas, width, height){
+  canvas.setAttribute('width', width);
+  canvas.setAttribute('height', height);
+  document.body.appendChild(canvas);
+  Paper.setup(canvas);
+}
+
+function createGrid(viewBounds){
+  var grid = new Paper.Group();
+  for(var x = viewBounds.left; x < viewBounds.right; x += 20){
+    var line = new Paper.Path.Rectangle(
+      new Paper.Point(x, viewBounds.top),
+      new Paper.Point(x + 1, Paper.view.bounds.bottom)
+    );
+    line.fillColor = 'black';
+
+    grid.addChild(line);
+  }
+  for(var y = viewBounds.top; y < viewBounds.bottom; y += 20){
+    var line = new Paper.Path.Rectangle(
+      new Paper.Point(viewBounds.left, y),
+      new Paper.Point(Paper.view.bounds.right, y + 1)
+    );
+    line.fillColor = 'black';
+
+    grid.addChild(line);
+  }
+
+  return grid;
+}
+
 function isSameBounds(view1, view2){
   var diff = view1.center.subtract(view2.center).length
   return diff < 1;
 }
 
 function animateView(center, zoom){
-  var totalTime = 0.5;
-  var deltaCenter = center.clone().subtract(Paper.view.center).divide(totalTime);
-  var deltaZoom = (zoom - Paper.view.zoom) / totalTime;
+  var animationDuration = 0.5;
+  var startCenter = Paper.view.center.clone();
+  var deltaCenter = center.clone().subtract(startCenter);
+  var startZoom = Paper.view.zoom;
+  var deltaZoom = zoom - startZoom;
   var elapsedTime = 0;
   var animating = true;
+  var ease = bezierEasing(0.42, 0.0, 0.58, 1.0);
   Paper.view.onFrame = event => {
     if(!animating) return;
     elapsedTime += event.delta;
-    if(elapsedTime > totalTime){
+    if(elapsedTime > animationDuration){
       Paper.view.center = center;
       Paper.view.zoom = zoom;
       animating = false;
       return;
     }
     if(event.delta > 0){
-      Paper.view.center = Paper.view.center.add(deltaCenter.multiply(event.delta));
-      Paper.view.zoom = Paper.view.zoom + (deltaZoom * event.delta);
+      var easeValue = ease.get(elapsedTime/animationDuration);
+      var dtCenter = deltaCenter.multiply(easeValue);
+      Paper.view.center = startCenter.add(dtCenter);
+      var dtZoom = deltaZoom * easeValue;
+      Paper.view.zoom = startZoom + dtZoom;
     }
   }
 }

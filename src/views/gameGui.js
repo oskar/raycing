@@ -10,14 +10,9 @@ export default class GameGui{
     this.nbrOfPlayers = 2;
     this.players = [];
     this.colors = ['#ff0000', '#0000ff'];
-    this.course = new Paper.Group();
     this.controls = new Paper.Group();
     this.foreGround = new Paper.Group([this.controls]);
-    this.elements = new Paper.Group([
-      this.course,
-      this.foreGround,
-      this.controls
-    ]);
+    this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
@@ -25,22 +20,18 @@ export default class GameGui{
 
     var track = this.game.track;
     track.closed = true;
-    track.fillColor = 'grey';
-    track.strokeColor = 'black';
-    track.opacity = '0.7';
+    track.fillColor = 'purple';
     this.course.addChild(track);
 
     var startArea = this.game.start;
     startArea.fillColor = 'green';
-    startArea.strokeColor = 'black';
-    startArea.opacity = '0.7';
     this.course.addChild(startArea);
 
     var endArea = this.game.end;
     endArea.fillColor = 'yellow';
-    endArea.strokeColor = 'black';
-    endArea.opacity = '0.7';
     this.course.addChild(endArea);
+
+    view.addCourse(this.course);
 
     this.setViewToTrack();
 
@@ -65,7 +56,7 @@ export default class GameGui{
   }
 
   startGame(){
-    this.players.forEach(p => this.foreGround.appendBottom(p.groups));
+    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
     this.mouseControls.onMouseDown = e => this.onMouseDown(e);
     this.game.startGame();
     this.drawControls();
@@ -137,7 +128,8 @@ export default class GameGui{
   }
 
   dispose(){
-    this.elements.remove();
+    this.course.remove();
+    this.foreGround.remove();
     setTimeout(() => this.mouseControls.remove());
   }
 }

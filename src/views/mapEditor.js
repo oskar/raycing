@@ -5,11 +5,11 @@ export default class MapEditor{
   constructor(callback){
     this.callback = callback;
     this.track = new Paper.Path();
-    this.track.strokeColor = 'black';
+    this.track.strokeColor = 'white';
     this.start = new Paper.Path();
-    this.start.strokeColor = 'black';
+    this.start.strokeColor = 'white';
     this.end = new Paper.Path();
-    this.end.strokeColor = 'black';
+    this.end.strokeColor = 'white';
     this.steps = [this.track, this.start, this.end];
     this.currentStep = 0;
 
@@ -41,18 +41,11 @@ export default class MapEditor{
 
     var track = this.track;
     track.closed = true;
-    track.fillColor = 'grey';
-    track.strokeColor = 'black';
-    track.opacity = '0.7';
+    track.fillColor = 'purple';
     var startArea = this.start.intersect(this.track);
     startArea.fillColor = 'green';
-    startArea.strokeColor = 'black';
-    startArea.opacity = '0.7';
     var endArea = this.end.intersect(this.track);
     endArea.fillColor = 'yellow';
-    endArea.strokeColor = 'black';
-    endArea.opacity = '0.7';
-
     var map = {
       track: track,
       start: startArea,

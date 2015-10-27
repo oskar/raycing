@@ -2,13 +2,12 @@ var Paper = require('paper');
 
 export default class Player{
   constructor(color, position){
-    this.positions = new Paper.Group();
     this.color = color;
     this.path = new Paper.Path({
       strokeColor: this.color,
-      strokeWidth: 3
+      strokeWidth: 2
     });
-    this.groups = new Paper.Group([this.positions, this.path]);
+    this.elements = new Paper.Group([this.path]);
 
     this.addPosition(position);
   }
@@ -17,7 +16,7 @@ export default class Player{
     this.path.add(position);
     this.path.smooth();
     var circle = this.createPositionElement(position);
-    this.positions.addChild(circle);
+    this.elements.addChild(circle);
   }
 
   createPositionElement(position){
