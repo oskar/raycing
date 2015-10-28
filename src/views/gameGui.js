@@ -21,16 +21,21 @@ export default class GameGui{
     var track = this.game.track;
     track.closed = true;
     track.fillColor = 'purple';
-    this.course.addChild(track);
 
     var startArea = this.game.start;
-    startArea.fillColor = 'green';
-    this.course.addChild(startArea);
+    startArea.fillColor = 'teal';
 
     var endArea = this.game.end;
     endArea.fillColor = 'yellow';
-    this.course.addChild(endArea);
 
+    // this.border = track.clone();
+    // this.border.fillColor.alpha = 0;
+    // this.border.strokeColor = 'white';
+    // this.border.strokeWidth = 0.5;
+
+    this.course.addChild(track);
+    this.course.addChild(startArea);
+    this.course.addChild(endArea);
     view.addCourse(this.course);
 
     this.setViewToTrack();
@@ -118,7 +123,6 @@ export default class GameGui{
 
   createControl(controlObject){
     var circle = this.currentPlayer.createPositionElement(controlObject.absolute);
-    circle.opacity = 0.5;
     circle.movePlayerData = controlObject.relative;
     return circle;
   }

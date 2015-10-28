@@ -14,8 +14,8 @@ var mouseControls;
 
 var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
 
-var background = new Paper.Group(createGrid(outerBounds));
-background.clipped = true;
+var course = new Paper.Group(createGrid(outerBounds));
+course.clipped = true;
 
 var initialBounds = Paper.view.bounds.clone();
 
@@ -44,7 +44,7 @@ export function reset(){
 }
 
 export function addCourse(element){
-  background.appendBottom(element);
+  course.appendBottom(element);
 }
 
 function initPaper(canvas, width, height){
@@ -62,6 +62,8 @@ function createGrid(viewBounds){
       new Paper.Point(x + 1, Paper.view.bounds.bottom)
     );
     line.fillColor = 'black';
+    line.shadowColor = new Paper.Color(0,0,0);
+    line.shadowBlur = 10;
 
     grid.addChild(line);
   }

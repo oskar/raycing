@@ -34,15 +34,12 @@ body {
 }
 
 .createMapButton {
-  background-color: white;
-  padding: 10px 15px;
+  background-color: black;
+  color: teal;
+  padding: 10px 20px;
   border-radius: 3px;
-  border: 3px solid black;
+  border: 1px solid white;
   cursor: pointer;
-}
-
-.createMapButton:hover {
-  text-decoration: underline;
 }
 
 .mapDiv {
@@ -52,8 +49,8 @@ body {
 img {
   width: 100px;
   height: 100px;
-  background-color: white;
+  background-color: black;
   border-radius: 5px;
-  border: 2px solid black;
+  border: 1px solid white;
   cursor: pointer;
 }

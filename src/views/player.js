@@ -4,8 +4,8 @@ export default class Player{
   constructor(color, position){
     this.color = color;
     this.path = new Paper.Path({
-      strokeColor: this.color,
-      strokeWidth: 2
+      strokeColor: 'white',
+      strokeWidth: 1
     });
     this.elements = new Paper.Group([this.path]);
 
@@ -22,6 +22,8 @@ export default class Player{
   createPositionElement(position){
     var circle = new Paper.Path.Circle(position, 5);
     circle.fillColor = this.color;
+    circle.strokeColor = 'white';
+    circle.strokeWidth = 0.5;
     return circle;
   }
 }

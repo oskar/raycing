@@ -5,22 +5,19 @@ export default class MapEditor{
   constructor(callback){
     this.callback = callback;
     this.track = new Paper.Path();
+    this.track.closed = true;
     this.track.strokeColor = 'white';
     this.start = new Paper.Path();
-    this.start.strokeColor = 'white';
+    this.start.strokeColor = 'teal';
     this.end = new Paper.Path();
-    this.end.strokeColor = 'white';
+    this.end.strokeColor = 'yellow';
+    this.course = new Paper.Group(this.track, this.start, this.end);
     this.steps = [this.track, this.start, this.end];
     this.currentStep = 0;
 
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
     this.mouseControls.onMouseUp = e => this.onMouseUp(e);
-
-    this.elements = new Paper.Group();
-    this.elements.addChild(this.track);
-    this.elements.addChild(this.start);
-    this.elements.addChild(this.end);
   }
 
   onMouseDrag(event) {
@@ -39,11 +36,10 @@ export default class MapEditor{
   done(){
     this.mouseControls.remove();
 
+    view.addCourse(this.course);
     var track = this.track;
-    track.closed = true;
-    track.fillColor = 'purple';
     var startArea = this.start.intersect(this.track);
-    startArea.fillColor = 'green';
+    startArea.fillColor = 'teal';
     var endArea = this.end.intersect(this.track);
     endArea.fillColor = 'yellow';
     var map = {
@@ -58,7 +54,7 @@ export default class MapEditor{
     Paper.view.draw();
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
 
-    this.elements.remove();
+    this.course.remove();
     var key = 'map-' + (new Date()).toISOString();
     var value = {
       dataURL,
@@ -77,6 +73,6 @@ export default class MapEditor{
   }
 
   dispose(){
-    this.elements.remove();
+    this.course.remove();
   }
 }
