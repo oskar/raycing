@@ -41,6 +41,8 @@ export default class GameGui{
     this.setViewToTrack();
 
     document.addEventListener('mousewheel', event => this.mousewheel(event.wheelDelta));
+
+    document.addEventListener('gestureend', e => this.mousewheel(e.scale), false);
   }
 
   get currentPlayer(){
