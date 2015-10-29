@@ -13890,10 +13890,6 @@
 	    document.addEventListener('mousewheel', function (event) {
 	      return _this.mousewheel(event.wheelDelta);
 	    });
-	
-	    document.addEventListener('gestureend', function (e) {
-	      return _this.mousewheel(e.scale);
-	    }, false);
 	  }
 	
 	  _createClass(GameGui, [{
