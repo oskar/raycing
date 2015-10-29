@@ -2,73 +2,55 @@
   box-sizing: border-box;
 }
 
-html {
-  font-size: 20px;
-}
-
-body,
-#background {
+.menu,
+body {
+  background-color: black;
+  -webkit-user-select: none;
+  touch-action: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  margin: 0;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 0;
   overflow: hidden;
 }
 
-#background {
-  background-image:
-    repeating-linear-gradient(90deg, black, transparent 1px, transparent 1rem),
-    repeating-linear-gradient(180deg, black, transparent 1px, transparent 1rem);
+.menu {
+  display: none;
+  background-color: rgba(0,0,0,0.4);
+  font-family: monospace;
+  font-size: 35px;
+  text-align: center;
 }
 
-#controls > * {
+.container {
   position: absolute;
-  background-color: purple;
+  top: 20%;
+  left: 20%;
+  right: 20%;
 }
 
-#controls > * {
-  background-color: purple;
-  width: 1rem;
-  height: 1rem;
-  opacity: 0.5;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
+.createMapButton {
+  background-color: black;
+  color: teal;
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: 1px solid white;
+  cursor: pointer;
 }
 
-.position {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background-color: inherit;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+.mapDiv {
+  margin-top: 20px;
 }
 
-.move {
-  position: absolute;
-  z-index: 1;
-}
-
-.move.top-right {
-  background:
-       linear-gradient(to top left,
-           rgba(0,0,0,0) 0%,
-           rgba(0,0,0,0) calc(50% - 0.8px),
-           rgba(0,0,0,1) 50%,
-           rgba(0,0,0,0) calc(50% + 0.8px),
-           rgba(0,0,0,0) 100%);
-}
-
-.move.top-left {
-  background:
-       linear-gradient(to top right,
-           rgba(0,0,0,0) 0%,
-           rgba(0,0,0,0) calc(50% - 0.8px),
-           rgba(0,0,0,1) 50%,
-           rgba(0,0,0,0) calc(50% + 0.8px),
-           rgba(0,0,0,0) 100%);
+img {
+  width: 100px;
+  height: 100px;
+  background-color: black;
+  border-radius: 5px;
+  border: 1px solid white;
+  cursor: pointer;
 }
