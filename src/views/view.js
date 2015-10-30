@@ -57,8 +57,8 @@ function createGrid(viewBounds){
   var grid = new Paper.Group();
   for(var x = viewBounds.left; x < viewBounds.right; x += 20){
     var line = new Paper.Path.Rectangle(
-      new Paper.Point(x, viewBounds.top),
-      new Paper.Point(x + 1, Paper.view.bounds.bottom)
+      new Paper.Point(x - 0.5, viewBounds.top),
+      new Paper.Point(x + 0.5, Paper.view.bounds.bottom)
     );
     line.fillColor = 'black';
     line.shadowColor = new Paper.Color(0,0,0);
