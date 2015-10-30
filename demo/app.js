@@ -13797,7 +13797,7 @@
 	      this.course.remove();
 	      var key = 'map-' + new Date().toISOString();
 	      var value = {
-	        dataURL: dataURL,
+	        dataURL: '',
 	        map: this.paperToStorage(map)
 	      };
 	      localStorage.setItem(key, JSON.stringify(value));
