@@ -48,7 +48,7 @@ export default class MapEditor{
       end: endArea
     }
 
-    view.setView(this.track.bounds.expand(50));
+    view.setView(this.track.bounds.expand(100));
     this.start.remove();
     this.end.remove();
     Paper.view.draw();

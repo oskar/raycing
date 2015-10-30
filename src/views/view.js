@@ -1,7 +1,6 @@
 var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
-var bezierEasing = require('bezier-easing');
 
 var canvas = document.createElement('canvas');
 
@@ -86,14 +85,13 @@ function isSameBounds(view1, view2){
 }
 
 function animateView(center, zoom){
-  var animationDuration = 0.5;
+  var animationDuration = 0.3;
   var startCenter = Paper.view.center.clone();
   var deltaCenter = center.clone().subtract(startCenter);
   var startZoom = Paper.view.zoom;
   var deltaZoom = zoom - startZoom;
   var elapsedTime = 0;
   var animating = true;
-  var ease = bezierEasing(0.42, 0.0, 0.58, 1.0);
   Paper.view.onFrame = event => {
     if(!animating) return;
     elapsedTime += event.delta;
@@ -104,7 +102,7 @@ function animateView(center, zoom){
       return;
     }
     if(event.delta > 0){
-      var easeValue = ease.get(elapsedTime/animationDuration);
+      var easeValue = elapsedTime/animationDuration;
       var dtCenter = deltaCenter.multiply(easeValue);
       Paper.view.center = startCenter.add(dtCenter);
       var dtZoom = deltaZoom * easeValue;
