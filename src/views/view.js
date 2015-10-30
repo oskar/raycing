@@ -1,6 +1,7 @@
 var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
+var animation = require('./animation');
 
 var canvas = document.createElement('canvas');
 
@@ -51,6 +52,7 @@ function initPaper(canvas, width, height){
   canvas.setAttribute('height', height);
   document.body.appendChild(canvas);
   Paper.setup(canvas);
+  animation.init();
 }
 
 function createGrid(viewBounds){
@@ -90,23 +92,35 @@ function animateView(center, zoom){
   var deltaCenter = center.clone().subtract(startCenter);
   var startZoom = Paper.view.zoom;
   var deltaZoom = zoom - startZoom;
-  var elapsedTime = 0;
-  var animating = true;
-  Paper.view.onFrame = event => {
-    if(!animating) return;
-    elapsedTime += event.delta;
+  animation.add(elapsedTime => {
     if(elapsedTime > animationDuration){
       Paper.view.center = center;
       Paper.view.zoom = zoom;
-      animating = false;
-      return;
-    }
-    if(event.delta > 0){
+      return false;
+    } else {
       var easeValue = elapsedTime/animationDuration;
       var dtCenter = deltaCenter.multiply(easeValue);
       Paper.view.center = startCenter.add(dtCenter);
       var dtZoom = deltaZoom * easeValue;
       Paper.view.zoom = startZoom + dtZoom;
     }
-  }
+    return true;
+  });
+  // Paper.view.onFrame = event => {
+  //   if(!animating) return;
+  //   elapsedTime += event.delta;
+  //   if(elapsedTime > animationDuration){
+  //     Paper.view.center = center;
+  //     Paper.view.zoom = zoom;
+  //     animating = false;
+  //     return;
+  //   }
+  //   if(event.delta > 0){
+  //     var easeValue = elapsedTime/animationDuration;
+  //     var dtCenter = deltaCenter.multiply(easeValue);
+  //     Paper.view.center = startCenter.add(dtCenter);
+  //     var dtZoom = deltaZoom * easeValue;
+  //     Paper.view.zoom = startZoom + dtZoom;
+  //   }
+  // }
 }
