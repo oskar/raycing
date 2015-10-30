@@ -45,19 +45,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	__webpack_require__(1);
 	var Menu = __webpack_require__(5);
 	var MapEditor = __webpack_require__(6);
 	var GameGui = __webpack_require__(7);
-	
+
 	var currentView = new Menu(function (data) {
 	  return onDone(data);
 	});
-	
+
 	function onDone(data) {
 	  currentView.dispose();
-	
+
 	  switch (data.view) {
 	    case 'Create map':
 	      currentView = new MapEditor(function (data) {
@@ -82,7 +82,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -93,25 +93,25 @@
 	var changeCenter = __webpack_require__(3).changeCenter;
 	var changeZoom = __webpack_require__(3).changeZoom;
 	var bezierEasing = __webpack_require__(4);
-	
+
 	var canvas = document.createElement('canvas');
-	
+
 	var width = document.body.clientWidth;
 	var height = document.body.clientHeight;
-	
+
 	initPaper(canvas, width, height);
-	
+
 	var mouseControls;
-	
+
 	var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
-	
+
 	var course = new Paper.Group(createGrid(outerBounds));
 	course.clipped = true;
-	
+
 	var initialBounds = Paper.view.bounds.clone();
-	
+
 	Paper.view.draw();
-	
+
 	function setView(bounds) {
 	  if (isSameBounds(Paper.view.bounds, bounds)) return;
 	  var aspectRatio = width / height;
@@ -129,22 +129,22 @@
 	  console.log('New view:', bounds.center, newZoom);
 	  animateView(bounds.center, newZoom);
 	}
-	
+
 	function reset() {
 	  setView(initialBounds);
 	}
-	
+
 	function addCourse(element) {
 	  course.appendBottom(element);
 	}
-	
+
 	function initPaper(canvas, width, height) {
 	  canvas.setAttribute('width', width);
 	  canvas.setAttribute('height', height);
 	  document.body.appendChild(canvas);
 	  Paper.setup(canvas);
 	}
-	
+
 	function createGrid(viewBounds) {
 	  var grid = new Paper.Group();
 	  for (var x = viewBounds.left; x < viewBounds.right; x += 20) {
@@ -152,24 +152,24 @@
 	    line.fillColor = 'black';
 	    line.shadowColor = new Paper.Color(0, 0, 0);
 	    line.shadowBlur = 10;
-	
+
 	    grid.addChild(line);
 	  }
 	  for (var y = viewBounds.top; y < viewBounds.bottom; y += 20) {
 	    var line = new Paper.Path.Rectangle(new Paper.Point(viewBounds.left, y), new Paper.Point(Paper.view.bounds.right, y + 1));
 	    line.fillColor = 'black';
-	
+
 	    grid.addChild(line);
 	  }
-	
+
 	  return grid;
 	}
-	
+
 	function isSameBounds(view1, view2) {
 	  var diff = view1.center.subtract(view2.center).length;
 	  return diff < 1;
 	}
-	
+
 	function animateView(center, zoom) {
 	  var animationDuration = 0.5;
 	  var startCenter = Paper.view.center.clone();
@@ -233,27 +233,27 @@
 	 * created by Marijn Haverbeke and released under an MIT license.
 	 *
 	 */
-	
+
 	var paper = new function(undefined) {
-	
+
 	var Base = new function() {
 		var hidden = /^(statics|enumerable|beans|preserve)$/,
-	
+
 			forEach = [].forEach || function(iter, bind) {
 				for (var i = 0, l = this.length; i < l; i++)
 					iter.call(bind, this[i], i, this);
 			},
-	
+
 			forIn = function(iter, bind) {
 				for (var i in this)
 					if (this.hasOwnProperty(i))
 						iter.call(bind, this[i], i, this);
 			},
-	
+
 			create = Object.create || function(proto) {
 				return { __proto__: proto };
 			},
-	
+
 			describe = Object.getOwnPropertyDescriptor || function(obj, name) {
 				var get = obj.__lookupGetter__ && obj.__lookupGetter__(name);
 				return get
@@ -264,7 +264,7 @@
 								configurable: true, writable: true }
 							: null;
 			},
-	
+
 			_define = Object.defineProperty || function(obj, name, desc) {
 				if ((desc.get || desc.set) && obj.__defineGetter__) {
 					if (desc.get)
@@ -276,15 +276,15 @@
 				}
 				return obj;
 			},
-	
+
 			define = function(obj, name, desc) {
 				delete obj[name];
 				return _define(obj, name, desc);
 			};
-	
+
 		function inject(dest, src, enumerable, beans, preserve) {
 			var beansNames = {};
-	
+
 			function field(name, val) {
 				val = val || (val = describe(src, name))
 						&& (val.get ? val : val.value);
@@ -328,7 +328,7 @@
 			}
 			return dest;
 		}
-	
+
 		function each(obj, iter, bind) {
 			if (obj)
 				('length' in obj && !obj.getLength
@@ -337,14 +337,14 @@
 					: forIn).call(obj, iter, bind = bind || obj);
 			return bind;
 		}
-	
+
 		function set(obj, props, exclude) {
 			for (var key in props)
 				if (props.hasOwnProperty(key) && !(exclude && exclude[key]))
 					obj[key] = props[key];
 			return obj;
 		}
-	
+
 		return inject(function Base() {
 			for (var i = 0, l = arguments.length; i < l; i++)
 				set(this, arguments[i]);
@@ -362,7 +362,7 @@
 					this.inject(arguments[i]);
 				return this;
 			},
-	
+
 			extend: function() {
 				var base = this,
 					ctor,
@@ -391,51 +391,51 @@
 				}
 				return this;
 			},
-	
+
 			extend: function() {
 				var res = create(this);
 				return res.inject.apply(res, arguments);
 			},
-	
+
 			each: function(iter, bind) {
 				return each(this, iter, bind);
 			},
-	
+
 			set: function(props) {
 				return set(this, props);
 			},
-	
+
 			clone: function() {
 				return new this.constructor(this);
 			},
-	
+
 			statics: {
 				each: each,
 				create: create,
 				define: define,
 				describe: describe,
 				set: set,
-	
+
 				clone: function(obj) {
 					return set(new obj.constructor(), obj);
 				},
-	
+
 				isPlainObject: function(obj) {
 					var ctor = obj != null && obj.constructor;
 					return ctor && (ctor === Object || ctor === Base
 							|| ctor.name === 'Object');
 				},
-	
+
 				pick: function(a, b) {
 					return a !== undefined ? a : b;
 				}
 			}
 		});
 	};
-	
+
 	if (true)
 		module.exports = Base;
-	
+
 	Base.inject({
 		toString: function() {
 			return this._id != null
@@ -451,19 +451,19 @@
 					}
 				}, []).join(', ') + ' }';
 		},
-	
+
 		getClassName: function() {
 			return this._class || '';
 		},
-	
+
 		exportJSON: function(options) {
 			return Base.exportJSON(this, options);
 		},
-	
+
 		toJSON: function() {
 			return Base.serialize(this);
 		},
-	
+
 		_set: function(props, exclude, dontCheck) {
 			if (props && (dontCheck || Base.isPlainObject(props))) {
 				var keys = Object.keys(props._filtering || props);
@@ -478,13 +478,13 @@
 				return true;
 			}
 		},
-	
+
 		statics: {
-	
+
 			exports: {
 				enumerable: true
 			},
-	
+
 			extend: function extend() {
 				var res = extend.base.apply(this, arguments),
 					name = res.prototype._class;
@@ -492,7 +492,7 @@
 					Base.exports[name] = res;
 				return res;
 			},
-	
+
 			equals: function(obj1, obj2) {
 				if (obj1 === obj2)
 					return true;
@@ -526,7 +526,7 @@
 				}
 				return false;
 			},
-	
+
 			read: function(list, start, options, length) {
 				if (this === Base) {
 					var value = this.peek(list, start);
@@ -557,15 +557,15 @@
 				}
 				return obj;
 			},
-	
+
 			peek: function(list, start) {
 				return list[list.__index = start || list.__index || 0];
 			},
-	
+
 			remain: function(list) {
 				return list.length - (list.__index || 0);
 			},
-	
+
 			readAll: function(list, start, options) {
 				var res = [],
 					entry;
@@ -576,7 +576,7 @@
 				}
 				return res;
 			},
-	
+
 			readNamed: function(list, name, start, options, length) {
 				var value = this.getNamed(list, name),
 					hasObject = value !== undefined;
@@ -590,7 +590,7 @@
 				}
 				return this.read(hasObject ? [value] : list, start, options, length);
 			},
-	
+
 			getNamed: function(list, name) {
 				var arg = list[0];
 				if (list._hasObject === undefined)
@@ -598,19 +598,19 @@
 				if (list._hasObject)
 					return name ? arg[name] : list._filtered || arg;
 			},
-	
+
 			hasNamed: function(list, name) {
 				return !!this.getNamed(list, name);
 			},
-	
+
 			isPlainValue: function(obj, asString) {
 				return this.isPlainObject(obj) || Array.isArray(obj)
 						|| asString && typeof obj === 'string';
 			},
-	
+
 			serialize: function(obj, options, compact, dictionary) {
 				options = options || {};
-	
+
 				var root = !dictionary,
 					res;
 				if (root) {
@@ -664,7 +664,7 @@
 						? [['dictionary', dictionary.definitions], res]
 						: res;
 			},
-	
+
 			deserialize: function(json, create, _data, _isDictionary) {
 				var res = json,
 					isRoot = !_data;
@@ -701,14 +701,14 @@
 						? res[1]
 						: res;
 			},
-	
+
 			exportJSON: function(obj, options) {
 				var json = Base.serialize(obj, options);
 				return options && options.asString === false
 						? json
 						: JSON.stringify(json);
 			},
-	
+
 			importJSON: function(json, target) {
 				return Base.deserialize(
 						typeof json === 'string' ? JSON.parse(json) : json,
@@ -729,7 +729,7 @@
 							return obj;
 						});
 			},
-	
+
 			splice: function(list, items, index, remove) {
 				var amount = items && items.length,
 					append = index === undefined;
@@ -753,25 +753,25 @@
 					return removed;
 				}
 			},
-	
+
 			capitalize: function(str) {
 				return str.replace(/\b[a-z]/g, function(match) {
 					return match.toUpperCase();
 				});
 			},
-	
+
 			camelize: function(str) {
 				return str.replace(/-(.)/g, function(all, chr) {
 					return chr.toUpperCase();
 				});
 			},
-	
+
 			hyphenate: function(str) {
 				return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 			}
 		}
 	});
-	
+
 	var Emitter = {
 		on: function(type, func) {
 			if (typeof type !== 'string') {
@@ -791,7 +791,7 @@
 			}
 			return this;
 		},
-	
+
 		off: function(type, func) {
 			if (typeof type !== 'string') {
 				Base.each(type, function(value, key) {
@@ -815,14 +815,14 @@
 			}
 			return this;
 		},
-	
+
 		once: function(type, func) {
 			return this.on(type, function() {
 				func.apply(this, arguments);
 				this.off(type, func);
 			});
 		},
-	
+
 		emit: function(type, event) {
 			var handlers = this._callbacks && this._callbacks[type];
 			if (!handlers)
@@ -838,15 +838,15 @@
 			}
 			return true;
 		},
-	
+
 		responds: function(type) {
 			return !!(this._callbacks && this._callbacks[type]);
 		},
-	
+
 		attach: '#on',
 		detach: '#off',
 		fire: '#emit',
-	
+
 		_installEvents: function(install) {
 			var handlers = this._callbacks,
 				key = install ? 'install' : 'uninstall';
@@ -860,7 +860,7 @@
 				}
 			}
 		},
-	
+
 		statics: {
 			inject: function inject(src) {
 				var events = src._events;
@@ -891,10 +891,10 @@
 			}
 		}
 	};
-	
+
 	var PaperScope = Base.extend({
 		_class: 'PaperScope',
-	
+
 		initialize: function PaperScope() {
 			paper = this;
 			this.settings = new Base({
@@ -917,7 +917,7 @@
 				};
 				CanvasProvider.release(ctx);
 			}
-	
+
 			if (!this.browser) {
 				var agent = navigator.userAgent.toLowerCase(),
 					platform = (/(win)/.exec(agent)
@@ -949,22 +949,22 @@
 					delete browser.chrome;
 			}
 		},
-	
+
 		version: '0.9.24',
-	
+
 		getView: function() {
 			return this.project && this.project.getView();
 		},
-	
+
 		getPaper: function() {
 			return this;
 		},
-	
+
 		execute: function(code, url, options) {
 			paper.PaperScript.execute(code, this, url, options);
 			View.updateFocus();
 		},
-	
+
 		install: function(scope) {
 			var that = this;
 			Base.each(['project', 'view', 'tool'], function(key) {
@@ -979,17 +979,17 @@
 				if (!/^_/.test(key) && this[key])
 					scope[key] = this[key];
 		},
-	
+
 		setup: function(element) {
 			paper = this;
 			this.project = new Project(element);
 			return this;
 		},
-	
+
 		activate: function() {
 			paper = this;
 		},
-	
+
 		clear: function() {
 			for (var i = this.projects.length - 1; i >= 0; i--)
 				this.projects[i].remove();
@@ -998,12 +998,12 @@
 			for (var i = this.palettes.length - 1; i >= 0; i--)
 				this.palettes[i].remove();
 		},
-	
+
 		remove: function() {
 			this.clear();
 			delete PaperScope._scopes[this._id];
 		},
-	
+
 		statics: new function() {
 			function handleAttribute(name) {
 				name += 'Attribute';
@@ -1011,30 +1011,30 @@
 					return el[name](attr) || el[name]('data-paper-' + attr);
 				};
 			}
-	
+
 			return {
 				_scopes: {},
 				_id: 0,
-	
+
 				get: function(id) {
 					return this._scopes[id] || null;
 				},
-	
+
 				getAttribute: handleAttribute('get'),
 				hasAttribute: handleAttribute('has')
 			};
 		}
 	});
-	
+
 	var PaperScopeItem = Base.extend(Emitter, {
-	
+
 		initialize: function(activate) {
 			this._scope = paper;
 			this._index = this._scope[this._list].push(this) - 1;
 			if (activate || !this._scope[this._reference])
 				this.activate();
 		},
-	
+
 		activate: function() {
 			if (!this._scope)
 				return false;
@@ -1045,11 +1045,11 @@
 			this.emit('activate', prev);
 			return true;
 		},
-	
+
 		isActive: function() {
 			return this._scope[this._reference] === this;
 		},
-	
+
 		remove: function() {
 			if (this._index == null)
 				return false;
@@ -1060,40 +1060,40 @@
 			return true;
 		}
 	});
-	
+
 	var Formatter = Base.extend({
 		initialize: function(precision) {
 			this.precision = precision || 5;
 			this.multiplier = Math.pow(10, this.precision);
 		},
-	
+
 		number: function(val) {
 			return Math.round(val * this.multiplier) / this.multiplier;
 		},
-	
+
 		pair: function(val1, val2, separator) {
 			return this.number(val1) + (separator || ',') + this.number(val2);
 		},
-	
+
 		point: function(val, separator) {
 			return this.number(val.x) + (separator || ',') + this.number(val.y);
 		},
-	
+
 		size: function(val, separator) {
 			return this.number(val.width) + (separator || ',')
 					+ this.number(val.height);
 		},
-	
+
 		rectangle: function(val, separator) {
 			return this.point(val, separator) + (separator || ',')
 					+ this.size(val, separator);
 		}
 	});
-	
+
 	Formatter.instance = new Formatter();
-	
+
 	var Numerical = new function() {
-	
+
 		var abscissas = [
 			[  0.5773502691896257645091488],
 			[0,0.7745966692414833770358531],
@@ -1111,7 +1111,7 @@
 			[0,0.2011940939974345223006283,0.3941513470775633698972074,0.5709721726085388475372267,0.7244177313601700474161861,0.8482065834104272162006483,0.9372733924007059043077589,0.9879925180204854284895657],
 			[  0.0950125098376374401853193,0.2816035507792589132304605,0.4580167776572273863424194,0.6178762444026437484466718,0.7554044083550030338951012,0.8656312023878317438804679,0.9445750230732325760779884,0.9894009349916499325961542]
 		];
-	
+
 		var weights = [
 			[1],
 			[0.8888888888888888888888889,0.5555555555555555555555556],
@@ -1129,24 +1129,24 @@
 			[0.2025782419255612728806202,0.1984314853271115764561183,0.1861610000155622110268006,0.1662692058169939335532009,0.1395706779261543144478048,0.1071592204671719350118695,0.0703660474881081247092674,0.0307532419961172683546284],
 			[0.1894506104550684962853967,0.1826034150449235888667637,0.1691565193950025381893121,0.1495959888165767320815017,0.1246289712555338720524763,0.0951585116824927848099251,0.0622535239386478928628438,0.0271524594117540948517806]
 		];
-	
+
 		var abs = Math.abs,
 			sqrt = Math.sqrt,
 			pow = Math.pow,
 			TOLERANCE = 1e-6,
 			EPSILON = 1e-12,
 			MACHINE_EPSILON = 1.12e-16;
-	
+
 		return {
 			TOLERANCE: TOLERANCE,
 			EPSILON: EPSILON,
 			MACHINE_EPSILON: MACHINE_EPSILON,
 			KAPPA: 4 * (sqrt(2) - 1) / 3,
-	
+
 			isZero: function(val) {
 				return abs(val) <= EPSILON;
 			},
-	
+
 			integrate: function(f, a, b, n) {
 				var x = abscissas[n - 2],
 					w = weights[n - 2],
@@ -1161,7 +1161,7 @@
 				}
 				return A * sum;
 			},
-	
+
 			findRoot: function(f, df, x, a, b, n, tolerance) {
 				for (var i = 0; i < n; i++) {
 					var fx = f(x),
@@ -1179,7 +1179,7 @@
 				}
 				return x;
 			},
-	
+
 			solveQuadratic: function(a, b, c, roots, min, max) {
 				var count = 0,
 					x1, x2 = Infinity,
@@ -1225,7 +1225,7 @@
 					roots[count++] = x2;
 				return count;
 			},
-	
+
 			solveCubic: function(a, b, c, d, roots, min, max) {
 				var count = 0,
 					x, b1, c2;
@@ -1281,11 +1281,11 @@
 			}
 		};
 	};
-	
+
 	var UID = {
 		_id: 1,
 		_pools: {},
-	
+
 		get: function(ctor) {
 			if (ctor) {
 				var name = ctor._class,
@@ -1298,11 +1298,11 @@
 			}
 		}
 	};
-	
+
 	var Point = Base.extend({
 		_class: 'Point',
 		_readIndex: true,
-	
+
 		initialize: function Point(arg0, arg1) {
 			var type = typeof arg0;
 			if (type === 'number') {
@@ -1338,13 +1338,13 @@
 					this.__read = 1;
 			}
 		},
-	
+
 		set: function(x, y) {
 			this.x = x;
 			this.y = y;
 			return this;
 		},
-	
+
 		equals: function(point) {
 			return this === point || point
 					&& (this.x === point.x && this.y === point.y
@@ -1352,25 +1352,25 @@
 							&& this.x === point[0] && this.y === point[1])
 					|| false;
 		},
-	
+
 		clone: function() {
 			return new Point(this.x, this.y);
 		},
-	
+
 		toString: function() {
 			var f = Formatter.instance;
 			return '{ x: ' + f.number(this.x) + ', y: ' + f.number(this.y) + ' }';
 		},
-	
+
 		_serialize: function(options) {
 			var f = options.formatter;
 			return [f.number(this.x), f.number(this.y)];
 		},
-	
+
 		getLength: function() {
 			return Math.sqrt(this.x * this.x + this.y * this.y);
 		},
-	
+
 		setLength: function(length) {
 			if (this.isZero()) {
 				var angle = this._angle || 0;
@@ -1391,14 +1391,14 @@
 		getAngle: function() {
 			return this.getAngleInRadians.apply(this, arguments) * 180 / Math.PI;
 		},
-	
+
 		setAngle: function(angle) {
 			this.setAngleInRadians.call(this, angle * Math.PI / 180);
 		},
-	
+
 		getAngleInDegrees: '#getAngle',
 		setAngleInDegrees: '#setAngle',
-	
+
 		getAngleInRadians: function() {
 			if (!arguments.length) {
 				return this.isZero()
@@ -1415,7 +1415,7 @@
 				}
 			}
 		},
-	
+
 		setAngleInRadians: function(angle) {
 			this._angle = angle;
 			if (!this.isZero()) {
@@ -1426,18 +1426,18 @@
 				);
 			}
 		},
-	
+
 		getQuadrant: function() {
 			return this.x >= 0 ? this.y >= 0 ? 1 : 4 : this.y >= 0 ? 2 : 3;
 		}
 	}, {
 		beans: false,
-	
+
 		getDirectedAngle: function() {
 			var point = Point.read(arguments);
 			return Math.atan2(this.cross(point), this.dot(point)) * 180 / Math.PI;
 		},
-	
+
 		getDistance: function() {
 			var point = Point.read(arguments),
 				x = point.x - this.x,
@@ -1446,7 +1446,7 @@
 				squared = Base.read(arguments);
 			return squared ? d : Math.sqrt(d);
 		},
-	
+
 		normalize: function(length) {
 			if (length === undefined)
 				length = 1;
@@ -1457,7 +1457,7 @@
 				point._angle = this._angle;
 			return point;
 		},
-	
+
 		rotate: function(angle, center) {
 			if (angle === 0)
 				return this.clone();
@@ -1471,76 +1471,76 @@
 			);
 			return center ? point.add(center) : point;
 		},
-	
+
 		transform: function(matrix) {
 			return matrix ? matrix._transformPoint(this) : this;
 		},
-	
+
 		add: function() {
 			var point = Point.read(arguments);
 			return new Point(this.x + point.x, this.y + point.y);
 		},
-	
+
 		subtract: function() {
 			var point = Point.read(arguments);
 			return new Point(this.x - point.x, this.y - point.y);
 		},
-	
+
 		multiply: function() {
 			var point = Point.read(arguments);
 			return new Point(this.x * point.x, this.y * point.y);
 		},
-	
+
 		divide: function() {
 			var point = Point.read(arguments);
 			return new Point(this.x / point.x, this.y / point.y);
 		},
-	
+
 		modulo: function() {
 			var point = Point.read(arguments);
 			return new Point(this.x % point.x, this.y % point.y);
 		},
-	
+
 		negate: function() {
 			return new Point(-this.x, -this.y);
 		},
-	
+
 		isInside: function() {
 			return Rectangle.read(arguments).contains(this);
 		},
-	
+
 		isClose: function(point, tolerance) {
 			return this.getDistance(point) < tolerance;
 		},
-	
+
 		isCollinear: function(point) {
 			return Math.abs(this.cross(point)) < 0.000001;
 		},
-	
+
 		isColinear: '#isCollinear',
-	
+
 		isOrthogonal: function(point) {
 			return Math.abs(this.dot(point)) < 0.000001;
 		},
-	
+
 		isZero: function() {
 			return Numerical.isZero(this.x) && Numerical.isZero(this.y);
 		},
-	
+
 		isNaN: function() {
 			return isNaN(this.x) || isNaN(this.y);
 		},
-	
+
 		dot: function() {
 			var point = Point.read(arguments);
 			return this.x * point.x + this.y * point.y;
 		},
-	
+
 		cross: function() {
 			var point = Point.read(arguments);
 			return this.x * point.y - this.y * point.x;
 		},
-	
+
 		project: function() {
 			var point = Point.read(arguments);
 			if (point.isZero()) {
@@ -1553,7 +1553,7 @@
 				);
 			}
 		},
-	
+
 		statics: {
 			min: function() {
 				var point1 = Point.read(arguments),
@@ -1563,7 +1563,7 @@
 					Math.min(point1.y, point2.y)
 				);
 			},
-	
+
 			max: function() {
 				var point1 = Point.read(arguments),
 					point2 = Point.read(arguments);
@@ -1572,7 +1572,7 @@
 					Math.max(point1.y, point2.y)
 				);
 			},
-	
+
 			random: function() {
 				return new Point(Math.random(), Math.random());
 			}
@@ -1583,7 +1583,7 @@
 			return new Point(op(this.x), op(this.y));
 		};
 	}, {}));
-	
+
 	var LinkedPoint = Point.extend({
 		initialize: function Point(x, y, owner, setter) {
 			this._x = x;
@@ -1591,7 +1591,7 @@
 			this._owner = owner;
 			this._setter = setter;
 		},
-	
+
 		set: function(x, y, _dontNotify) {
 			this._x = x;
 			this._y = y;
@@ -1599,30 +1599,30 @@
 				this._owner[this._setter](this);
 			return this;
 		},
-	
+
 		getX: function() {
 			return this._x;
 		},
-	
+
 		setX: function(x) {
 			this._x = x;
 			this._owner[this._setter](this);
 		},
-	
+
 		getY: function() {
 			return this._y;
 		},
-	
+
 		setY: function(y) {
 			this._y = y;
 			this._owner[this._setter](this);
 		}
 	});
-	
+
 	var Size = Base.extend({
 		_class: 'Size',
 		_readIndex: true,
-	
+
 		initialize: function Size(arg0, arg1) {
 			var type = typeof arg0;
 			if (type === 'number') {
@@ -1654,86 +1654,86 @@
 					this.__read = 1;
 			}
 		},
-	
+
 		set: function(width, height) {
 			this.width = width;
 			this.height = height;
 			return this;
 		},
-	
+
 		equals: function(size) {
 			return size === this || size && (this.width === size.width
 					&& this.height === size.height
 					|| Array.isArray(size) && this.width === size[0]
 						&& this.height === size[1]) || false;
 		},
-	
+
 		clone: function() {
 			return new Size(this.width, this.height);
 		},
-	
+
 		toString: function() {
 			var f = Formatter.instance;
 			return '{ width: ' + f.number(this.width)
 					+ ', height: ' + f.number(this.height) + ' }';
 		},
-	
+
 		_serialize: function(options) {
 			var f = options.formatter;
 			return [f.number(this.width),
 					f.number(this.height)];
 		},
-	
+
 		add: function() {
 			var size = Size.read(arguments);
 			return new Size(this.width + size.width, this.height + size.height);
 		},
-	
+
 		subtract: function() {
 			var size = Size.read(arguments);
 			return new Size(this.width - size.width, this.height - size.height);
 		},
-	
+
 		multiply: function() {
 			var size = Size.read(arguments);
 			return new Size(this.width * size.width, this.height * size.height);
 		},
-	
+
 		divide: function() {
 			var size = Size.read(arguments);
 			return new Size(this.width / size.width, this.height / size.height);
 		},
-	
+
 		modulo: function() {
 			var size = Size.read(arguments);
 			return new Size(this.width % size.width, this.height % size.height);
 		},
-	
+
 		negate: function() {
 			return new Size(-this.width, -this.height);
 		},
-	
+
 		isZero: function() {
 			return Numerical.isZero(this.width) && Numerical.isZero(this.height);
 		},
-	
+
 		isNaN: function() {
 			return isNaN(this.width) || isNaN(this.height);
 		},
-	
+
 		statics: {
 			min: function(size1, size2) {
 				return new Size(
 					Math.min(size1.width, size2.width),
 					Math.min(size1.height, size2.height));
 			},
-	
+
 			max: function(size1, size2) {
 				return new Size(
 					Math.max(size1.width, size2.width),
 					Math.max(size1.height, size2.height));
 			},
-	
+
 			random: function() {
 				return new Size(Math.random(), Math.random());
 			}
@@ -1744,7 +1744,7 @@
 			return new Size(op(this.width), op(this.height));
 		};
 	}, {}));
-	
+
 	var LinkedSize = Size.extend({
 		initialize: function Size(width, height, owner, setter) {
 			this._width = width;
@@ -1752,7 +1752,7 @@
 			this._owner = owner;
 			this._setter = setter;
 		},
-	
+
 		set: function(width, height, _dontNotify) {
 			this._width = width;
 			this._height = height;
@@ -1760,31 +1760,31 @@
 				this._owner[this._setter](this);
 			return this;
 		},
-	
+
 		getWidth: function() {
 			return this._width;
 		},
-	
+
 		setWidth: function(width) {
 			this._width = width;
 			this._owner[this._setter](this);
 		},
-	
+
 		getHeight: function() {
 			return this._height;
 		},
-	
+
 		setHeight: function(height) {
 			this._height = height;
 			this._owner[this._setter](this);
 		}
 	});
-	
+
 	var Rectangle = Base.extend({
 		_class: 'Rectangle',
 		_readIndex: true,
 		beans: true,
-	
+
 		initialize: function Rectangle(arg0, arg1, arg2, arg3) {
 			var type = typeof arg0,
 				read = 0;
@@ -1843,7 +1843,7 @@
 			if (this.__read)
 				this.__read = read;
 		},
-	
+
 		set: function(x, y, width, height) {
 			this.x = x;
 			this.y = y;
@@ -1851,11 +1851,11 @@
 			this.height = height;
 			return this;
 		},
-	
+
 		clone: function() {
 			return new Rectangle(this.x, this.y, this.width, this.height);
 		},
-	
+
 		equals: function(rect) {
 			var rt = Base.isPlainValue(rect)
 					? Rectangle.read(arguments)
@@ -1865,7 +1865,7 @@
 						&& this.width === rt.width && this.height === rt.height
 					|| false;
 		},
-	
+
 		toString: function() {
 			var f = Formatter.instance;
 			return '{ x: ' + f.number(this.x)
@@ -1874,7 +1874,7 @@
 					+ ', height: ' + f.number(this.height)
 					+ ' }';
 		},
-	
+
 		_serialize: function(options) {
 			var f = options.formatter;
 			return [f.number(this.x),
@@ -1882,23 +1882,23 @@
 					f.number(this.width),
 					f.number(this.height)];
 		},
-	
+
 		getPoint: function(_dontLink) {
 			var ctor = _dontLink ? Point : LinkedPoint;
 			return new ctor(this.x, this.y, this, 'setPoint');
 		},
-	
+
 		setPoint: function() {
 			var point = Point.read(arguments);
 			this.x = point.x;
 			this.y = point.y;
 		},
-	
+
 		getSize: function(_dontLink) {
 			var ctor = _dontLink ? Size : LinkedSize;
 			return new ctor(this.width, this.height, this, 'setSize');
 		},
-	
+
 		setSize: function() {
 			var size = Size.read(arguments);
 			if (this._fixX)
@@ -1910,33 +1910,33 @@
 			this._fixW = 1;
 			this._fixH = 1;
 		},
-	
+
 		getLeft: function() {
 			return this.x;
 		},
-	
+
 		setLeft: function(left) {
 			if (!this._fixW)
 				this.width -= left - this.x;
 			this.x = left;
 			this._fixX = 0;
 		},
-	
+
 		getTop: function() {
 			return this.y;
 		},
-	
+
 		setTop: function(top) {
 			if (!this._fixH)
 				this.height -= top - this.y;
 			this.y = top;
 			this._fixY = 0;
 		},
-	
+
 		getRight: function() {
 			return this.x + this.width;
 		},
-	
+
 		setRight: function(right) {
 			if (this._fixX !== undefined && this._fixX !== 1)
 				this._fixW = 0;
@@ -1946,11 +1946,11 @@
 				this.width = right - this.x;
 			this._fixX = 1;
 		},
-	
+
 		getBottom: function() {
 			return this.y + this.height;
 		},
-	
+
 		setBottom: function(bottom) {
 			if (this._fixY !== undefined && this._fixY !== 1)
 				this._fixH = 0;
@@ -1960,52 +1960,52 @@
 				this.height = bottom - this.y;
 			this._fixY = 1;
 		},
-	
+
 		getCenterX: function() {
 			return this.x + this.width * 0.5;
 		},
-	
+
 		setCenterX: function(x) {
 			this.x = x - this.width * 0.5;
 			this._fixX = 0.5;
 		},
-	
+
 		getCenterY: function() {
 			return this.y + this.height * 0.5;
 		},
-	
+
 		setCenterY: function(y) {
 			this.y = y - this.height * 0.5;
 			this._fixY = 0.5;
 		},
-	
+
 		getCenter: function(_dontLink) {
 			var ctor = _dontLink ? Point : LinkedPoint;
 			return new ctor(this.getCenterX(), this.getCenterY(), this, 'setCenter');
 		},
-	
+
 		setCenter: function() {
 			var point = Point.read(arguments);
 			this.setCenterX(point.x);
 			this.setCenterY(point.y);
 			return this;
 		},
-	
+
 		getArea: function() {
 			return this.width * this.height;
 		},
-	
+
 		isEmpty: function() {
 			return this.width === 0 || this.height === 0;
 		},
-	
+
 		contains: function(arg) {
 			return arg && arg.width !== undefined
 					|| (Array.isArray(arg) ? arg : arguments).length == 4
 					? this._containsRectangle(Rectangle.read(arguments))
 					: this._containsPoint(Point.read(arguments));
 		},
-	
+
 		_containsPoint: function(point) {
 			var x = point.x,
 				y = point.y;
@@ -2013,7 +2013,7 @@
 					&& x <= this.x + this.width
 					&& y <= this.y + this.height;
 		},
-	
+
 		_containsRectangle: function(rect) {
 			var x = rect.x,
 				y = rect.y;
@@ -2021,7 +2021,7 @@
 					&& x + rect.width <= this.x + this.width
 					&& y + rect.height <= this.y + this.height;
 		},
-	
+
 		intersects: function() {
 			var rect = Rectangle.read(arguments);
 			return rect.x + rect.width > this.x
@@ -2029,7 +2029,7 @@
 					&& rect.x < this.x + this.width
 					&& rect.y < this.y + this.height;
 		},
-	
+
 		touches: function() {
 			var rect = Rectangle.read(arguments);
 			return rect.x + rect.width >= this.x
@@ -2037,7 +2037,7 @@
 					&& rect.x <= this.x + this.width
 					&& rect.y <= this.y + this.height;
 		},
-	
+
 		intersect: function() {
 			var rect = Rectangle.read(arguments),
 				x1 = Math.max(this.x, rect.x),
@@ -2046,7 +2046,7 @@
 				y2 = Math.min(this.y + this.height, rect.y + rect.height);
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		},
-	
+
 		unite: function() {
 			var rect = Rectangle.read(arguments),
 				x1 = Math.min(this.x, rect.x),
@@ -2055,7 +2055,7 @@
 				y2 = Math.max(this.y + this.height, rect.y + rect.height);
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		},
-	
+
 		include: function() {
 			var point = Point.read(arguments);
 			var x1 = Math.min(this.x, point.x),
@@ -2064,7 +2064,7 @@
 				y2 = Math.max(this.y + this.height, point.y);
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		},
-	
+
 		expand: function() {
 			var amount = Size.read(arguments),
 				hor = amount.width,
@@ -2072,7 +2072,7 @@
 			return new Rectangle(this.x - hor / 2, this.y - ver / 2,
 					this.width + hor, this.height + ver);
 		},
-	
+
 		scale: function(hor, ver) {
 			return this.expand(this.width * hor - this.width,
 					this.height * (ver === undefined ? hor : ver) - this.height);
@@ -2109,14 +2109,14 @@
 			beans: true
 		}
 	));
-	
+
 	var LinkedRectangle = Rectangle.extend({
 		initialize: function Rectangle(x, y, width, height, owner, setter) {
 			this.set(x, y, width, height, true);
 			this._owner = owner;
 			this._setter = setter;
 		},
-	
+
 		set: function(x, y, width, height, _dontNotify) {
 			this._x = x;
 			this._y = y;
@@ -2128,14 +2128,14 @@
 		}
 	}, new function() {
 		var proto = Rectangle.prototype;
-	
+
 		return Base.each(['x', 'y', 'width', 'height'], function(key) {
 			var part = Base.capitalize(key);
 			var internal = '_' + key;
 			this['get' + part] = function() {
 				return this[internal];
 			};
-	
+
 			this['set' + part] = function(value) {
 				this[internal] = value;
 				if (!this._dontNotify)
@@ -2157,7 +2157,7 @@
 				isSelected: function() {
 					return this._owner._boundsSelected;
 				},
-	
+
 				setSelected: function(selected) {
 					var owner = this._owner;
 					if (owner.setSelected) {
@@ -2168,10 +2168,10 @@
 			})
 		);
 	});
-	
+
 	var Matrix = Base.extend({
 		_class: 'Matrix',
-	
+
 		initialize: function Matrix(arg) {
 			var count = arguments.length,
 				ok = true;
@@ -2193,7 +2193,7 @@
 			if (!ok)
 				throw new Error('Unsupported matrix parameters');
 		},
-	
+
 		set: function(a, c, b, d, tx, ty, _dontNotify) {
 			this._a = a;
 			this._c = c;
@@ -2205,11 +2205,11 @@
 				this._changed();
 			return this;
 		},
-	
+
 		_serialize: function(options) {
 			return Base.serialize(this.getValues(), options);
 		},
-	
+
 		_changed: function() {
 			var owner = this._owner;
 			if (owner) {
@@ -2220,19 +2220,19 @@
 				}
 			}
 		},
-	
+
 		clone: function() {
 			return new Matrix(this._a, this._c, this._b, this._d,
 					this._tx, this._ty);
 		},
-	
+
 		equals: function(mx) {
 			return mx === this || mx && this._a === mx._a && this._b === mx._b
 					&& this._c === mx._c && this._d === mx._d
 					&& this._tx === mx._tx && this._ty === mx._ty
 					|| false;
 		},
-	
+
 		toString: function() {
 			var f = Formatter.instance;
 			return '[[' + [f.number(this._a), f.number(this._b),
@@ -2240,7 +2240,7 @@
 					+ [f.number(this._c), f.number(this._d),
 						f.number(this._ty)].join(', ') + ']]';
 		},
-	
+
 		reset: function(_dontNotify) {
 			this._a = this._d = 1;
 			this._c = this._b = this._tx = this._ty = 0;
@@ -2248,7 +2248,7 @@
 				this._changed();
 			return this;
 		},
-	
+
 		apply: function(recursively, _setApplyMatrix) {
 			var owner = this._owner;
 			if (owner) {
@@ -2258,7 +2258,7 @@
 			}
 			return false;
 		},
-	
+
 		translate: function() {
 			var point = Point.read(arguments),
 				x = point.x,
@@ -2268,7 +2268,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		scale: function() {
 			var scale = Point.read(arguments),
 				center = Point.read(arguments, 0, { readNull: true });
@@ -2283,7 +2283,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		rotate: function(angle ) {
 			angle *= Math.PI / 180;
 			var center = Point.read(arguments, 1),
@@ -2306,7 +2306,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		shear: function() {
 			var shear = Point.read(arguments),
 				center = Point.read(arguments, 0, { readNull: true });
@@ -2323,7 +2323,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		skew: function() {
 			var skew = Point.read(arguments),
 				center = Point.read(arguments, 0, { readNull: true }),
@@ -2332,7 +2332,7 @@
 					Math.tan(skew.y * toRadians));
 			return this.shear(shear, center);
 		},
-	
+
 		concatenate: function(mx) {
 			var a1 = this._a,
 				b1 = this._b,
@@ -2353,7 +2353,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		preConcatenate: function(mx) {
 			var a1 = this._a,
 				b1 = this._b,
@@ -2376,7 +2376,7 @@
 			this._changed();
 			return this;
 		},
-	
+
 		chain: function(mx) {
 			var a1 = this._a,
 				b1 = this._b,
@@ -2398,30 +2398,30 @@
 					tx1 + tx2 * a1 + ty2 * b1,
 					ty1 + tx2 * c1 + ty2 * d1);
 		},
-	
+
 		isIdentity: function() {
 			return this._a === 1 && this._c === 0 && this._b === 0 && this._d === 1
 					&& this._tx === 0 && this._ty === 0;
 		},
-	
+
 		orNullIfIdentity: function() {
 			return this.isIdentity() ? null : this;
 		},
-	
+
 		isInvertible: function() {
 			return !!this._getDeterminant();
 		},
-	
+
 		isSingular: function() {
 			return !this._getDeterminant();
 		},
-	
+
 		transform: function( src, dst, count) {
 			return arguments.length < 3
 				? this._transformPoint(Point.read(arguments))
 				: this._transformCoordinates(src, dst, count);
 		},
-	
+
 		_transformPoint: function(point, dest, _dontNotify) {
 			var x = point.x,
 				y = point.y;
@@ -2433,7 +2433,7 @@
 				_dontNotify
 			);
 		},
-	
+
 		_transformCoordinates: function(src, dst, count) {
 			var i = 0,
 				j = 0,
@@ -2446,7 +2446,7 @@
 			}
 			return dst;
 		},
-	
+
 		_transformCorners: function(rect) {
 			var x1 = rect.x,
 				y1 = rect.y,
@@ -2455,7 +2455,7 @@
 				coords = [ x1, y1, x2, y1, x2, y2, x1, y2 ];
 			return this._transformCoordinates(coords, coords, 4);
 		},
-	
+
 		_transformBounds: function(bounds, dest, _dontNotify) {
 			var coords = this._transformCorners(bounds),
 				min = coords.slice(0, 2),
@@ -2473,18 +2473,18 @@
 			return dest.set(min[0], min[1], max[0] - min[0], max[1] - min[1],
 					_dontNotify);
 		},
-	
+
 		inverseTransform: function() {
 			return this._inverseTransform(Point.read(arguments));
 		},
-	
+
 		_getDeterminant: function() {
 			var det = this._a * this._d - this._b * this._c;
 			return isFinite(det) && !Numerical.isZero(det)
 					&& isFinite(this._tx) && isFinite(this._ty)
 					? det : null;
 		},
-	
+
 		_inverseTransform: function(point, dest, _dontNotify) {
 			var det = this._getDeterminant();
 			if (!det)
@@ -2499,55 +2499,55 @@
 				_dontNotify
 			);
 		},
-	
+
 		decompose: function() {
 			var a = this._a, b = this._b, c = this._c, d = this._d;
 			if (Numerical.isZero(a * d - b * c))
 				return null;
-	
+
 			var scaleX = Math.sqrt(a * a + b * b);
 			a /= scaleX;
 			b /= scaleX;
-	
+
 			var shear = a * c + b * d;
 			c -= a * shear;
 			d -= b * shear;
-	
+
 			var scaleY = Math.sqrt(c * c + d * d);
 			c /= scaleY;
 			d /= scaleY;
 			shear /= scaleY;
-	
+
 			if (a * d < b * c) {
 				a = -a;
 				b = -b;
 				shear = -shear;
 				scaleX = -scaleX;
 			}
-	
+
 			return {
 				scaling: new Point(scaleX, scaleY),
 				rotation: -Math.atan2(b, a) * 180 / Math.PI,
 				shearing: shear
 			};
 		},
-	
+
 		getValues: function() {
 			return [ this._a, this._c, this._b, this._d, this._tx, this._ty ];
 		},
-	
+
 		getTranslation: function() {
 			return new Point(this._tx, this._ty);
 		},
-	
+
 		getScaling: function() {
 			return (this.decompose() || {}).scaling;
 		},
-	
+
 		getRotation: function() {
 			return (this.decompose() || {}).rotation;
 		},
-	
+
 		inverted: function() {
 			var det = this._getDeterminant();
 			return det && new Matrix(
@@ -2558,11 +2558,11 @@
 					(this._b * this._ty - this._d * this._tx) / det,
 					(this._c * this._tx - this._a * this._ty) / det);
 		},
-	
+
 		shiftless: function() {
 			return new Matrix(this._a, this._c, this._b, this._d, 0, 0);
 		},
-	
+
 		applyToContext: function(ctx) {
 			ctx.transform(this._a, this._c, this._b, this._d, this._tx, this._ty);
 		}
@@ -2577,10 +2577,10 @@
 			this._changed();
 		};
 	}, {}));
-	
+
 	var Line = Base.extend({
 		_class: 'Line',
-	
+
 		initialize: function Line(arg0, arg1, arg2, arg3, arg4) {
 			var asVector = false;
 			if (arguments.length >= 4) {
@@ -2601,38 +2601,38 @@
 				this._vy -= this._py;
 			}
 		},
-	
+
 		getPoint: function() {
 			return new Point(this._px, this._py);
 		},
-	
+
 		getVector: function() {
 			return new Point(this._vx, this._vy);
 		},
-	
+
 		getLength: function() {
 			return this.getVector().getLength();
 		},
-	
+
 		intersect: function(line, isInfinite) {
 			return Line.intersect(
 					this._px, this._py, this._vx, this._vy,
 					line._px, line._py, line._vx, line._vy,
 					true, isInfinite);
 		},
-	
+
 		getSide: function(point) {
 			return Line.getSide(
 					this._px, this._py, this._vx, this._vy,
 					point.x, point.y, true);
 		},
-	
+
 		getDistance: function(point) {
 			return Math.abs(Line.getSignedDistance(
 					this._px, this._py, this._vx, this._vy,
 					point.x, point.y, true));
 		},
-	
+
 		statics: {
 			intersect: function(apx, apy, avx, avy, bpx, bpy, bvx, bvy, asVector,
 					isInfinite) {
@@ -2654,7 +2654,7 @@
 									apy + ta * avy);
 				}
 			},
-	
+
 			getSide: function(px, py, vx, vy, x, y, asVector) {
 				if (!asVector) {
 					vx -= px;
@@ -2675,7 +2675,7 @@
 				}
 				return ccw < 0 ? -1 : ccw > 0 ? 1 : 0;
 			},
-	
+
 			getSignedDistance: function(px, py, vx, vy, x, y, asVector) {
 				if (!asVector) {
 					vx -= px;
@@ -2689,12 +2689,12 @@
 			}
 		}
 	});
-	
+
 	var Project = PaperScopeItem.extend({
 		_class: 'Project',
 		_list: 'projects',
 		_reference: 'project',
-	
+
 		initialize: function Project(element) {
 			PaperScopeItem.call(this, true);
 			this.layers = [];
@@ -2707,21 +2707,21 @@
 			this._selectedItemCount = 0;
 			this._updateVersion = 0;
 		},
-	
+
 		_serialize: function(options, dictionary) {
 			return Base.serialize(this.layers, options, true, dictionary);
 		},
-	
+
 		clear: function() {
 			for (var i = this.layers.length - 1; i >= 0; i--)
 				this.layers[i].remove();
 			this.symbols = [];
 		},
-	
+
 		isEmpty: function() {
 			return this.layers.length === 0;
 		},
-	
+
 		remove: function remove() {
 			if (!remove.base.call(this))
 				return false;
@@ -2729,31 +2729,31 @@
 				this._view.remove();
 			return true;
 		},
-	
+
 		getView: function() {
 			return this._view;
 		},
-	
+
 		getCurrentStyle: function() {
 			return this._currentStyle;
 		},
-	
+
 		setCurrentStyle: function(style) {
 			this._currentStyle.initialize(style);
 		},
-	
+
 		getIndex: function() {
 			return this._index;
 		},
-	
+
 		getOptions: function() {
 			return this._scope.settings;
 		},
-	
+
 		getActiveLayer: function() {
 			return this._activeLayer || new Layer({ project: this });
 		},
-	
+
 		getSelectedItems: function() {
 			var items = [];
 			for (var id in this._selectedItems) {
@@ -2763,7 +2763,7 @@
 			}
 			return items;
 		},
-	
+
 		insertChild: function(index, item, _preserve) {
 			if (item instanceof Layer) {
 				item._remove(false, true);
@@ -2782,11 +2782,11 @@
 			}
 			return item;
 		},
-	
+
 		addChild: function(item, _preserve) {
 			return this.insertChild(undefined, item, _preserve);
 		},
-	
+
 		_updateSelection: function(item) {
 			var id = item._id,
 				selectedItems = this._selectedItems;
@@ -2800,19 +2800,19 @@
 				delete selectedItems[id];
 			}
 		},
-	
+
 		selectAll: function() {
 			var layers = this.layers;
 			for (var i = 0, l = layers.length; i < l; i++)
 				layers[i].setFullySelected(true);
 		},
-	
+
 		deselectAll: function() {
 			var selectedItems = this._selectedItems;
 			for (var i in selectedItems)
 				selectedItems[i].setFullySelected(false);
 		},
-	
+
 		hitTest: function() {
 			var point = Point.read(arguments),
 				options = HitResult.getOptions(Base.read(arguments));
@@ -2822,21 +2822,21 @@
 			}
 			return null;
 		},
-	
+
 		getItems: function(match) {
 			return Item._getItems(this.layers, match);
 		},
-	
+
 		getItem: function(match) {
 			return Item._getItems(this.layers, match, null, null, true)[0] || null;
 		},
-	
+
 		importJSON: function(json) {
 			this.activate();
 			var layer = this._activeLayer;
 			return Base.importJSON(json, layer && layer.isEmpty() && layer);
 		},
-	
+
 		draw: function(ctx, matrix, pixelRatio) {
 			this._updateVersion++;
 			ctx.save();
@@ -2851,7 +2851,7 @@
 			for (var i = 0, layers = this.layers, l = layers.length; i < l; i++)
 				layers[i].draw(ctx, param);
 			ctx.restore();
-	
+
 			if (this._selectedItemCount > 0) {
 				ctx.save();
 				ctx.strokeWidth = 1;
@@ -2864,10 +2864,10 @@
 			}
 		}
 	});
-	
+
 	var Symbol = Base.extend({
 		_class: 'Symbol',
-	
+
 		initialize: function Symbol(item, dontCenter) {
 			this._id = UID.get();
 			this.project = paper.project;
@@ -2875,14 +2875,14 @@
 			if (item)
 				this.setDefinition(item, dontCenter);
 		},
-	
+
 		_serialize: function(options, dictionary) {
 			return dictionary.add(this, function() {
 				return Base.serialize([this._class, this._definition],
 						options, false, dictionary);
 			});
 		},
-	
+
 		_changed: function(flags) {
 			if (flags & 8) {
 				Item._clearBoundsCache(this);
@@ -2891,11 +2891,11 @@
 				this.project._needsUpdate = true;
 			}
 		},
-	
+
 		getDefinition: function() {
 			return this._definition;
 		},
-	
+
 		setDefinition: function(item, _dontCenter) {
 			if (item._parentSymbol)
 				item = item.clone();
@@ -2909,22 +2909,22 @@
 			item._parentSymbol = this;
 			this._changed(9);
 		},
-	
+
 		place: function(position) {
 			return new PlacedSymbol(this, position);
 		},
-	
+
 		clone: function() {
 			return new Symbol(this._definition.clone(false));
 		},
-	
+
 		equals: function(symbol) {
 			return symbol === this
 					|| symbol && this.definition.equals(symbol.definition)
 					|| false;
 		}
 	});
-	
+
 	var Item = Base.extend(Emitter, {
 		statics: {
 			extend: function extend(src) {
@@ -2933,10 +2933,10 @@
 							this.prototype._serializeFields, src._serializeFields);
 				return extend.base.apply(this, arguments);
 			},
-	
+
 			NO_INSERT: { insert: false }
 		},
-	
+
 		_class: 'Item',
 		_applyMatrix: true,
 		_canApplyMatrix: true,
@@ -2956,10 +2956,10 @@
 			clipMask: false,
 			data: {}
 		},
-	
+
 		initialize: function Item() {
 		},
-	
+
 		_initialize: function(props, point) {
 			var hasProps = props && Base.isPlainObject(props),
 				internal = hasProps && props.internal === true,
@@ -2986,9 +2986,9 @@
 						true);
 			return hasProps;
 		},
-	
+
 		_events: new function() {
-	
+
 			var mouseFlags = {
 				mousedown: {
 					mousedown: 1,
@@ -3009,7 +3009,7 @@
 					mouseleave: 1
 				}
 			};
-	
+
 			var mouseEvent = {
 				install: function(type) {
 					var counters = this.getView()._eventCounters;
@@ -3028,7 +3028,7 @@
 					}
 				}
 			};
-	
+
 			return Base.each(['onMouseDown', 'onMouseUp', 'onMouseDrag', 'onClick',
 				'onDoubleClick', 'onMouseMove', 'onMouseEnter', 'onMouseLeave'],
 				function(name) {
@@ -3042,20 +3042,20 @@
 							this._animateItem(false);
 						}
 					},
-	
+
 					onLoad: {}
 				}
 			);
 		},
-	
+
 		_animateItem: function(animate) {
 			this.getView()._animateItem(this, animate);
 		},
-	
+
 		_serialize: function(options, dictionary) {
 			var props = {},
 				that = this;
-	
+
 			function serialize(fields) {
 				for (var key in fields) {
 					var value = that[key];
@@ -3066,13 +3066,13 @@
 					}
 				}
 			}
-	
+
 			serialize(this._serializeFields);
 			if (!(this instanceof Group))
 				serialize(this._style._defaults);
 			return [ this._class, props ];
 		},
-	
+
 		_changed: function(flags) {
 			var symbol = this._parentSymbol,
 				cacheParent = this._parent || symbol,
@@ -3106,23 +3106,23 @@
 			if (symbol)
 				symbol._changed(flags);
 		},
-	
+
 		set: function(props) {
 			if (props)
 				this._set(props);
 			return this;
 		},
-	
+
 		getId: function() {
 			return this._id;
 		},
-	
+
 		getName: function() {
 			return this._name;
 		},
-	
+
 		setName: function(name, unique) {
-	
+
 			if (this._name)
 				this._removeNamed();
 			if (name === (+name) + '')
@@ -3142,11 +3142,11 @@
 			this._name = name || undefined;
 			this._changed(128);
 		},
-	
+
 		getStyle: function() {
 			return this._style;
 		},
-	
+
 		setStyle: function(style) {
 			this.getStyle().set(style);
 		}
@@ -3167,17 +3167,17 @@
 		},
 	{}), {
 		beans: true,
-	
+
 		_locked: false,
-	
+
 		_visible: true,
-	
+
 		_blendMode: 'normal',
-	
+
 		_opacity: 1,
-	
+
 		_guide: false,
-	
+
 		isSelected: function() {
 			if (this._selectChildren) {
 				var children = this._children;
@@ -3187,7 +3187,7 @@
 			}
 			return this._selected;
 		},
-	
+
 		setSelected: function(selected, noChildren) {
 			if (!noChildren && this._selectChildren) {
 				var children = this._children;
@@ -3200,9 +3200,9 @@
 				this._changed(129);
 			}
 		},
-	
+
 		_selected: false,
-	
+
 		isFullySelected: function() {
 			var children = this._children;
 			if (children && this._selected) {
@@ -3213,7 +3213,7 @@
 			}
 			return this._selected;
 		},
-	
+
 		setFullySelected: function(selected) {
 			var children = this._children;
 			if (children) {
@@ -3222,11 +3222,11 @@
 			}
 			this.setSelected(selected, true);
 		},
-	
+
 		isClipMask: function() {
 			return this._clipMask;
 		},
-	
+
 		setClipMask: function(clipMask) {
 			if (this._clipMask != (clipMask = !!clipMask)) {
 				this._clipMask = clipMask;
@@ -3239,19 +3239,19 @@
 					this._parent._changed(1024);
 			}
 		},
-	
+
 		_clipMask: false,
-	
+
 		getData: function() {
 			if (!this._data)
 				this._data = {};
 			return this._data;
 		},
-	
+
 		setData: function(data) {
 			this._data = data;
 		},
-	
+
 		getPosition: function(_dontLink) {
 			var position = this._position,
 				ctor = _dontLink ? Point : LinkedPoint;
@@ -3263,11 +3263,11 @@
 			}
 			return new ctor(position.x, position.y, this, 'setPosition');
 		},
-	
+
 		setPosition: function() {
 			this.translate(Point.read(arguments).subtract(this.getPosition(true)));
 		},
-	
+
 		getPivot: function(_dontLink) {
 			var pivot = this._pivot;
 			if (pivot) {
@@ -3276,12 +3276,12 @@
 			}
 			return pivot;
 		},
-	
+
 		setPivot: function() {
 			this._pivot = Point.read(arguments, 0, { clone: true, readNull: true });
 			this._position = undefined;
 		},
-	
+
 		_pivot: null,
 	}, Base.each(['bounds', 'strokeBounds', 'handleBounds', 'roughBounds',
 			'internalBounds', 'internalRoughBounds'],
@@ -3304,7 +3304,7 @@
 		},
 	{
 		beans: true,
-	
+
 		_getBounds: function(getter, matrix, cacheItem) {
 			var children = this._children;
 			if (!children || children.length == 0)
@@ -3329,7 +3329,7 @@
 					? new Rectangle(x1, y1, x2 - x1, y2 - y1)
 					: new Rectangle();
 		},
-	
+
 		setBounds: function() {
 			var rect = Rectangle.read(arguments),
 				bounds = this.getBounds(),
@@ -3345,7 +3345,7 @@
 			matrix.translate(-center.x, -center.y);
 			this.transform(matrix);
 		},
-	
+
 		_getCachedBounds: function(getter, matrix, cacheItem, internalGetter) {
 			matrix = matrix && matrix.orNullIfIdentity();
 			var _matrix = internalGetter ? null : this._matrix.orNullIfIdentity(),
@@ -3363,7 +3363,7 @@
 			}
 			return bounds;
 		},
-	
+
 		statics: {
 			_updateBoundsCache: function(parent, item) {
 				if (parent) {
@@ -3378,7 +3378,7 @@
 					}
 				}
 			},
-	
+
 			_clearBoundsCache: function(item) {
 				var cache = item._boundsCache;
 				if (cache) {
@@ -3394,19 +3394,19 @@
 				}
 			}
 		}
-	
+
 	}), {
 		beans: true,
-	
+
 		_decompose: function() {
 			return this._decomposed = this._matrix.decompose();
 		},
-	
+
 		getRotation: function() {
 			var decomposed = this._decomposed || this._decompose();
 			return decomposed && decomposed.rotation;
 		},
-	
+
 		setRotation: function(rotation) {
 			var current = this.getRotation();
 			if (current != null && rotation != null) {
@@ -3416,14 +3416,14 @@
 				this._decomposed = decomposed;
 			}
 		},
-	
+
 		getScaling: function(_dontLink) {
 			var decomposed = this._decomposed || this._decompose(),
 				scaling = decomposed && decomposed.scaling,
 				ctor = _dontLink ? Point : LinkedPoint;
 			return scaling && new ctor(scaling.x, scaling.y, this, 'setScaling');
 		},
-	
+
 		setScaling: function() {
 			var current = this.getScaling();
 			if (current) {
@@ -3434,11 +3434,11 @@
 				this._decomposed = decomposed;
 			}
 		},
-	
+
 		getMatrix: function() {
 			return this._matrix;
 		},
-	
+
 		setMatrix: function() {
 			var matrix = this._matrix;
 			matrix.initialize.apply(matrix, arguments);
@@ -3448,7 +3448,7 @@
 				this._changed(9);
 			}
 		},
-	
+
 		getGlobalMatrix: function(_dontClone) {
 			var matrix = this._globalMatrix,
 				updateVersion = this._project._updateVersion;
@@ -3463,23 +3463,23 @@
 			}
 			return _dontClone ? matrix : matrix.clone();
 		},
-	
+
 		getApplyMatrix: function() {
 			return this._applyMatrix;
 		},
-	
+
 		setApplyMatrix: function(apply) {
 			if (this._applyMatrix = this._canApplyMatrix && !!apply)
 				this.transform(null, true);
 		},
-	
+
 		getTransformContent: '#getApplyMatrix',
 		setTransformContent: '#setApplyMatrix',
 	}, {
 		getProject: function() {
 			return this._project;
 		},
-	
+
 		_setProject: function(project, installEvents) {
 			if (this._project !== project) {
 				if (this._project)
@@ -3493,18 +3493,18 @@
 			if (installEvents)
 				this._installEvents(true);
 		},
-	
+
 		getView: function() {
 			return this._project.getView();
 		},
-	
+
 		_installEvents: function _installEvents(install) {
 			_installEvents.base.call(this, install);
 			var children = this._children;
 			for (var i = 0, l = children && children.length; i < l; i++)
 				children[i]._installEvents(install);
 		},
-	
+
 		getLayer: function() {
 			var parent = this;
 			while (parent = parent._parent) {
@@ -3513,45 +3513,45 @@
 			}
 			return null;
 		},
-	
+
 		getParent: function() {
 			return this._parent;
 		},
-	
+
 		setParent: function(item) {
 			return item.addChild(this);
 		},
-	
+
 		getChildren: function() {
 			return this._children;
 		},
-	
+
 		setChildren: function(items) {
 			this.removeChildren();
 			this.addChildren(items);
 		},
-	
+
 		getFirstChild: function() {
 			return this._children && this._children[0] || null;
 		},
-	
+
 		getLastChild: function() {
 			return this._children && this._children[this._children.length - 1]
 					|| null;
 		},
-	
+
 		getNextSibling: function() {
 			return this._parent && this._parent._children[this._index + 1] || null;
 		},
-	
+
 		getPreviousSibling: function() {
 			return this._parent && this._parent._children[this._index - 1] || null;
 		},
-	
+
 		getIndex: function() {
 			return this._index;
 		},
-	
+
 		equals: function(item) {
 			return item === this || item && this._class === item._class
 					&& this._style.equals(item._style)
@@ -3565,15 +3565,15 @@
 					&& this._equals(item)
 					|| false;
 		},
-	
+
 		_equals: function(item) {
 			return Base.equals(this._children, item._children);
 		},
-	
+
 		clone: function(insert) {
 			return this._clone(new this.constructor(Item.NO_INSERT), insert);
 		},
-	
+
 		_clone: function(copy, insert, includeMatrix) {
 			var keys = ['_locked', '_visible', '_blendMode', '_opacity',
 					'_clipMask', '_guide'],
@@ -3599,11 +3599,11 @@
 				copy.setName(this._name, true);
 			return copy;
 		},
-	
+
 		copyTo: function(itemOrProject) {
 			return itemOrProject.addChild(this.clone(false));
 		},
-	
+
 		rasterize: function(resolution) {
 			var bounds = this.getStrokeBounds(),
 				scale = (resolution || this.getView().getResolution()) / 72,
@@ -3624,12 +3624,12 @@
 			raster.insertAbove(this);
 			return raster;
 		},
-	
+
 		contains: function() {
 			return !!this._contains(
 					this._matrix._inverseTransform(Point.read(arguments)));
 		},
-	
+
 		_contains: function(point) {
 			if (this._children) {
 				for (var i = this._children.length - 1; i >= 0; i--) {
@@ -3640,11 +3640,11 @@
 			}
 			return point.isInside(this.getInternalBounds());
 		},
-	
+
 		isInside: function() {
 			return Rectangle.read(arguments).contains(this.getBounds());
 		},
-	
+
 		_asPathItem: function() {
 			return new Path.Rectangle({
 				rectangle: this.getInternalBounds(),
@@ -3652,25 +3652,25 @@
 				insert: false,
 			});
 		},
-	
+
 		intersects: function(item, _matrix) {
 			if (!(item instanceof Item))
 				return false;
 			return this._asPathItem().getIntersections(item._asPathItem(),
 					_matrix || item._matrix).length > 0;
 		},
-	
+
 		hitTest: function() {
 			return this._hitTest(
 					Point.read(arguments),
 					HitResult.getOptions(Base.read(arguments)));
 		},
-	
+
 		_hitTest: function(point, options) {
 			if (this._locked || !this._visible || this._guide && !options.guides
 					|| this.isEmpty())
 				return null;
-	
+
 			var matrix = this._matrix,
 				parentTotalMatrix = options._totalMatrix,
 				view = this.getView(),
@@ -3683,7 +3683,7 @@
 							Math.max(options.tolerance, 0.000001)
 						);
 			point = matrix._inverseTransform(point);
-	
+
 			if (!this._children && !this.getInternalRoughBounds()
 					.expand(tolerancePadding.multiply(2))._containsPoint(point))
 				return null;
@@ -3693,14 +3693,14 @@
 					|| options.class && !(this instanceof options.class)),
 				that = this,
 				res;
-	
+
 			function checkBounds(type, part) {
 				var pt = bounds['get' + part]();
 				if (point.subtract(pt).divide(tolerancePadding).length <= 1)
 					return new HitResult(type, that,
 							{ name: Base.hyphenate(part), point: pt });
 			}
-	
+
 			if (checkSelf && (options.center || options.bounds) && this._parent) {
 				var bounds = this.getInternalBounds();
 				if (options.center)
@@ -3714,7 +3714,7 @@
 						res = checkBounds('bounds', points[i]);
 				}
 			}
-	
+
 			var children = !res && this._children;
 			if (children) {
 				var opts = this._getChildHitTestOptions(options);
@@ -3728,16 +3728,16 @@
 			options._totalMatrix = parentTotalMatrix;
 			return res;
 		},
-	
+
 		_getChildHitTestOptions: function(options) {
 			return options;
 		},
-	
+
 		_hitTestSelf: function(point, options) {
 			if (options.fill && this.hasFill() && this._contains(point))
 				return new HitResult('fill', this);
 		},
-	
+
 		matches: function(name, compare) {
 			function matchObject(obj1, obj2) {
 				for (var i in obj1) {
@@ -3786,16 +3786,16 @@
 			}
 			return true;
 		},
-	
+
 		getItems: function(match) {
 			return Item._getItems(this._children, match, this._matrix);
 		},
-	
+
 		getItem: function(match) {
 			return Item._getItems(this._children, match, this._matrix, null, true)
 					[0] || null;
 		},
-	
+
 		statics: {
 			_getItems: function _getItems(children, match, matrix, param,
 					firstOnly) {
@@ -3849,27 +3849,27 @@
 			}
 		}
 	}, {
-	
+
 		importJSON: function(json) {
 			var res = Base.importJSON(json, this);
 			return res !== this
 					? this.addChild(res)
 					: res;
 		},
-	
+
 		addChild: function(item, _preserve) {
 			return this.insertChild(undefined, item, _preserve);
 		},
-	
+
 		insertChild: function(index, item, _preserve) {
 			var res = item ? this.insertChildren(index, [item], _preserve) : null;
 			return res && res[0];
 		},
-	
+
 		addChildren: function(items, _preserve) {
 			return this.insertChildren(this._children.length, items, _preserve);
 		},
-	
+
 		insertChildren: function(index, items, _preserve, _proto) {
 			var children = this._children;
 			if (children && items && items.length > 0) {
@@ -3902,41 +3902,41 @@
 			}
 			return items;
 		},
-	
+
 		_insertSibling: function(index, item, _preserve) {
 			return this._parent
 					? this._parent.insertChild(index, item, _preserve)
 					: null;
 		},
-	
+
 		insertAbove: function(item, _preserve) {
 			return item._insertSibling(item._index + 1, this, _preserve);
 		},
-	
+
 		insertBelow: function(item, _preserve) {
 			return item._insertSibling(item._index, this, _preserve);
 		},
-	
+
 		sendToBack: function() {
 			return (this._parent || this instanceof Layer && this._project)
 					.insertChild(0, this);
 		},
-	
+
 		bringToFront: function() {
 			return (this._parent || this instanceof Layer && this._project)
 					.addChild(this);
 		},
-	
+
 		appendTop: '#addChild',
-	
+
 		appendBottom: function(item) {
 			return this.insertChild(0, item);
 		},
-	
+
 		moveAbove: '#insertAbove',
-	
+
 		moveBelow: '#insertBelow',
-	
+
 		reduce: function() {
 			if (this._children && this._children.length === 1) {
 				var child = this._children[0].reduce();
@@ -3947,7 +3947,7 @@
 			}
 			return this;
 		},
-	
+
 		_removeNamed: function() {
 			var parent = this._parent;
 			if (parent) {
@@ -3968,7 +3968,7 @@
 				}
 			}
 		},
-	
+
 		_remove: function(notifySelf, notifyParent) {
 			var parent = this._parent;
 			if (parent) {
@@ -3989,18 +3989,18 @@
 			}
 			return false;
 		},
-	
+
 		remove: function() {
 			return this._remove(true, true);
 		},
-	
+
 		replaceWith: function(item) {
 			var ok = item && item.insertBelow(this);
 			if (ok)
 				this.remove();
 			return ok;
 		},
-	
+
 		removeChildren: function(from, to) {
 			if (!this._children)
 				return null;
@@ -4014,9 +4014,9 @@
 				this._changed(11);
 			return removed;
 		},
-	
+
 		clear: '#removeChildren',
-	
+
 		reverseChildren: function() {
 			if (this._children) {
 				this._children.reverse();
@@ -4025,11 +4025,11 @@
 				this._changed(11);
 			}
 		},
-	
+
 		isEmpty: function() {
 			return !this._children || this._children.length === 0;
 		},
-	
+
 		isEditable: function() {
 			var item = this;
 			while (item) {
@@ -4039,19 +4039,19 @@
 			}
 			return true;
 		},
-	
+
 		hasFill: function() {
 			return this.getStyle().hasFill();
 		},
-	
+
 		hasStroke: function() {
 			return this.getStyle().hasStroke();
 		},
-	
+
 		hasShadow: function() {
 			return this.getStyle().hasShadow();
 		},
-	
+
 		_getOrder: function(item) {
 			function getList(item) {
 				var list = [];
@@ -4069,31 +4069,31 @@
 			}
 			return 0;
 		},
-	
+
 		hasChildren: function() {
 			return this._children && this._children.length > 0;
 		},
-	
+
 		isInserted: function() {
 			return this._parent ? this._parent.isInserted() : false;
 		},
-	
+
 		isAbove: function(item) {
 			return this._getOrder(item) === -1;
 		},
-	
+
 		isBelow: function(item) {
 			return this._getOrder(item) === 1;
 		},
-	
+
 		isParent: function(item) {
 			return this._parent === item;
 		},
-	
+
 		isChild: function(item) {
 			return item && item._parent === this;
 		},
-	
+
 		isDescendant: function(item) {
 			var parent = this;
 			while (parent = parent._parent) {
@@ -4102,11 +4102,11 @@
 			}
 			return false;
 		},
-	
+
 		isAncestor: function(item) {
 			return item ? item.isDescendant(this) : false;
 		},
-	
+
 		isGroupedWith: function(item) {
 			var parent = this._parent;
 			while (parent) {
@@ -4118,12 +4118,12 @@
 			}
 			return false;
 		},
-	
+
 		translate: function() {
 			var mx = new Matrix();
 			return this.transform(mx.translate.apply(mx, arguments));
 		},
-	
+
 		rotate: function(angle ) {
 			return this.transform(new Matrix().rotate(angle,
 					Point.read(arguments, 1, { readNull: true })
@@ -4137,7 +4137,7 @@
 					center || this.getPosition(true)));
 		};
 	}, {
-	
+
 	}), {
 		transform: function(matrix, _applyMatrix, _applyRecursively,
 				_setApplyMatrix) {
@@ -4187,7 +4187,7 @@
 			}
 			return this;
 		},
-	
+
 		_transformContent: function(matrix, applyRecursively, setApplyMatrix) {
 			var children = this._children;
 			if (children) {
@@ -4197,25 +4197,25 @@
 				return true;
 			}
 		},
-	
+
 		globalToLocal: function() {
 			return this.getGlobalMatrix(true)._inverseTransform(
 					Point.read(arguments));
 		},
-	
+
 		localToGlobal: function() {
 			return this.getGlobalMatrix(true)._transformPoint(
 					Point.read(arguments));
 		},
-	
+
 		parentToLocal: function() {
 			return this._matrix._inverseTransform(Point.read(arguments));
 		},
-	
+
 		localToParent: function() {
 			return this._matrix._transformPoint(Point.read(arguments));
 		},
-	
+
 		fitBounds: function(rectangle, fill) {
 			rectangle = Rectangle.read(arguments);
 			var bounds = this.getBounds(),
@@ -4229,7 +4229,7 @@
 			newBounds.setCenter(rectangle.getCenter());
 			this.setBounds(newBounds);
 		},
-	
+
 		_setStyles: function(ctx) {
 			var style = this._style,
 				fillColor = style.getFillColor(),
@@ -4277,7 +4277,7 @@
 				}
 			}
 		},
-	
+
 		draw: function(ctx, param, parentStrokeMatrix) {
 			var updateVersion = this._updateVersion = this._project._updateVersion;
 			if (!this._visible || this._opacity === 0)
@@ -4288,17 +4288,17 @@
 				globalMatrix = matrices[matrices.length - 1].chain(matrix);
 			if (!globalMatrix.isInvertible())
 				return;
-	
+
 			function getViewMatrix(matrix) {
 				return viewMatrix ? viewMatrix.chain(matrix) : matrix;
 			}
-	
+
 			matrices.push(globalMatrix);
 			if (param.updateMatrix) {
 				globalMatrix._updateVersion = updateVersion;
 				this._globalMatrix = globalMatrix;
 			}
-	
+
 			var blendMode = this._blendMode,
 				opacity = this._opacity,
 				normalBlend = blendMode === 'normal',
@@ -4357,7 +4357,7 @@
 				param.offset = prevOffset;
 			}
 		},
-	
+
 		_isUpdated: function(updateVersion) {
 			var parent = this._parent;
 			if (parent instanceof CompoundPath)
@@ -4370,7 +4370,7 @@
 			}
 			return updated;
 		},
-	
+
 		_drawSelection: function(ctx, matrix, size, selectedItems, updateVersion) {
 			if ((this._drawSelected || this._boundsSelected)
 					&& this._isUpdated(updateVersion)) {
@@ -4395,7 +4395,7 @@
 				}
 			}
 		},
-	
+
 		_canComposite: function() {
 			return false;
 		}
@@ -4406,7 +4406,7 @@
 			return this.removeOn(hash);
 		};
 	}, {
-	
+
 		removeOn: function(obj) {
 			for (var name in obj) {
 				if (obj[name]) {
@@ -4420,28 +4420,28 @@
 			return this;
 		}
 	}));
-	
+
 	var Group = Item.extend({
 		_class: 'Group',
 		_selectChildren: true,
 		_serializeFields: {
 			children: []
 		},
-	
+
 		initialize: function Group(arg) {
 			this._children = [];
 			this._namedChildren = {};
 			if (!this._initialize(arg))
 				this.addChildren(Array.isArray(arg) ? arg : arguments);
 		},
-	
+
 		_changed: function _changed(flags) {
 			_changed.base.call(this, flags);
 			if (flags & 1026) {
 				this._clipItem = undefined;
 			}
 		},
-	
+
 		_getClipItem: function() {
 			var clipItem = this._clipItem;
 			if (clipItem === undefined) {
@@ -4457,17 +4457,17 @@
 			}
 			return clipItem;
 		},
-	
+
 		isClipped: function() {
 			return !!this._getClipItem();
 		},
-	
+
 		setClipped: function(clipped) {
 			var child = this.getFirstChild();
 			if (child)
 				child.setClipMask(clipped);
 		},
-	
+
 		_draw: function(ctx, param) {
 			var clip = param.clip,
 				clipItem = !clip && this._getClipItem(),
@@ -4496,10 +4496,10 @@
 			}
 		}
 	});
-	
+
 	var Layer = Group.extend({
 		_class: 'Layer',
-	
+
 		initialize: function Layer(arg) {
 			var props = Base.isPlainObject(arg)
 					? new Base(arg)
@@ -4512,7 +4512,7 @@
 				this.activate();
 			}
 		},
-	
+
 		_remove: function _remove(notifySelf, notifyParent) {
 			if (this._parent)
 				return _remove.base.call(this, notifySelf, notifyParent);
@@ -4532,32 +4532,32 @@
 			}
 			return false;
 		},
-	
+
 		getNextSibling: function getNextSibling() {
 			return this._parent ? getNextSibling.base.call(this)
 					: this._project.layers[this._index + 1] || null;
 		},
-	
+
 		getPreviousSibling: function getPreviousSibling() {
 			return this._parent ? getPreviousSibling.base.call(this)
 					: this._project.layers[this._index - 1] || null;
 		},
-	
+
 		isInserted: function isInserted() {
 			return this._parent ? isInserted.base.call(this) : this._index != null;
 		},
-	
+
 		activate: function() {
 			this._project._activeLayer = this;
 		},
-	
+
 		_insertSibling: function _insertSibling(index, item, _preserve) {
 			return !this._parent
 					? this._project.insertChild(index, item, _preserve)
 					: _insertSibling.base.call(this, index, item, _preserve);
 		}
 	});
-	
+
 	var Shape = Item.extend({
 		_class: 'Shape',
 		_applyMatrix: false,
@@ -4568,17 +4568,17 @@
 			size: null,
 			radius: null
 		},
-	
+
 		initialize: function Shape(props) {
 			this._initialize(props);
 		},
-	
+
 		_equals: function(item) {
 			return this._type === item._type
 				&& this._size.equals(item._size)
 				&& Base.equals(this._radius, item._radius);
 		},
-	
+
 		clone: function(insert) {
 			var copy = new Shape(Item.NO_INSERT);
 			copy.setType(this._type);
@@ -4586,23 +4586,23 @@
 			copy.setRadius(this._radius);
 			return this._clone(copy, insert);
 		},
-	
+
 		getType: function() {
 			return this._type;
 		},
-	
+
 		setType: function(type) {
 			this._type = type;
 		},
-	
+
 		getShape: '#getType',
 		setShape: '#setType',
-	
+
 		getSize: function() {
 			var size = this._size;
 			return new LinkedSize(size.width, size.height, this, 'setSize');
 		},
-	
+
 		setSize: function() {
 			var size = Size.read(arguments);
 			if (!this._size) {
@@ -4624,14 +4624,14 @@
 				this._changed(9);
 			}
 		},
-	
+
 		getRadius: function() {
 			var rad = this._radius;
 			return this._type === 'circle'
 					? rad
 					: new LinkedSize(rad.width, rad.height, this, 'setRadius');
 		},
-	
+
 		setRadius: function(radius) {
 			var type = this._type;
 			if (type === 'circle') {
@@ -4658,11 +4658,11 @@
 			}
 			this._changed(9);
 		},
-	
+
 		isEmpty: function() {
 			return false;
 		},
-	
+
 		toPath: function(insert) {
 			var path = this._clone(new Path[Base.capitalize(this._type)]({
 				center: new Point(),
@@ -4674,7 +4674,7 @@
 				path.setApplyMatrix(true);
 			return path;
 		},
-	
+
 		_draw: function(ctx, param, strokeMatrix) {
 			var style = this._style,
 				hasFill = style.hasFill(),
@@ -4748,11 +4748,11 @@
 					ctx.stroke();
 			}
 		},
-	
+
 		_canComposite: function() {
 			return !(this.hasFill() && this.hasStroke());
 		},
-	
+
 		_getBounds: function(getter, matrix) {
 			var rect = new Rectangle(this._size).setCenter(0, 0);
 			if (getter !== 'getBounds' && this.hasStroke())
@@ -4761,7 +4761,7 @@
 		}
 	},
 	new function() {
-	
+
 		function getCornerCenter(that, point, expand) {
 			var radius = that._radius;
 			if (!radius.isZero()) {
@@ -4776,7 +4776,7 @@
 				}
 			}
 		}
-	
+
 		function getEllipseRadius(point, radius) {
 			var angle = point.getAngleInRadians(),
 				width = radius.width * 2,
@@ -4785,7 +4785,7 @@
 				y = height * Math.cos(angle);
 			return width * height / (2 * Math.sqrt(x * x + y * y));
 		}
-	
+
 		return {
 			_contains: function _contains(point) {
 				if (this._type === 'rectangle') {
@@ -4798,7 +4798,7 @@
 					return point.divide(this.size).getLength() <= 0.5;
 				}
 			},
-	
+
 			_hitTestSelf: function _hitTestSelf(point, options) {
 				var hit = false;
 				if (this.hasStroke()) {
@@ -4831,7 +4831,7 @@
 			}
 		};
 	}, {
-	
+
 	statics: new function() {
 		function createShape(type, point, size, radius, args) {
 			var item = new Shape(Base.getNamed(args));
@@ -4840,7 +4840,7 @@
 			item._radius = radius;
 			return item.translate(point);
 		}
-	
+
 		return {
 			Circle: function() {
 				var center = Point.readNamed(arguments, 'center'),
@@ -4848,7 +4848,7 @@
 				return createShape('circle', center, new Size(radius * 2), radius,
 						arguments);
 			},
-	
+
 			Rectangle: function() {
 				var rect = Rectangle.readNamed(arguments, 'rectangle'),
 					radius = Size.min(Size.readNamed(arguments, 'radius'),
@@ -4856,14 +4856,14 @@
 				return createShape('rectangle', rect.getCenter(true),
 						rect.getSize(true), radius, arguments);
 			},
-	
+
 			Ellipse: function() {
 				var ellipse = Shape._readEllipse(arguments),
 					radius = ellipse.radius;
 				return createShape('ellipse', ellipse.center, radius.multiply(2),
 						radius, arguments);
 			},
-	
+
 			_readEllipse: function(args) {
 				var center,
 					radius;
@@ -4879,7 +4879,7 @@
 			}
 		};
 	}});
-	
+
 	var Raster = Item.extend({
 		_class: 'Raster',
 		_applyMatrix: false,
@@ -4890,7 +4890,7 @@
 			crossOrigin: null,
 			source: null
 		},
-	
+
 		initialize: function Raster(object, position) {
 			if (!this._initialize(object,
 					position !== undefined && Point.read(arguments, 1))) {
@@ -4905,11 +4905,11 @@
 				this._loaded = false;
 			}
 		},
-	
+
 		_equals: function(item) {
 			return this.getSource() === item.getSource();
 		},
-	
+
 		clone: function(insert) {
 			var copy = new Raster(Item.NO_INSERT),
 				image = this._image,
@@ -4924,13 +4924,13 @@
 			copy._crossOrigin = this._crossOrigin;
 			return this._clone(copy, insert);
 		},
-	
+
 		getSize: function() {
 			var size = this._size;
 			return new LinkedSize(size ? size.width : 0, size ? size.height : 0,
 					this, 'setSize');
 		},
-	
+
 		setSize: function() {
 			var size = Size.read(arguments);
 			if (!size.equals(this._size)) {
@@ -4947,28 +4947,28 @@
 				}
 			}
 		},
-	
+
 		getWidth: function() {
 			return this._size ? this._size.width : 0;
 		},
-	
+
 		setWidth: function(width) {
 			this.setSize(width, this.getHeight());
 		},
-	
+
 		getHeight: function() {
 			return this._size ? this._size.height : 0;
 		},
-	
+
 		setHeight: function(height) {
 			this.setSize(this.getWidth(), height);
 		},
-	
+
 		isEmpty: function() {
 			var size = this._size;
 			return !size || size.width === 0 && size.height === 0;
 		},
-	
+
 		getResolution: function() {
 			var matrix = this._matrix,
 				orig = new Point(0, 0).transform(matrix),
@@ -4979,13 +4979,13 @@
 				72 / v.getLength()
 			);
 		},
-	
+
 		getPpi: '#getResolution',
-	
+
 		getImage: function() {
 			return this._image;
 		},
-	
+
 		setImage: function(image) {
 			if (this._canvas)
 				CanvasProvider.release(this._canvas);
@@ -5004,7 +5004,7 @@
 			this._context = null;
 			this._changed(521);
 		},
-	
+
 		getCanvas: function() {
 			if (!this._canvas) {
 				var ctx = CanvasProvider.getContext(this._size);
@@ -5018,9 +5018,9 @@
 			}
 			return this._canvas;
 		},
-	
+
 		setCanvas: '#setImage',
-	
+
 		getContext: function(modify) {
 			if (!this._context)
 				this._context = this.getCanvas().getContext('2d');
@@ -5030,20 +5030,20 @@
 			}
 			return this._context;
 		},
-	
+
 		setContext: function(context) {
 			this._context = context;
 		},
-	
+
 		getSource: function() {
 			return this._image && this._image.src || this.toDataURL();
 		},
-	
+
 		setSource: function(src) {
 			var that = this,
 				crossOrigin = this._crossOrigin,
 				image;
-	
+
 			function loaded() {
 				var view = that.getView();
 				if (view) {
@@ -5053,7 +5053,7 @@
 					view.update();
 				}
 			}
-	
+
 			image = document.getElementById(src) || new Image();
 			if (crossOrigin)
 				image.crossOrigin = crossOrigin;
@@ -5066,23 +5066,23 @@
 			}
 			this.setImage(image);
 		},
-	
+
 		getCrossOrigin: function() {
 			return this._image && this._image.crossOrigin || this._crossOrigin || '';
 		},
-	
+
 		setCrossOrigin: function(crossOrigin) {
 			this._crossOrigin = crossOrigin;
 			if (this._image)
 				this._image.crossOrigin = crossOrigin;
 		},
-	
+
 		getElement: function() {
 			return this._canvas || this._loaded && this._image;
 		}
 	}, {
 		beans: false,
-	
+
 		getSubCanvas: function() {
 			var rect = Rectangle.read(arguments),
 				ctx = CanvasProvider.getContext(rect.getSize());
@@ -5090,7 +5090,7 @@
 					rect.width, rect.height, 0, 0, rect.width, rect.height);
 			return ctx.canvas;
 		},
-	
+
 		getSubRaster: function() {
 			var rect = Rectangle.read(arguments),
 				raster = new Raster(Item.NO_INSERT);
@@ -5100,7 +5100,7 @@
 			raster.insertAbove(this);
 			return raster;
 		},
-	
+
 		toDataURL: function() {
 			var src = this._image && this._image.src;
 			if (/^data:/.test(src))
@@ -5108,12 +5108,12 @@
 			var canvas = this.getCanvas();
 			return canvas ? canvas.toDataURL() : null;
 		},
-	
+
 		drawImage: function(image ) {
 			var point = Point.read(arguments, 1);
 			this.getContext(true).drawImage(image, point.x, point.y);
 		},
-	
+
 		getAverageColor: function(object) {
 			var bounds, path;
 			if (!object) {
@@ -5165,14 +5165,14 @@
 				channels[i] /= total;
 			return total ? Color.read(channels) : null;
 		},
-	
+
 		getPixel: function() {
 			var point = Point.read(arguments);
 			var data = this.getContext().getImageData(point.x, point.y, 1, 1).data;
 			return new Color('rgb', [data[0] / 255, data[1] / 255, data[2] / 255],
 					data[3] / 255);
 		},
-	
+
 		setPixel: function() {
 			var point = Point.read(arguments),
 				color = Color.read(arguments),
@@ -5187,12 +5187,12 @@
 			data[3] = alpha != null ? alpha * 255 : 255;
 			ctx.putImageData(imageData, point.x, point.y);
 		},
-	
+
 		createImageData: function() {
 			var size = Size.read(arguments);
 			return this.getContext().createImageData(size.width, size.height);
 		},
-	
+
 		getImageData: function() {
 			var rect = Rectangle.read(arguments);
 			if (rect.isEmpty())
@@ -5200,17 +5200,17 @@
 			return this.getContext().getImageData(rect.x, rect.y,
 					rect.width, rect.height);
 		},
-	
+
 		setImageData: function(data ) {
 			var point = Point.read(arguments, 1);
 			this.getContext(true).putImageData(data, point.x, point.y);
 		},
-	
+
 		_getBounds: function(getter, matrix) {
 			var rect = new Rectangle(this._size).setCenter(0, 0);
 			return matrix ? matrix._transformBounds(rect) : rect;
 		},
-	
+
 		_hitTestSelf: function(point) {
 			if (this._contains(point)) {
 				var that = this;
@@ -5224,7 +5224,7 @@
 				});
 			}
 		},
-	
+
 		_draw: function(ctx) {
 			var element = this.getElement();
 			if (element) {
@@ -5233,12 +5233,12 @@
 						-this._size.width / 2, -this._size.height / 2);
 			}
 		},
-	
+
 		_canComposite: function() {
 			return true;
 		}
 	});
-	
+
 	var PlacedSymbol = Item.extend({
 		_class: 'PlacedSymbol',
 		_applyMatrix: false,
@@ -5248,58 +5248,58 @@
 		_serializeFields: {
 			symbol: null
 		},
-	
+
 		initialize: function PlacedSymbol(arg0, arg1) {
 			if (!this._initialize(arg0,
 					arg1 !== undefined && Point.read(arguments, 1)))
 				this.setSymbol(arg0 instanceof Symbol ? arg0 : new Symbol(arg0));
 		},
-	
+
 		_equals: function(item) {
 			return this._symbol === item._symbol;
 		},
-	
+
 		getSymbol: function() {
 			return this._symbol;
 		},
-	
+
 		setSymbol: function(symbol) {
 			this._symbol = symbol;
 			this._changed(9);
 		},
-	
+
 		clone: function(insert) {
 			var copy = new PlacedSymbol(Item.NO_INSERT);
 			copy.setSymbol(this._symbol);
 			return this._clone(copy, insert);
 		},
-	
+
 		isEmpty: function() {
 			return this._symbol._definition.isEmpty();
 		},
-	
+
 		_getBounds: function(getter, matrix, cacheItem) {
 			var definition = this.symbol._definition;
 			return definition._getCachedBounds(getter,
 					matrix && matrix.chain(definition._matrix), cacheItem);
 		},
-	
+
 		_hitTestSelf: function(point, options) {
 			var res = this._symbol._definition._hitTest(point, options);
 			if (res)
 				res.item = this;
 			return res;
 		},
-	
+
 		_draw: function(ctx, param) {
 			this.symbol._definition.draw(ctx, param);
 		}
-	
+
 	});
-	
+
 	var HitResult = Base.extend({
 		_class: 'HitResult',
-	
+
 		initialize: function HitResult(type, item, values) {
 			this.type = type;
 			this.item = item;
@@ -5308,7 +5308,7 @@
 				this.inject(values);
 			}
 		},
-	
+
 		statics: {
 			getOptions: function(options) {
 				return new Base({
@@ -5327,11 +5327,11 @@
 			}
 		}
 	});
-	
+
 	var Segment = Base.extend({
 		_class: 'Segment',
 		beans: true,
-	
+
 		initialize: function Segment(arg0, arg1, arg2, arg3, arg4, arg5) {
 			var count = arguments.length,
 				point, handleIn, handleOut;
@@ -5359,13 +5359,13 @@
 			new SegmentPoint(handleIn, this, '_handleIn');
 			new SegmentPoint(handleOut, this, '_handleOut');
 		},
-	
+
 		_serialize: function(options) {
 			return Base.serialize(this.isStraight() ? this._point
 					: [this._point, this._handleIn, this._handleOut],
 					options, true);
 		},
-	
+
 		_changed: function(point) {
 			var path = this._path;
 			if (!path)
@@ -5384,65 +5384,65 @@
 			}
 			path._changed(25);
 		},
-	
+
 		getPoint: function() {
 			return this._point;
 		},
-	
+
 		setPoint: function() {
 			var point = Point.read(arguments);
 			this._point.set(point.x, point.y);
 		},
-	
+
 		getHandleIn: function() {
 			return this._handleIn;
 		},
-	
+
 		setHandleIn: function() {
 			var point = Point.read(arguments);
 			this._handleIn.set(point.x, point.y);
 		},
-	
+
 		getHandleOut: function() {
 			return this._handleOut;
 		},
-	
+
 		setHandleOut: function() {
 			var point = Point.read(arguments);
 			this._handleOut.set(point.x, point.y);
 		},
-	
+
 		hasHandles: function() {
 			return !this.isStraight();
 		},
-	
+
 		isStraight: function() {
 			return this._handleIn.isZero() && this._handleOut.isZero();
 		},
-	
+
 		isLinear: function() {
 			return Segment.isLinear(this, this.getNext());
 		},
-	
+
 		isCollinear: function(segment) {
 			return Segment.isCollinear(this, this.getNext(),
 					segment, segment.getNext());
 		},
-	
+
 		isColinear: '#isCollinear',
-	
+
 		isOrthogonal: function() {
 			return Segment.isOrthogonal(this.getPrevious(), this, this.getNext());
 		},
-	
+
 		isOrthogonalArc: function() {
 			return Segment.isOrthogonalArc(this, this.getNext());
 		},
-	
+
 		isArc: '#isOrthogonalArc',
-	
+
 		_selectionState: 0,
-	
+
 		isSelected: function(_point) {
 			var state = this._selectionState;
 			return !_point ? !!(state & 7)
@@ -5451,7 +5451,7 @@
 				: _point === this._handleOut ? !!(state & 2)
 				: false;
 		},
-	
+
 		setSelected: function(selected, _point) {
 			var path = this._path,
 				selected = !!selected,
@@ -5473,15 +5473,15 @@
 				path._changed(129);
 			}
 		},
-	
+
 		getIndex: function() {
 			return this._index !== undefined ? this._index : null;
 		},
-	
+
 		getPath: function() {
 			return this._path || null;
 		},
-	
+
 		getCurve: function() {
 			var path = this._path,
 				index = this._index;
@@ -5493,38 +5493,38 @@
 			}
 			return null;
 		},
-	
+
 		getLocation: function() {
 			var curve = this.getCurve();
 			return curve
 					? new CurveLocation(curve, this === curve._segment1 ? 0 : 1)
 					: null;
 		},
-	
+
 		getNext: function() {
 			var segments = this._path && this._path._segments;
 			return segments && (segments[this._index + 1]
 					|| this._path._closed && segments[0]) || null;
 		},
-	
+
 		getPrevious: function() {
 			var segments = this._path && this._path._segments;
 			return segments && (segments[this._index - 1]
 					|| this._path._closed && segments[segments.length - 1]) || null;
 		},
-	
+
 		reverse: function() {
 			return new Segment(this._point, this._handleOut, this._handleIn);
 		},
-	
+
 		remove: function() {
 			return this._path ? !!this._path.removeSegment(this._index) : false;
 		},
-	
+
 		clone: function() {
 			return new Segment(this._point, this._handleIn, this._handleOut);
 		},
-	
+
 		equals: function(segment) {
 			return segment === this || segment && this._class === segment._class
 					&& this._point.equals(segment._point)
@@ -5532,7 +5532,7 @@
 					&& this._handleOut.equals(segment._handleOut)
 					|| false;
 		},
-	
+
 		toString: function() {
 			var parts = [ 'point: ' + this._point ];
 			if (!this._handleIn.isZero())
@@ -5541,12 +5541,12 @@
 				parts.push('handleOut: ' + this._handleOut);
 			return '{ ' + parts.join(', ') + ' }';
 		},
-	
+
 		transform: function(matrix) {
 			this._transformCoordinates(matrix, new Array(6), true);
 			this._changed();
 		},
-	
+
 		_transformCoordinates: function(matrix, coords, change) {
 			var point = this._point,
 				handleIn = !change || !this._handleIn.isZero()
@@ -5595,29 +5595,29 @@
 			}
 			return coords;
 		},
-	
+
 	   statics: {
-	
+
 			isLinear: function(seg1, seg2) {
 				var l = seg2._point.subtract(seg1._point);
 				return l.isCollinear(seg1._handleOut)
 						&& l.isCollinear(seg2._handleIn);
 			},
-	
+
 			isCollinear: function(seg1, seg2, seg3, seg4) {
 				return seg1._handleOut.isZero() && seg2._handleIn.isZero()
 						&& seg3._handleOut.isZero() && seg4._handleIn.isZero()
 						&& seg2._point.subtract(seg1._point).isCollinear(
 							seg4._point.subtract(seg3._point));
 			},
-	
+
 			isOrthogonal: function(seg1, seg2, seg3) {
 				return seg1._handleOut.isZero() && seg2._handleIn.isZero()
 					&& seg2._handleOut.isZero() && seg3._handleIn.isZero()
 					&& seg2._point.subtract(seg1._point).isOrthogonal(
 							seg3._point.subtract(seg2._point));
 			},
-	
+
 			isOrthogonalArc: function(seg1, seg2) {
 				var handle1 = seg1._handleOut,
 					handle2 = seg2._handleIn,
@@ -5636,7 +5636,7 @@
 			},
 		}
 	});
-	
+
 	var SegmentPoint = Point.extend({
 		initialize: function SegmentPoint(point, owner, key) {
 			var x, y, selected;
@@ -5660,14 +5660,14 @@
 			if (selected)
 				this.setSelected(true);
 		},
-	
+
 		set: function(x, y) {
 			this._x = x;
 			this._y = y;
 			this._owner._changed(this);
 			return this;
 		},
-	
+
 		_serialize: function(options) {
 			var f = options.formatter,
 				x = f.number(this._x),
@@ -5676,41 +5676,41 @@
 					? { x: x, y: y, selected: true }
 					: [x, y];
 		},
-	
+
 		getX: function() {
 			return this._x;
 		},
-	
+
 		setX: function(x) {
 			this._x = x;
 			this._owner._changed(this);
 		},
-	
+
 		getY: function() {
 			return this._y;
 		},
-	
+
 		setY: function(y) {
 			this._y = y;
 			this._owner._changed(this);
 		},
-	
+
 		isZero: function() {
 			return Numerical.isZero(this._x) && Numerical.isZero(this._y);
 		},
-	
+
 		setSelected: function(selected) {
 			this._owner.setSelected(selected, this);
 		},
-	
+
 		isSelected: function() {
 			return this._owner.isSelected(this);
 		}
 	});
-	
+
 	var Curve = Base.extend({
 		_class: 'Curve',
-	
+
 		initialize: function Curve(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
 			var count = arguments.length;
 			if (count === 3) {
@@ -5743,93 +5743,93 @@
 				this._segment2 = new Segment(point2, handle2, null);
 			}
 		},
-	
+
 		_changed: function() {
 			this._length = this._bounds = undefined;
 		},
-	
+
 		getPoint1: function() {
 			return this._segment1._point;
 		},
-	
+
 		setPoint1: function() {
 			var point = Point.read(arguments);
 			this._segment1._point.set(point.x, point.y);
 		},
-	
+
 		getPoint2: function() {
 			return this._segment2._point;
 		},
-	
+
 		setPoint2: function() {
 			var point = Point.read(arguments);
 			this._segment2._point.set(point.x, point.y);
 		},
-	
+
 		getHandle1: function() {
 			return this._segment1._handleOut;
 		},
-	
+
 		setHandle1: function() {
 			var point = Point.read(arguments);
 			this._segment1._handleOut.set(point.x, point.y);
 		},
-	
+
 		getHandle2: function() {
 			return this._segment2._handleIn;
 		},
-	
+
 		setHandle2: function() {
 			var point = Point.read(arguments);
 			this._segment2._handleIn.set(point.x, point.y);
 		},
-	
+
 		getSegment1: function() {
 			return this._segment1;
 		},
-	
+
 		getSegment2: function() {
 			return this._segment2;
 		},
-	
+
 		getPath: function() {
 			return this._path;
 		},
-	
+
 		getIndex: function() {
 			return this._segment1._index;
 		},
-	
+
 		getNext: function() {
 			var curves = this._path && this._path._curves;
 			return curves && (curves[this._segment1._index + 1]
 					|| this._path._closed && curves[0]) || null;
 		},
-	
+
 		getPrevious: function() {
 			var curves = this._path && this._path._curves;
 			return curves && (curves[this._segment1._index - 1]
 					|| this._path._closed && curves[curves.length - 1]) || null;
 		},
-	
+
 		isSelected: function() {
 			return this.getPoint1().isSelected()
 					&& this.getHandle2().isSelected()
 					&& this.getHandle2().isSelected()
 					&& this.getPoint2().isSelected();
 		},
-	
+
 		setSelected: function(selected) {
 			this.getPoint1().setSelected(selected);
 			this.getHandle1().setSelected(selected);
 			this.getHandle2().setSelected(selected);
 			this.getPoint2().setSelected(selected);
 		},
-	
+
 		getValues: function(matrix) {
 			return Curve.getValues(this._segment1, this._segment2, matrix);
 		},
-	
+
 		getPoints: function() {
 			var coords = this.getValues(),
 				points = [];
@@ -5837,7 +5837,7 @@
 				points.push(new Point(coords[i], coords[i + 1]));
 			return points;
 		},
-	
+
 		getLength: function() {
 			if (this._length == null) {
 				this._length = this.isLinear()
@@ -5846,42 +5846,42 @@
 			}
 			return this._length;
 		},
-	
+
 		getArea: function() {
 			return Curve.getArea(this.getValues());
 		},
-	
+
 		getPart: function(from, to) {
 			return new Curve(Curve.getPart(this.getValues(), from, to));
 		},
-	
+
 		getPartLength: function(from, to) {
 			return Curve.getLength(this.getValues(), from, to);
 		},
-	
+
 		hasHandles: function() {
 			return !this._segment1._handleOut.isZero()
 					|| !this._segment2._handleIn.isZero();
 		},
-	
+
 		isLinear: function() {
 			return Segment.isLinear(this._segment1, this._segment2);
 		},
-	
+
 		isCollinear: function(curve) {
 			return Ssegment.isCollinear(this._segment1, this._segment2,
 					curve._segment1, curve._segment2);
 		},
-	
+
 		isOrthogonalArc: function() {
 			return Segment.isOrthogonalArc(this._segment1, this._segment2);
 		},
-	
+
 		getIntersections: function(curve) {
 			return Curve.filterIntersections(Curve.getIntersections(
 					this.getValues(), curve.getValues(), this, curve, []));
 		},
-	
+
 		_getParameter: function(offset, isParameter) {
 			return isParameter
 					? offset
@@ -5891,7 +5891,7 @@
 							? 0.5
 							: this.getParameterAt(offset, 0);
 		},
-	
+
 		divide: function(offset, isParameter, ignoreLinear) {
 			var parameter = this._getParameter(offset, isParameter),
 				tolerance = 0.000001,
@@ -5901,19 +5901,19 @@
 					isLinear = ignoreLinear ? false : this.isLinear(),
 					left = parts[0],
 					right = parts[1];
-	
+
 				if (!isLinear) {
 					this._segment1._handleOut.set(left[2] - left[0],
 							left[3] - left[1]);
 					this._segment2._handleIn.set(right[4] - right[6],
 							right[5] - right[7]);
 				}
-	
+
 				var x = left[6], y = left[7],
 					segment = new Segment(new Point(x, y),
 							!isLinear && new Point(left[4] - x, left[5] - y),
 							!isLinear && new Point(right[2] - x, right[3] - y));
-	
+
 				if (this._path) {
 					if (this._segment1._index > 0 && this._segment2._index === 0) {
 						this._path.add(segment);
@@ -5929,18 +5929,18 @@
 			}
 			return res;
 		},
-	
+
 		split: function(offset, isParameter) {
 			return this._path
 				? this._path.split(this._segment1._index,
 						this._getParameter(offset, isParameter))
 				: null;
 		},
-	
+
 		reverse: function() {
 			return new Curve(this._segment2.reverse(), this._segment1.reverse());
 		},
-	
+
 		remove: function() {
 			var removed = false;
 			if (this._path) {
@@ -5952,11 +5952,11 @@
 			}
 			return removed;
 		},
-	
+
 		clone: function() {
 			return new Curve(this._segment1, this._segment2);
 		},
-	
+
 		toString: function() {
 			var parts = [ 'point1: ' + this._segment1._point ];
 			if (!this._segment1._handleOut.isZero())
@@ -5966,7 +5966,7 @@
 			parts.push('point2: ' + this._segment2._point);
 			return '{ ' + parts.join(', ') + ' }';
 		},
-	
+
 	statics: {
 		getValues: function(segment1, segment2, matrix) {
 			var p1 = segment1._point,
@@ -5983,7 +5983,7 @@
 				matrix._transformCoordinates(values, values, 4);
 			return values;
 		},
-	
+
 		subdivide: function(v, t) {
 			var p1x = v[0], p1y = v[1],
 				c1x = v[2], c1y = v[3],
@@ -6003,7 +6003,7 @@
 				[p8x, p8y, p7x, p7y, p5x, p5y, p2x, p2y]
 			];
 		},
-	
+
 		solveCubic: function (v, coord, val, roots, min, max) {
 			var p1 = v[coord],
 				c1 = v[coord + 2],
@@ -6014,7 +6014,7 @@
 				a = p2 - p1 - c - b;
 			return Numerical.solveCubic(a, b, c, p1 - val, roots, min, max);
 		},
-	
+
 		getParameterOf: function(v, x, y) {
 			var tolerance = 0.000001;
 			if (Math.abs(v[0] - x) < tolerance && Math.abs(v[1] - y) < tolerance)
@@ -6045,7 +6045,7 @@
 			}
 			return null;
 		},
-	
+
 		getPart: function(v, from, to) {
 			if (from > 0)
 				v = Curve.subdivide(v, from)[1];
@@ -6053,13 +6053,13 @@
 				v = Curve.subdivide(v, (to - from) / (1 - from))[0];
 			return v;
 		},
-	
+
 		hasHandles: function(v) {
 			var isZero = Numerical.isZero;
 			return !(isZero(v[0] - v[2]) && isZero(v[1] - v[3])
 					&& isZero(v[4] - v[6]) && isZero(v[5] - v[7]));
 		},
-	
+
 		isLinear: function(v) {
 			var p1x = v[0], p1y = v[1],
 				p2x = v[6], p2y = v[7],
@@ -6067,7 +6067,7 @@
 			return l.isCollinear(new Point(v[2] - p1x, v[3] - p1y))
 					&& l.isCollinear(new Point(v[4] - p2x, v[5] - p2y));
 		},
-	
+
 		isFlatEnough: function(v, tolerance) {
 			var p1x = v[0], p1y = v[1],
 				c1x = v[2], c1y = v[3],
@@ -6080,7 +6080,7 @@
 			return Math.max(ux * ux, vx * vx) + Math.max(uy * uy, vy * vy)
 					< 10 * tolerance * tolerance;
 		},
-	
+
 		getArea: function(v) {
 			var p1x = v[0], p1y = v[1],
 				c1x = v[2], c1y = v[3],
@@ -6093,13 +6093,13 @@
 					- 3.0 * c2y * p2x + 0.5 * p2y * p1x
 					+ 1.5 * p2y * c1x + 3.0 * p2y * c2x) / 10;
 		},
-	
+
 		getEdgeSum: function(v) {
 			return	  (v[0] - v[2]) * (v[3] + v[1])
 					+ (v[2] - v[4]) * (v[5] + v[3])
 					+ (v[4] - v[6]) * (v[7] + v[5]);
 		},
-	
+
 		getBounds: function(v) {
 			var min = v.slice(0, 2),
 				max = min.slice(),
@@ -6109,7 +6109,7 @@
 						i, 0, min, max, roots);
 			return new Rectangle(min[0], min[1], max[0] - min[0], max[1] - min[1]);
 		},
-	
+
 		_addBounds: function(v0, v1, v2, v3, coord, padding, min, max, roots) {
 			function add(value, padding) {
 				var left = value - padding,
@@ -6152,43 +6152,43 @@
 			};
 		},
 	{
-	
+
 	}), {
 		beans: false,
-	
+
 		getParameterAt: function(offset, start) {
 			return Curve.getParameterAt(this.getValues(), offset, start);
 		},
-	
+
 		getParameterOf: function() {
 			var point = Point.read(arguments);
 			return Curve.getParameterOf(this.getValues(), point.x, point.y);
 		},
-	
+
 		getLocationAt: function(offset, isParameter) {
 			var t = isParameter ? offset : this.getParameterAt(offset);
 			return t != null && t >= 0 && t <= 1
 					? new CurveLocation(this, t)
 					: null;
 		},
-	
+
 		getLocationOf: function() {
 			return this.getLocationAt(this.getParameterOf(Point.read(arguments)),
 					true);
 		},
-	
+
 		getOffsetOf: function() {
 			var loc = this.getLocationOf.apply(this, arguments);
 			return loc ? loc.getOffset() : null;
 		},
-	
+
 		getNearestLocation: function() {
 			var point = Point.read(arguments),
 				values = this.getValues(),
 				count = 100,
 				minDist = Infinity,
 				minT = 0;
-	
+
 			function refine(t) {
 				if (t >= 0 && t <= 1) {
 					var dist = point.getDistance(Curve.getPoint(values, t), true);
@@ -6199,10 +6199,10 @@
 					}
 				}
 			}
-	
+
 			for (var i = 0; i <= count; i++)
 				refine(i / count);
-	
+
 			var step = 1 / (count * 2);
 			while (step > 0.000001) {
 				if (!refine(minT - step) && !refine(minT + step))
@@ -6212,11 +6212,11 @@
 			return new CurveLocation(this, minT, pt, null, null, null,
 					point.getDistance(pt));
 		},
-	
+
 		getNearestPoint: function() {
 			return this.getNearestLocation.apply(this, arguments).getPoint();
 		}
-	
+
 	},
 	new function() {
 		var methods = ['getPoint', 'getTangent', 'getNormal', 'getWeightedTangent',
@@ -6235,32 +6235,32 @@
 		})
 	},
 	new function() {
-	
+
 		function getLengthIntegrand(v) {
 			var p1x = v[0], p1y = v[1],
 				c1x = v[2], c1y = v[3],
 				c2x = v[4], c2y = v[5],
 				p2x = v[6], p2y = v[7],
-	
+
 				ax = 9 * (c1x - c2x) + 3 * (p2x - p1x),
 				bx = 6 * (p1x + c2x) - 12 * c1x,
 				cx = 3 * (c1x - p1x),
-	
+
 				ay = 9 * (c1y - c2y) + 3 * (p2y - p1y),
 				by = 6 * (p1y + c2y) - 12 * c1y,
 				cy = 3 * (c1y - p1y);
-	
+
 			return function(t) {
 				var dx = (ax * t + bx) * t + cx,
 					dy = (ay * t + by) * t + cy;
 				return Math.sqrt(dx * dx + dy * dy);
 			};
 		}
-	
+
 		function getIterations(a, b) {
 			return Math.max(2, Math.min(16, Math.ceil(Math.abs(b - a) * 32)));
 		}
-	
+
 		function evaluate(v, t, type, normalized) {
 			if (t == null || t < 0 || t > 1)
 				return null;
@@ -6270,7 +6270,7 @@
 				p2x = v[6], p2y = v[7],
 				tolerance = 0.000001,
 				x, y;
-	
+
 			if (type === 0 && (t < tolerance || t > 1 - tolerance)) {
 				var isZero = t < tolerance;
 				x = isZero ? p1x : p2x;
@@ -6279,7 +6279,7 @@
 				var cx = 3 * (c1x - p1x),
 					bx = 3 * (c2x - c1x) - cx,
 					ax = p2x - p1x - cx - bx,
-	
+
 					cy = 3 * (c1y - p1y),
 					by = 3 * (c2y - c1y) - cy,
 					ay = p2y - p1y - cy - by;
@@ -6318,10 +6318,10 @@
 			}
 			return type === 2 ? new Point(y, -x) : new Point(x, y);
 		}
-	
+
 		return {
 			statics: true,
-	
+
 			getLength: function(v, a, b) {
 				if (a === undefined)
 					a = 0;
@@ -6338,7 +6338,7 @@
 				var ds = getLengthIntegrand(v);
 				return Numerical.integrate(ds, a, b, getIterations(a, b));
 			},
-	
+
 			getParameterAt: function(v, offset, start) {
 				if (start === undefined)
 					start = offset < 0 ? 1 : 0
@@ -6368,27 +6368,27 @@
 				return Numerical.findRoot(f, ds, start + guess, a, b, 16,
 						tolerance);
 			},
-	
+
 			getPoint: function(v, t) {
 				return evaluate(v, t, 0, false);
 			},
-	
+
 			getTangent: function(v, t) {
 				return evaluate(v, t, 1, true);
 			},
-	
+
 			getWeightedTangent: function(v, t) {
 				return evaluate(v, t, 1, false);
 			},
-	
+
 			getNormal: function(v, t) {
 				return evaluate(v, t, 2, true);
 			},
-	
+
 			getWeightedNormal: function(v, t) {
 				return evaluate(v, t, 2, false);
 			},
-	
+
 			getCurvature: function(v, t) {
 				return evaluate(v, t, 3, false).x;
 			}
@@ -6400,7 +6400,7 @@
 			if (!include || include(loc))
 				locations.push(loc);
 		}
-	
+
 		function addCurveIntersections(v1, v2, curve1, curve2, locations, include,
 				tMin, tMax, uMin, uMax, oldTDiff, reverse, recursion) {
 			if (recursion > 32)
@@ -6474,7 +6474,7 @@
 						uMin, uMax, tMinNew, tMaxNew, tDiff, !reverse, ++recursion);
 			}
 		}
-	
+
 		function getConvexHull(dq0, dq1, dq2, dq3) {
 			var p0 = [ 0, dq0 ],
 				p1 = [ 1 / 3, dq1 ],
@@ -6507,7 +6507,7 @@
 			}
 			return flip ? hull.reverse() : hull;
 		}
-	
+
 		function clipConvexHull(hullTop, hullBottom, dMin, dMax) {
 			if (hullTop[0][1] < dMin) {
 				return clipConvexHullPart(hullTop, true, dMin);
@@ -6517,7 +6517,7 @@
 				return hullTop[0][0];
 			}
 		}
-	
+
 		function clipConvexHullPart(part, top, threshold) {
 			var px = part[0][0],
 				py = part[0][1];
@@ -6531,7 +6531,7 @@
 			}
 			return null;
 		}
-	
+
 		function addCurveLineIntersections(v1, v2, curve1, curve2, locations,
 				include) {
 			var flip = Curve.isLinear(v1),
@@ -6569,7 +6569,7 @@
 				}
 			}
 		}
-	
+
 		function addLineIntersection(v1, v2, curve1, curve2, locations, include) {
 			var point = Line.intersect(
 					v1[0], v1[1], v1[6], v1[7],
@@ -6582,7 +6582,7 @@
 						curve2, Curve.getParameterOf(v2, x, y), point);
 			}
 		}
-	
+
 		return { statics: {
 			getIntersections: function(v1, v2, c1, c2, locations, include) {
 				var linear1 = Curve.isLinear(v1),
@@ -6609,7 +6609,7 @@
 					addLocation(locations, include, c1, 1, c1p2, c2, 1, c1p2);
 				return locations;
 			},
-	
+
 			filterIntersections: function(locations, _expand) {
 				var last = locations.length - 1,
 					tMax = 1 - 0.000001;
@@ -6626,7 +6626,7 @@
 						loc._curve2 = next2;
 					}
 				}
-	
+
 				function compare(loc1, loc2) {
 					var path1 = loc1.getPath(),
 						path2 = loc2.getPath();
@@ -6635,7 +6635,7 @@
 									- (loc2.getIndex() + loc2.getParameter())
 							: path1._id - path2._id;
 				}
-	
+
 				if (last > 0) {
 					locations.sort(compare);
 					for (var i = last; i > 0; i--) {
@@ -6654,11 +6654,11 @@
 			}
 		}};
 	});
-	
+
 	var CurveLocation = Base.extend({
 		_class: 'CurveLocation',
 		beans: true,
-	
+
 		initialize: function CurveLocation(curve, parameter, point, _curve2,
 				_parameter2, _point2, _distance) {
 			this._id = UID.get(CurveLocation);
@@ -6674,7 +6674,7 @@
 			this._segment1 = curve._segment1;
 			this._segment2 = curve._segment2;
 		},
-	
+
 		getSegment: function(_preferFirst) {
 			if (!this._segment) {
 				var curve = this.getCurve(),
@@ -6694,7 +6694,7 @@
 			}
 			return this._segment;
 		},
-	
+
 		getCurve: function() {
 			var curve = this._curve,
 				path = curve && curve._path;
@@ -6712,17 +6712,17 @@
 			}
 			return curve;
 		},
-	
+
 		getPath: function() {
 			var curve = this.getCurve();
 			return curve && curve._path;
 		},
-	
+
 		getIndex: function() {
 			var curve = this.getCurve();
 			return curve && curve.getIndex();
 		},
-	
+
 		getParameter: function() {
 			var curve = this.getCurve(),
 				parameter = this._parameter;
@@ -6730,22 +6730,22 @@
 				? this._parameter = curve.getParameterOf(this._point)
 				: parameter;
 		},
-	
+
 		getPoint: function() {
 			return this._point;
 		},
-	
+
 		getOffset: function() {
 			var path = this.getPath();
 			return path ? path._getOffset(this) : this.getCurveOffset();
 		},
-	
+
 		getCurveOffset: function() {
 			var curve = this.getCurve(),
 				parameter = this.getParameter();
 			return parameter != null && curve && curve.getPartLength(0, parameter);
 		},
-	
+
 		getIntersection: function() {
 			var intersection = this._intersection;
 			if (!intersection && this._curve2) {
@@ -6755,21 +6755,21 @@
 			}
 			return intersection;
 		},
-	
+
 		getDistance: function() {
 			return this._distance;
 		},
-	
+
 		divide: function() {
 			var curve = this.getCurve();
 			return curve && curve.divide(this.getParameter(), true);
 		},
-	
+
 		split: function() {
 			var curve = this.getCurve();
 			return curve && curve.split(this.getParameter(), true);
 		},
-	
+
 		equals: function(loc) {
 			var abs = Math.abs,
 				tolerance = 0.000001;
@@ -6781,7 +6781,7 @@
 						&& abs(this._parameter2 - loc._parameter2) < tolerance
 					|| false;
 		},
-	
+
 		toString: function() {
 			var parts = [],
 				point = this.getPoint(),
@@ -6808,13 +6808,13 @@
 			};
 		}
 	}, {}));
-	
+
 	var PathItem = Item.extend({
 		_class: 'PathItem',
-	
+
 		initialize: function PathItem() {
 		},
-	
+
 		getIntersections: function(path, _matrix, _expand) {
 			if (this === path)
 				path = null;
@@ -6870,13 +6870,13 @@
 			}
 			return Curve.filterIntersections(locations, _expand);
 		},
-	
+
 		_asPathItem: function() {
 			return this;
 		},
-	
+
 		setPathData: function(data) {
-	
+
 			var parts = data.match(/[mlhvcsqtaz][^mlhvcsqtaz]*/ig),
 				coords,
 				relative = false,
@@ -6884,23 +6884,23 @@
 				control,
 				current = new Point(),
 				start = new Point();
-	
+
 			function getCoord(index, coord) {
 				var val = +coords[index];
 				if (relative)
 					val += current[coord];
 				return val;
 			}
-	
+
 			function getPoint(index) {
 				return new Point(
 					getCoord(index, 'x'),
 					getCoord(index + 1, 'y')
 				);
 			}
-	
+
 			this.clear();
-	
+
 			for (var i = 0, l = parts && parts.length; i < l; i++) {
 				var part = parts[i],
 					command = part[0],
@@ -6980,25 +6980,25 @@
 				previous = lower;
 			}
 		},
-	
+
 		_canComposite: function() {
 			return !(this.hasFill() && this.hasStroke());
 		},
-	
+
 		_contains: function(point) {
 			var winding = this._getWinding(point, false, true);
 			return !!(this.getWindingRule() === 'evenodd' ? winding & 1 : winding);
 		}
-	
+
 	});
-	
+
 	var Path = PathItem.extend({
 		_class: 'Path',
 		_serializeFields: {
 			segments: [],
 			closed: false
 		},
-	
+
 		initialize: function Path(arg) {
 			this._closed = false;
 			this._segments = [];
@@ -7023,12 +7023,12 @@
 			}
 			this._initialize(!segments && arg);
 		},
-	
+
 		_equals: function(item) {
 			return this._closed === item._closed
 					&& Base.equals(this._segments, item._segments);
 		},
-	
+
 		clone: function(insert) {
 			var copy = new Path(Item.NO_INSERT);
 			copy.setSegments(this._segments);
@@ -7037,7 +7037,7 @@
 				copy._clockwise = this._clockwise;
 			return this._clone(copy, insert);
 		},
-	
+
 		_changed: function _changed(flags) {
 			_changed.base.call(this, flags);
 			if (flags & 8) {
@@ -7056,16 +7056,16 @@
 				this._bounds = undefined;
 			}
 		},
-	
+
 		getStyle: function() {
 			var parent = this._parent;
 			return (parent instanceof CompoundPath ? parent : this)._style;
 		},
-	
+
 		getSegments: function() {
 			return this._segments;
 		},
-	
+
 		setSegments: function(segments) {
 			var fullySelected = this.isFullySelected();
 			this._segments.length = 0;
@@ -7076,15 +7076,15 @@
 			if (fullySelected)
 				this.setFullySelected(true);
 		},
-	
+
 		getFirstSegment: function() {
 			return this._segments[0];
 		},
-	
+
 		getLastSegment: function() {
 			return this._segments[this._segments.length - 1];
 		},
-	
+
 		getCurves: function() {
 			var curves = this._curves,
 				segments = this._segments;
@@ -7097,20 +7097,20 @@
 			}
 			return curves;
 		},
-	
+
 		getFirstCurve: function() {
 			return this.getCurves()[0];
 		},
-	
+
 		getLastCurve: function() {
 			var curves = this.getCurves();
 			return curves[curves.length - 1];
 		},
-	
+
 		isClosed: function() {
 			return this._closed;
 		},
-	
+
 		setClosed: function(closed) {
 			if (this._closed != (closed = !!closed)) {
 				this._closed = closed;
@@ -7125,7 +7125,7 @@
 		}
 	}, {
 		beans: true,
-	
+
 		getPathData: function(_matrix, _precision) {
 			var segments = this._segments,
 				length = segments.length,
@@ -7137,7 +7137,7 @@
 				inX, inY,
 				outX, outY,
 				parts = [];
-	
+
 			function addSegment(segment, skipLine) {
 				segment._transformCoordinates(_matrix, coords, false);
 				curX = coords[0];
@@ -7163,10 +7163,10 @@
 				outX = coords[4];
 				outY = coords[5];
 			}
-	
+
 			if (length === 0)
 				return '';
-	
+
 			for (var i = 0; i < length; i++)
 				addSegment(segments[i]);
 			if (this._closed && length > 0) {
@@ -7176,11 +7176,11 @@
 			return parts.join('');
 		}
 	}, {
-	
+
 		isEmpty: function() {
 			return this._segments.length === 0;
 		},
-	
+
 		isLinear: function() {
 			var segments = this._segments;
 			for (var i = 0, l = segments.length; i < l; i++) {
@@ -7189,7 +7189,7 @@
 			}
 			return true;
 		},
-	
+
 		hasHandles: function() {
 			var segments = this._segments;
 			for (var i = 0, l = segments.length; i < l; i++) {
@@ -7198,14 +7198,14 @@
 			}
 			return false;
 		},
-	
+
 		_transformContent: function(matrix) {
 			var coords = new Array(6);
 			for (var i = 0, l = this._segments.length; i < l; i++)
 				this._segments[i]._transformCoordinates(matrix, coords, true);
 			return true;
 		},
-	
+
 		_add: function(segs, index) {
 			var segments = this._segments,
 				curves = this._curves,
@@ -7245,7 +7245,7 @@
 			this._changed(25);
 			return segs;
 		},
-	
+
 		_adjustCurves: function(from, to) {
 			var segments = this._segments,
 				curves = this._curves,
@@ -7267,44 +7267,44 @@
 				curve._changed();
 			}
 		},
-	
+
 		_countCurves: function() {
 			var length = this._segments.length;
 			return !this._closed && length > 0 ? length - 1 : length;
 		},
-	
+
 		add: function(segment1 ) {
 			return arguments.length > 1 && typeof segment1 !== 'number'
 				? this._add(Segment.readAll(arguments))
 				: this._add([ Segment.read(arguments) ])[0];
 		},
-	
+
 		insert: function(index, segment1 ) {
 			return arguments.length > 2 && typeof segment1 !== 'number'
 				? this._add(Segment.readAll(arguments, 1), index)
 				: this._add([ Segment.read(arguments, 1) ], index)[0];
 		},
-	
+
 		addSegment: function() {
 			return this._add([ Segment.read(arguments) ])[0];
 		},
-	
+
 		insertSegment: function(index ) {
 			return this._add([ Segment.read(arguments, 1) ], index)[0];
 		},
-	
+
 		addSegments: function(segments) {
 			return this._add(Segment.readAll(segments));
 		},
-	
+
 		insertSegments: function(index, segments) {
 			return this._add(Segment.readAll(segments), index);
 		},
-	
+
 		removeSegment: function(index) {
 			return this.removeSegments(index, index + 1)[0] || null;
 		},
-	
+
 		removeSegments: function(from, to, _includeCurves) {
 			from = from || 0;
 			to = Base.pick(to, this._segments.length);
@@ -7335,9 +7335,9 @@
 			this._changed(25);
 			return removed;
 		},
-	
+
 		clear: '#removeSegments',
-	
+
 		getLength: function() {
 			if (this._length == null) {
 				var curves = this.getCurves();
@@ -7347,7 +7347,7 @@
 			}
 			return this._length;
 		},
-	
+
 		getArea: function() {
 			var curves = this.getCurves();
 			var area = 0;
@@ -7355,25 +7355,25 @@
 				area += curves[i].getArea();
 			return area;
 		},
-	
+
 		isFullySelected: function() {
 			var length = this._segments.length;
 			return this._selected && length > 0 && this._selectedSegmentState
 					=== length * 7;
 		},
-	
+
 		setFullySelected: function(selected) {
 			if (selected)
 				this._selectSegments(true);
 			this.setSelected(selected);
 		},
-	
+
 		setSelected: function setSelected(selected) {
 			if (!selected)
 				this._selectSegments(false);
 			setSelected.base.call(this, selected);
 		},
-	
+
 		_selectSegments: function(selected) {
 			var length = this._segments.length;
 			this._selectedSegmentState = selected
@@ -7382,14 +7382,14 @@
 				this._segments[i]._selectionState = selected
 						? 7 : 0;
 		},
-	
+
 		_updateSelection: function(segment, oldState, newState) {
 			segment._selectionState = newState;
 			var total = this._selectedSegmentState += newState - oldState;
 			if (total > 0)
 				this.setSelected(true);
 		},
-	
+
 		flatten: function(maxDistance) {
 			var iterator = new PathIterator(this, 64, 0.1),
 				pos = 0,
@@ -7402,7 +7402,7 @@
 			}
 			this.setSegments(segments);
 		},
-	
+
 		reduce: function() {
 			var curves = this.getCurves();
 			for (var i = curves.length - 1; i >= 0; i--) {
@@ -7412,14 +7412,14 @@
 			}
 			return this;
 		},
-	
+
 		simplify: function(tolerance) {
 			if (this._segments.length > 2) {
 				var fitter = new PathFitter(this, tolerance || 2.5);
 				this.setSegments(fitter.fit());
 			}
 		},
-	
+
 		split: function(index, parameter) {
 			if (parameter === null)
 				return null;
@@ -7456,19 +7456,19 @@
 			}
 			return null;
 		},
-	
+
 		isClockwise: function() {
 			if (this._clockwise !== undefined)
 				return this._clockwise;
 			return Path.isClockwise(this._segments);
 		},
-	
+
 		setClockwise: function(clockwise) {
 			if (this.isClockwise() != (clockwise = !!clockwise))
 				this.reverse();
 			this._clockwise = clockwise;
 		},
-	
+
 		reverse: function() {
 			this._segments.reverse();
 			for (var i = 0, l = this._segments.length; i < l; i++) {
@@ -7483,7 +7483,7 @@
 				this._clockwise = !this._clockwise;
 			this._changed(9);
 		},
-	
+
 		join: function(path) {
 			if (path) {
 				var segments = path._segments,
@@ -7522,33 +7522,33 @@
 			}
 			return this;
 		},
-	
+
 		toShape: function(insert) {
 			if (!this._closed)
 				return null;
-	
+
 			var segments = this._segments,
 				type,
 				size,
 				radius,
 				topCenter;
-	
+
 			function isCollinear(i, j) {
 				return segments[i].isCollinear(segments[j]);
 			}
-	
+
 			function isOrthogonal(i) {
 				return segments[i].isOrthogonal();
 			}
-	
+
 			function isArc(i) {
 				return segments[i].isOrthogonalArc();
 			}
-	
+
 			function getDistance(i, j) {
 				return segments[i]._point.getDistance(segments[j]._point);
 			}
-	
+
 			if (!this.hasHandles() && segments.length === 4
 					&& isCollinear(0, 2) && isCollinear(1, 3) && isOrthogonal(1)) {
 				type = Shape.Rectangle;
@@ -7572,7 +7572,7 @@
 				}
 				topCenter = segments[1]._point;
 			}
-	
+
 			if (type) {
 				var center = this.getPosition(true),
 					shape = this._clone(new type({
@@ -7586,7 +7586,7 @@
 			}
 			return null;
 		},
-	
+
 		_hitTestSelf: function(point, options) {
 			var that = this,
 				style = this.getStyle(),
@@ -7614,11 +7614,11 @@
 					join = cap = 'round';
 				}
 			}
-	
+
 			function isCloseEnough(pt, padding) {
 				return point.subtract(pt).divide(padding).length <= 1;
 			}
-	
+
 			function checkSegmentPoint(seg, pt, name) {
 				if (!options.selected || pt.isSelected()) {
 					var anchor = seg._point;
@@ -7632,7 +7632,7 @@
 					}
 				}
 			}
-	
+
 			function checkSegmentPoints(seg, ends) {
 				return (ends || options.segments)
 					&& checkSegmentPoint(seg, seg._point, 'segment')
@@ -7640,11 +7640,11 @@
 						checkSegmentPoint(seg, seg._handleIn, 'handle-in') ||
 						checkSegmentPoint(seg, seg._handleOut, 'handle-out'));
 			}
-	
+
 			function addToArea(point) {
 				area.add(point);
 			}
-	
+
 			function checkSegmentStroke(segment) {
 				if (join !== 'round' || cap !== 'round') {
 					area = new Path({ internal: true, closed: true });
@@ -7666,7 +7666,7 @@
 				}
 				return isCloseEnough(segment._point, strokePadding);
 			}
-	
+
 			if (options.ends && !options.segments && !closed) {
 				if (res = checkSegmentPoints(segments[0], true)
 						|| checkSegmentPoints(segments[numSegments - 1], true))
@@ -7708,7 +7708,7 @@
 							})
 							: null;
 		}
-	
+
 	}, Base.each(Curve.evaluateMethods,
 		function(name) {
 			this[name + 'At'] = function(offset, isParameter) {
@@ -7718,7 +7718,7 @@
 		},
 	{
 		beans: false,
-	
+
 		_getOffset: function(location) {
 			var index = location && location.getIndex();
 			if (index != null) {
@@ -7734,7 +7734,7 @@
 			}
 			return null;
 		},
-	
+
 		getLocationOf: function() {
 			var point = Point.read(arguments),
 				curves = this.getCurves();
@@ -7745,12 +7745,12 @@
 			}
 			return null;
 		},
-	
+
 		getOffsetOf: function() {
 			var loc = this.getLocationOf.apply(this, arguments);
 			return loc ? loc.getOffset() : null;
 		},
-	
+
 		getLocationAt: function(offset, isParameter) {
 			var curves = this.getCurves(),
 				length = 0;
@@ -7771,7 +7771,7 @@
 				return new CurveLocation(curves[curves.length - 1], 1);
 			return null;
 		},
-	
+
 		getNearestLocation: function() {
 			var point = Point.read(arguments),
 				curves = this.getCurves(),
@@ -7786,15 +7786,15 @@
 			}
 			return minLoc;
 		},
-	
+
 		getNearestPoint: function() {
 			return this.getNearestLocation.apply(this, arguments).getPoint();
 		}
 	}), new function() {
-	
+
 		function drawHandles(ctx, segments, matrix, size) {
 			var half = size / 2;
-	
+
 			function drawHandle(index) {
 				var hX = coords[index],
 					hY = coords[index + 1];
@@ -7808,7 +7808,7 @@
 					ctx.fill();
 				}
 			}
-	
+
 			var coords = new Array(6);
 			for (var i = 0, l = segments.length; i < l; i++) {
 				var segment = segments[i];
@@ -7829,7 +7829,7 @@
 				}
 			}
 		}
-	
+
 		function drawSegments(ctx, path, matrix) {
 			var segments = path._segments,
 				length = segments.length,
@@ -7839,7 +7839,7 @@
 				prevX, prevY,
 				inX, inY,
 				outX, outY;
-	
+
 			function drawSegment(segment) {
 				if (matrix) {
 					segment._transformCoordinates(matrix, coords, false);
@@ -7880,13 +7880,13 @@
 					outY = prevY + handle._y;
 				}
 			}
-	
+
 			for (var i = 0; i < length; i++)
 				drawSegment(segments[i]);
 			if (path._closed && length > 0)
 				drawSegment(segments[0]);
 		}
-	
+
 		return {
 			_draw: function(ctx, param, strokeMatrix) {
 				var dontStart = param.dontStart,
@@ -7897,10 +7897,10 @@
 					dashArray = style.getDashArray(),
 					dashLength = !paper.support.nativeDash && hasStroke
 							&& dashArray && dashArray.length;
-	
+
 				if (!dontStart)
 					ctx.beginPath();
-	
+
 				if (!dontStart && this._currentPath) {
 					ctx.currentPath = this._currentPath;
 				} else if (hasFill || hasStroke && !dashLength || dontPaint) {
@@ -7910,11 +7910,11 @@
 					if (!dontStart)
 						this._currentPath = ctx.currentPath;
 				}
-	
+
 				function getOffset(i) {
 					return dashArray[((i % dashLength) + dashLength) % dashLength];
 				}
-	
+
 				if (!dontPaint && (hasFill || hasStroke)) {
 					this._setStyles(ctx);
 					if (hasFill) {
@@ -7946,7 +7946,7 @@
 					}
 				}
 			},
-	
+
 			_drawSelected: function(ctx, matrix) {
 				ctx.beginPath();
 				drawSegments(ctx, this, matrix);
@@ -7955,7 +7955,7 @@
 			}
 		};
 	}, new function() {
-	
+
 		function getFirstControlPoints(rhs) {
 			var n = rhs.length,
 				x = [],
@@ -7972,7 +7972,7 @@
 			}
 			return x;
 		}
-	
+
 		return {
 			smooth: function() {
 				var segments = this._segments,
@@ -7998,19 +7998,19 @@
 					n--;
 				}
 				var rhs = [];
-	
+
 				for (var i = 1; i < n - 1; i++)
 					rhs[i] = 4 * knots[i]._x + 2 * knots[i + 1]._x;
 				rhs[0] = knots[0]._x + 2 * knots[1]._x;
 				rhs[n - 1] = 3 * knots[n - 1]._x;
 				var x = getFirstControlPoints(rhs);
-	
+
 				for (var i = 1; i < n - 1; i++)
 					rhs[i] = 4 * knots[i]._y + 2 * knots[i + 1]._y;
 				rhs[0] = knots[0]._y + 2 * knots[1]._y;
 				rhs[n - 1] = 3 * knots[n - 1]._y;
 				var y = getFirstControlPoints(rhs);
-	
+
 				if (closed) {
 					for (var i = 0, j = size; i < overlap; i++, j++) {
 						var f1 = i / overlap,
@@ -8054,7 +8054,7 @@
 				throw new Error('Use a moveTo() command first');
 			return segments[segments.length - 1];
 		}
-	
+
 		return {
 			moveTo: function() {
 				var segments = this._segments;
@@ -8063,15 +8063,15 @@
 				if (!segments.length)
 					this._add([ new Segment(Point.read(arguments)) ]);
 			},
-	
+
 			moveBy: function() {
 				throw new Error('moveBy() is unsupported on Path items.');
 			},
-	
+
 			lineTo: function() {
 				this._add([ new Segment(Point.read(arguments)) ]);
 			},
-	
+
 			cubicCurveTo: function() {
 				var handle1 = Point.read(arguments),
 					handle2 = Point.read(arguments),
@@ -8080,7 +8080,7 @@
 				current.setHandleOut(handle1.subtract(current._point));
 				this._add([ new Segment(to, handle2.subtract(to)) ]);
 			},
-	
+
 			quadraticCurveTo: function() {
 				var handle = Point.read(arguments),
 					to = Point.read(arguments),
@@ -8091,7 +8091,7 @@
 					to
 				);
 			},
-	
+
 			curveTo: function() {
 				var through = Point.read(arguments),
 					to = Point.read(arguments),
@@ -8105,7 +8105,7 @@
 						'Cannot put a curve through points with parameter = ' + t);
 				this.quadraticCurveTo(handle, to);
 			},
-	
+
 			arcTo: function() {
 				var current = getCurrentSegment(this),
 					from = current._point,
@@ -8223,13 +8223,13 @@
 				}
 				this._add(segments);
 			},
-	
+
 			lineBy: function() {
 				var to = Point.read(arguments),
 					current = getCurrentSegment(this)._point;
 				this.lineTo(current.add(to));
 			},
-	
+
 			curveBy: function() {
 				var through = Point.read(arguments),
 					to = Point.read(arguments),
@@ -8237,7 +8237,7 @@
 					current = getCurrentSegment(this)._point;
 				this.curveTo(current.add(through), current.add(to), parameter);
 			},
-	
+
 			cubicCurveBy: function() {
 				var handle1 = Point.read(arguments),
 					handle2 = Point.read(arguments),
@@ -8246,14 +8246,14 @@
 				this.cubicCurveTo(current.add(handle1), current.add(handle2),
 						current.add(to));
 			},
-	
+
 			quadraticCurveBy: function() {
 				var handle = Point.read(arguments),
 					to = Point.read(arguments),
 					current = getCurrentSegment(this)._point;
 				this.quadraticCurveTo(current.add(handle), current.add(to));
 			},
-	
+
 			arcBy: function() {
 				var current = getCurrentSegment(this)._point,
 					point = current.add(Point.read(arguments)),
@@ -8264,7 +8264,7 @@
 					this.arcTo(point, current.add(Point.read(arguments)));
 				}
 			},
-	
+
 			closePath: function(join) {
 				this.setClosed(true);
 				if (join)
@@ -8272,12 +8272,12 @@
 			}
 		};
 	}, {
-	
+
 		_getBounds: function(getter, matrix) {
 			return Path[getter](this._segments, this._closed, this.getStyle(),
 					matrix);
 		},
-	
+
 	statics: {
 		isClockwise: function(segments) {
 			var sum = 0;
@@ -8286,7 +8286,7 @@
 						segments[i], segments[i + 1 < l ? i + 1 : 0]));
 			return sum > 0;
 		},
-	
+
 		getBounds: function(segments, closed, style, matrix, strokePadding) {
 			var first = segments[0];
 			if (!first)
@@ -8296,7 +8296,7 @@
 				min = prevCoords.slice(0, 2),
 				max = min.slice(),
 				roots = new Array(2);
-	
+
 			function processSegment(segment) {
 				segment._transformCoordinates(matrix, coords, false);
 				for (var i = 0; i < 2; i++) {
@@ -8311,14 +8311,14 @@
 				prevCoords = coords;
 				coords = tmp;
 			}
-	
+
 			for (var i = 1, l = segments.length; i < l; i++)
 				processSegment(segments[i]);
 			if (closed)
 				processSegment(first);
 			return new Rectangle(min[0], min[1], max[0] - min[0], max[1] - min[1]);
 		},
-	
+
 		getStrokeBounds: function(segments, closed, style, matrix) {
 			if (!style.hasStroke())
 				return Path.getBounds(segments, closed, style, matrix);
@@ -8330,17 +8330,17 @@
 				cap = style.getStrokeCap(),
 				miterLimit = radius * style.getMiterLimit();
 			var joinBounds = new Rectangle(new Size(padding).multiply(2));
-	
+
 			function add(point) {
 				bounds = bounds.include(matrix
 					? matrix._transformPoint(point, point) : point);
 			}
-	
+
 			function addRound(segment) {
 				bounds = bounds.unite(joinBounds.setCenter(matrix
 					? matrix._transformPoint(segment._point) : segment._point));
 			}
-	
+
 			function addJoin(segment, join) {
 				var handleIn = segment._handleIn,
 					handleOut = segment._handleOut;
@@ -8351,7 +8351,7 @@
 					Path._addBevelJoin(segment, join, radius, miterLimit, add);
 				}
 			}
-	
+
 			function addCap(segment, cap) {
 				if (cap === 'round') {
 					addRound(segment);
@@ -8359,7 +8359,7 @@
 					Path._addSquareCap(segment, cap, radius, add);
 				}
 			}
-	
+
 			for (var i = 1; i < length; i++)
 				addJoin(segments[i], join);
 			if (closed) {
@@ -8370,7 +8370,7 @@
 			}
 			return bounds;
 		},
-	
+
 		_getPenPadding: function(radius, matrix) {
 			if (!matrix)
 				return [radius, radius];
@@ -8388,7 +8388,7 @@
 			return [Math.abs(a * Math.cos(tx) * cos - b * Math.sin(tx) * sin),
 					Math.abs(b * Math.sin(ty) * cos + a * Math.cos(ty) * sin)];
 		},
-	
+
 		_addBevelJoin: function(segment, join, radius, miterLimit, addPoint, area) {
 			var curve2 = segment.getCurve(),
 				curve1 = curve2.getPrevious(),
@@ -8420,7 +8420,7 @@
 				addPoint(point.add(normal1));
 			addPoint(point.add(normal2));
 		},
-	
+
 		_addSquareCap: function(segment, cap, radius, addPoint, area) {
 			var point = segment._point,
 				loc = segment.getLocation(),
@@ -8434,7 +8434,7 @@
 			addPoint(point.add(normal));
 			addPoint(point.subtract(normal));
 		},
-	
+
 		getHandleBounds: function(segments, closed, style, matrix, strokePadding,
 				joinPadding) {
 			var coords = new Array(6),
@@ -8463,7 +8463,7 @@
 			}
 			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		},
-	
+
 		getRoughBounds: function(segments, closed, style, matrix) {
 			var strokeRadius = style.hasStroke() ? style.getStrokeWidth() / 2 : 0,
 				joinRadius = strokeRadius;
@@ -8478,9 +8478,9 @@
 					Path._getPenPadding(joinRadius, matrix));
 		}
 	}});
-	
+
 	Path.inject({ statics: new function() {
-	
+
 		var kappa = 0.5522847498307936,
 			ellipseSegments = [
 				new Segment([-1, 0], [0, kappa ], [0, -kappa]),
@@ -8488,7 +8488,7 @@
 				new Segment([1, 0], [0, -kappa], [0, kappa ]),
 				new Segment([0, 1], [kappa, 0 ], [-kappa, 0])
 			];
-	
+
 		function createPath(segments, closed, args) {
 			var props = Base.getNamed(args),
 				path = new Path(props && props.insert === false && Item.NO_INSERT);
@@ -8496,7 +8496,7 @@
 			path._closed = closed;
 			return path.set(props);
 		}
-	
+
 		function createEllipse(center, radius, args) {
 			var segments = new Array(4);
 			for (var i = 0; i < 4; i++) {
@@ -8509,7 +8509,7 @@
 			}
 			return createPath(segments, true, args);
 		}
-	
+
 		return {
 			Line: function() {
 				return createPath([
@@ -8517,13 +8517,13 @@
 					new Segment(Point.readNamed(arguments, 'to'))
 				], false, arguments);
 			},
-	
+
 			Circle: function() {
 				var center = Point.readNamed(arguments, 'center'),
 					radius = Base.readNamed(arguments, 'radius');
 				return createEllipse(center, new Size(radius), arguments);
 			},
-	
+
 			Rectangle: function() {
 				var rect = Rectangle.readNamed(arguments, 'rectangle'),
 					radius = Size.readNamed(arguments, 'radius', 0,
@@ -8559,16 +8559,16 @@
 				}
 				return createPath(segments, true, arguments);
 			},
-	
+
 			RoundRectangle: '#Rectangle',
-	
+
 			Ellipse: function() {
 				var ellipse = Shape._readEllipse(arguments);
 				return createEllipse(ellipse.center, ellipse.radius, arguments);
 			},
-	
+
 			Oval: '#Ellipse',
-	
+
 			Arc: function() {
 				var from = Point.readNamed(arguments, 'from'),
 					through = Point.readNamed(arguments, 'through'),
@@ -8580,7 +8580,7 @@
 				path.arcTo(through, to);
 				return path.set(props);
 			},
-	
+
 			RegularPolygon: function() {
 				var center = Point.readNamed(arguments, 'center'),
 					sides = Base.readNamed(arguments, 'sides'),
@@ -8595,7 +8595,7 @@
 						vector.rotate((i + offset) * step)));
 				return createPath(segments, true, arguments);
 			},
-	
+
 			Star: function() {
 				var center = Point.readNamed(arguments, 'center'),
 					points = Base.readNamed(arguments, 'points') * 2,
@@ -8611,13 +8611,13 @@
 			}
 		};
 	}});
-	
+
 	var CompoundPath = PathItem.extend({
 		_class: 'CompoundPath',
 		_serializeFields: {
 			children: []
 		},
-	
+
 		initialize: function CompoundPath(arg) {
 			this._children = [];
 			this._namedChildren = {};
@@ -8629,7 +8629,7 @@
 				}
 			}
 		},
-	
+
 		insertChildren: function insertChildren(index, items, _preserve) {
 			items = insertChildren.base.call(this, index, items, _preserve, Path);
 			for (var i = 0, l = !_preserve && items && items.length; i < l; i++) {
@@ -8639,18 +8639,18 @@
 			}
 			return items;
 		},
-	
+
 		reverse: function() {
 			var children = this._children;
 			for (var i = 0, l = children.length; i < l; i++)
 				children[i].reverse();
 		},
-	
+
 		smooth: function() {
 			for (var i = 0, l = this._children.length; i < l; i++)
 				this._children[i].smooth();
 		},
-	
+
 		reduce: function reduce() {
 			if (this._children.length === 0) {
 				var path = new Path(Item.NO_INSERT);
@@ -8662,27 +8662,27 @@
 				return reduce.base.call(this);
 			}
 		},
-	
+
 		isClockwise: function() {
 			var child = this.getFirstChild();
 			return child && child.isClockwise();
 		},
-	
+
 		setClockwise: function(clockwise) {
 			if (this.isClockwise() !== !!clockwise)
 				this.reverse();
 		},
-	
+
 		getFirstSegment: function() {
 			var first = this.getFirstChild();
 			return first && first.getFirstSegment();
 		},
-	
+
 		getLastSegment: function() {
 			var last = this.getLastChild();
 			return last && last.getLastSegment();
 		},
-	
+
 		getCurves: function() {
 			var children = this._children,
 				curves = [];
@@ -8690,17 +8690,17 @@
 				curves.push.apply(curves, children[i].getCurves());
 			return curves;
 		},
-	
+
 		getFirstCurve: function() {
 			var first = this.getFirstChild();
 			return first && first.getFirstCurve();
 		},
-	
+
 		getLastCurve: function() {
 			var last = this.getLastChild();
 			return last && last.getFirstCurve();
 		},
-	
+
 		getArea: function() {
 			var children = this._children,
 				area = 0;
@@ -8710,7 +8710,7 @@
 		}
 	}, {
 		beans: true,
-	
+
 		getPathData: function(_matrix, _precision) {
 			var children = this._children,
 				paths = [];
@@ -8728,12 +8728,12 @@
 					? options
 					: new Base(options, { fill: false });
 		},
-	
+
 		_draw: function(ctx, param, strokeMatrix) {
 			var children = this._children;
 			if (children.length === 0)
 				return;
-	
+
 			if (this._currentPath) {
 				ctx.currentPath = this._currentPath;
 			} else {
@@ -8743,7 +8743,7 @@
 					children[i].draw(ctx, param, strokeMatrix);
 				this._currentPath = ctx.currentPath;
 			}
-	
+
 			if (!param.clip) {
 				this._setStyles(ctx);
 				var style = this._style;
@@ -8755,7 +8755,7 @@
 					ctx.stroke();
 			}
 		},
-	
+
 		_drawSelected: function(ctx, matrix, selectedItems) {
 			var children = this._children;
 			for (var i = 0, l = children.length; i < l; i++) {
@@ -8773,7 +8773,7 @@
 				throw new Error('Use a moveTo() command first');
 			return children[children.length - 1];
 		}
-	
+
 		var fields = {
 			moveTo: function() {
 				var current = getCurrentPath(this),
@@ -8782,19 +8782,19 @@
 					this.addChild(path);
 				path.moveTo.apply(path, arguments);
 			},
-	
+
 			moveBy: function() {
 				var current = getCurrentPath(this, true),
 					last = current && current.getLastSegment(),
 					point = Point.read(arguments);
 				this.moveTo(last ? point.add(last._point) : point);
 			},
-	
+
 			closePath: function(join) {
 				getCurrentPath(this, true).closePath(join);
 			}
 		};
-	
+
 		Base.each(['lineTo', 'cubicCurveTo', 'quadraticCurveTo', 'curveTo', 'arcTo',
 				'lineBy', 'cubicCurveBy', 'quadraticCurveBy', 'curveBy', 'arcBy'],
 				function(key) {
@@ -8804,48 +8804,48 @@
 					};
 				}
 		);
-	
+
 		return fields;
 	});
-	
+
 	PathItem.inject(new function() {
 		var operators = {
 			unite: function(w) {
 				return w === 1 || w === 0;
 			},
-	
+
 			intersect: function(w) {
 				return w === 2;
 			},
-	
+
 			subtract: function(w) {
 				return w === 1;
 			},
-	
+
 			exclude: function(w) {
 				return w === 1;
 			}
 		};
-	
+
 		function computeBoolean(path1, path2, operation) {
 			var operator = operators[operation];
 			function preparePath(path) {
 				return path.clone(false).reduce().reorient().transform(null, true,
 						true);
 			}
-	
+
 			var _path1 = preparePath(path1),
 				_path2 = path2 && path1 !== path2 && preparePath(path2);
 			if (_path2 && /^(subtract|exclude)$/.test(operation)
 					^ (_path2.isClockwise() !== _path1.isClockwise()))
 				_path2.reverse();
 			splitPath(_path1.getIntersections(_path2, null, true));
-	
+
 			var chain = [],
 				segments = [],
 				monoCurves = [],
 				tolerance = 0.000001;
-	
+
 			function collect(paths) {
 				for (var i = 0, l = paths.length; i < l; i++) {
 					var path = paths[i];
@@ -8853,7 +8853,7 @@
 					monoCurves.push.apply(monoCurves, path._getMonoCurves());
 				}
 			}
-	
+
 			collect(_path1._children || [_path1]);
 			if (_path2)
 				collect(_path2._children || [_path2]);
@@ -8913,17 +8913,17 @@
 			result.setStyle(path1._style);
 			return result;
 		}
-	
+
 		function splitPath(intersections) {
 			var tMin = 0.000001,
 				tMax = 1 - tMin,
 				linearHandles;
-	
+
 			function resetLinear() {
 				for (var i = 0, l = linearHandles.length; i < l; i++)
 					linearHandles[i].set(0, 0);
 			}
-	
+
 			for (var i = intersections.length - 1, curve, prev; i >= 0; i--) {
 				var loc = intersections[i],
 					t = loc._parameter;
@@ -8961,7 +8961,7 @@
 			if (linearHandles)
 				resetLinear();
 		}
-	
+
 		function getWinding(point, curves, horizontal, testContains) {
 			var tolerance = 0.000001,
 				tMin = tolerance,
@@ -9045,7 +9045,7 @@
 			}
 			return Math.max(abs(windLeft), abs(windRight));
 		}
-	
+
 		function tracePaths(segments, operator, selfOp) {
 			var paths = [],
 				tMin = 0.000001,
@@ -9124,40 +9124,40 @@
 			}
 			return paths;
 		}
-	
+
 		return {
 			_getWinding: function(point, horizontal, testContains) {
 				return getWinding(point, this._getMonoCurves(),
 						horizontal, testContains);
 			},
-	
+
 			unite: function(path) {
 				return computeBoolean(this, path, 'unite');
 			},
-	
+
 			intersect: function(path) {
 				return computeBoolean(this, path, 'intersect');
 			},
-	
+
 			subtract: function(path) {
 				return computeBoolean(this, path, 'subtract');
 			},
-	
+
 			exclude: function(path) {
 				return computeBoolean(this, path, 'exclude');
 			},
-	
+
 			divide: function(path) {
 				return new Group([this.subtract(path), this.intersect(path)]);
 			}
 		};
 	});
-	
+
 	Path.inject({
 		_getMonoCurves: function() {
 			var monoCurves = this._monoCurves,
 				prevCurve;
-	
+
 			function insertCurve(v) {
 				var y0 = v[1],
 					y1 = v[7],
@@ -9176,7 +9176,7 @@
 				monoCurves.push(curve);
 				prevCurve = curve;
 			}
-	
+
 			function handleCurve(v) {
 				if (Curve.getLength(v) === 0)
 					return;
@@ -9210,7 +9210,7 @@
 					}
 				}
 			}
-	
+
 			if (!monoCurves) {
 				monoCurves = this._monoCurves = [];
 				var curves = this.getCurves(),
@@ -9233,7 +9233,7 @@
 			}
 			return monoCurves;
 		},
-	
+
 		getInteriorPoint: function() {
 			var bounds = this.getBounds(),
 				point = bounds.getCenter(true);
@@ -9258,13 +9258,13 @@
 			}
 			return point;
 		},
-	
+
 		reorient: function() {
 			this.setClockwise(true);
 			return this;
 		}
 	});
-	
+
 	CompoundPath.inject({
 		_getMonoCurves: function() {
 			var children = this._children,
@@ -9273,7 +9273,7 @@
 				monoCurves.push.apply(monoCurves, children[i]._getMonoCurves());
 			return monoCurves;
 		},
-	
+
 		reorient: function() {
 			var children = this.removeChildren().sort(function(a, b) {
 				return b.getBounds().getArea() - a.getBounds().getArea();
@@ -9294,10 +9294,10 @@
 			return this;
 		}
 	});
-	
+
 	var PathIterator = Base.extend({
 		_class: 'PathIterator',
-	
+
 		initialize: function(path, maxRecursion, tolerance, matrix) {
 			var curves = [],
 				parts = [],
@@ -9306,13 +9306,13 @@
 				segments = path._segments,
 				segment1 = segments[0],
 				segment2;
-	
+
 			function addCurve(segment1, segment2) {
 				var curve = Curve.getValues(segment1, segment2, matrix);
 				curves.push(curve);
 				computeParts(curve, segment1._index, 0, 1);
 			}
-	
+
 			function computeParts(curve, index, minT, maxT) {
 				if ((maxT - minT) > minDifference
 						&& !Curve.isFlatEnough(curve, tolerance || 0.25)) {
@@ -9334,7 +9334,7 @@
 					}
 				}
 			}
-	
+
 			for (var i = 1, l = segments.length; i < l; i++) {
 				segment2 = segments[i];
 				addCurve(segment1, segment2);
@@ -9342,13 +9342,13 @@
 			}
 			if (path._closed)
 				addCurve(segment2, segments[0]);
-	
+
 			this.curves = curves;
 			this.parts = parts;
 			this.length = length;
 			this.index = 0;
 		},
-	
+
 		getParameterAt: function(offset) {
 			var i, j = this.index;
 			for (;;) {
@@ -9376,7 +9376,7 @@
 				index: part.index
 			};
 		},
-	
+
 		drawPart: function(ctx, from, to) {
 			from = this.getParameterAt(from);
 			to = this.getParameterAt(to);
@@ -9397,7 +9397,7 @@
 			};
 		}, {})
 	);
-	
+
 	var PathFitter = Base.extend({
 		initialize: function(path, error) {
 			var points = this.points = [],
@@ -9410,16 +9410,16 @@
 					prev = point;
 				}
 			}
-	
+
 			if (path._closed) {
 				this.closed = true;
 				points.unshift(points[points.length - 1]);
 				points.push(points[1]);
 			}
-	
+
 			this.error = error;
 		},
-	
+
 		fit: function() {
 			var points = this.points,
 				length = points.length,
@@ -9429,15 +9429,15 @@
 				this.fitCubic(0, length - 1,
 					points[1].subtract(points[0]).normalize(),
 					points[length - 2].subtract(points[length - 1]).normalize());
-	
+
 			if (this.closed) {
 				segments.shift();
 				segments.pop();
 			}
-	
+
 			return segments;
 		},
-	
+
 		fitCubic: function(first, last, tan1, tan2) {
 			if (last - first == 1) {
 				var pt1 = this.points[first],
@@ -9470,21 +9470,21 @@
 			this.fitCubic(first, split, tan1, tanCenter);
 			this.fitCubic(split, last, tanCenter.negate(), tan2);
 		},
-	
+
 		addCurve: function(curve) {
 			var prev = this.segments[this.segments.length - 1];
 			prev.setHandleOut(curve[1].subtract(curve[0]));
 			this.segments.push(
 					new Segment(curve[3], curve[2].subtract(curve[3])));
 		},
-	
+
 		generateBezier: function(first, last, uPrime, tan1, tan2) {
 			var epsilon = 1e-12,
 				pt1 = this.points[first],
 				pt2 = this.points[last],
 				C = [[0, 0], [0, 0]],
 				X = [0, 0];
-	
+
 			for (var i = 0, l = last - first + 1; i < l; i++) {
 				var u = uPrime[i],
 					t = 1 - u,
@@ -9505,7 +9505,7 @@
 				X[0] += a1.dot(tmp);
 				X[1] += a2.dot(tmp);
 			}
-	
+
 			var detC0C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1],
 				alpha1, alpha2;
 			if (Math.abs(detC0C1) > epsilon) {
@@ -9524,7 +9524,7 @@
 					alpha1 = alpha2 = 0;
 				}
 			}
-	
+
 			var segLength = pt2.getDistance(pt1),
 				eps = epsilon * segLength,
 				handle1,
@@ -9540,11 +9540,11 @@
 					handle1 = handle2 = null;
 				}
 			}
-	
+
 			return [pt1, pt1.add(handle1 || tan1.normalize(alpha1)),
 					pt2.add(handle2 || tan2.normalize(alpha2)), pt2];
 		},
-	
+
 		reparameterize: function(first, last, u, curve) {
 			for (var i = first; i <= last; i++) {
 				u[i - first] = this.findRoot(curve, this.points[i], u[i - first]);
@@ -9555,7 +9555,7 @@
 			}
 			return true;
 		},
-	
+
 		findRoot: function(curve, point, u) {
 			var curve1 = [],
 				curve2 = [];
@@ -9574,7 +9574,7 @@
 				return u;
 			return u - diff.dot(pt1) / df;
 		},
-	
+
 		evaluate: function(degree, curve, t) {
 			var tmp = curve.slice();
 			for (var i = 1; i <= degree; i++) {
@@ -9584,7 +9584,7 @@
 			}
 			return tmp[0];
 		},
-	
+
 		chordLengthParameterize: function(first, last) {
 			var u = [0];
 			for (var i = first + 1; i <= last; i++) {
@@ -9596,7 +9596,7 @@
 			}
 			return u;
 		},
-	
+
 		findMaxError: function(first, last, curve, u) {
 			var index = Math.floor((last - first + 1) / 2),
 				maxDist = 0;
@@ -9615,7 +9615,7 @@
 			};
 		}
 	});
-	
+
 	var TextItem = Item.extend({
 		_class: 'TextItem',
 		_boundsSelected: true,
@@ -9625,7 +9625,7 @@
 			content: null
 		},
 		_boundsGetter: 'getBounds',
-	
+
 		initialize: function TextItem(arg) {
 			this._content = '';
 			this._lines = [];
@@ -9633,58 +9633,58 @@
 					&& arg.x === undefined && arg.y === undefined;
 			this._initialize(hasProps && arg, !hasProps && Point.read(arguments));
 		},
-	
+
 		_equals: function(item) {
 			return this._content === item._content;
 		},
-	
+
 		_clone: function _clone(copy, insert, includeMatrix) {
 			copy.setContent(this._content);
 			return _clone.base.call(this, copy, insert, includeMatrix);
 		},
-	
+
 		getContent: function() {
 			return this._content;
 		},
-	
+
 		setContent: function(content) {
 			this._content = '' + content;
 			this._lines = this._content.split(/\r\n|\n|\r/mg);
 			this._changed(265);
 		},
-	
+
 		isEmpty: function() {
 			return !this._content;
 		},
-	
+
 		getCharacterStyle: '#getStyle',
 		setCharacterStyle: '#setStyle',
-	
+
 		getParagraphStyle: '#getStyle',
 		setParagraphStyle: '#setStyle'
 	});
-	
+
 	var PointText = TextItem.extend({
 		_class: 'PointText',
-	
+
 		initialize: function PointText() {
 			TextItem.apply(this, arguments);
 		},
-	
+
 		clone: function(insert) {
 			return this._clone(new PointText(Item.NO_INSERT), insert);
 		},
-	
+
 		getPoint: function() {
 			var point = this._matrix.getTranslation();
 			return new LinkedPoint(point.x, point.y, this, 'setPoint');
 		},
-	
+
 		setPoint: function() {
 			var point = Point.read(arguments);
 			this.translate(point.subtract(this._matrix.getTranslation()));
 		},
-	
+
 		_draw: function(ctx) {
 			if (!this._content)
 				return;
@@ -9707,7 +9707,7 @@
 				ctx.translate(0, leading);
 			}
 		},
-	
+
 		_getBounds: function(getter, matrix) {
 			var style = this._style,
 				lines = this._lines,
@@ -9724,7 +9724,7 @@
 			return matrix ? matrix._transformBounds(bounds, bounds) : bounds;
 		}
 	});
-	
+
 	var Color = Base.extend(new function() {
 		var types = {
 			gray: ['gray'],
@@ -9733,11 +9733,11 @@
 			hsl: ['hue', 'saturation', 'lightness'],
 			gradient: ['gradient', 'origin', 'destination', 'highlight']
 		};
-	
+
 		var componentParsers = {},
 			colorCache = {},
 			colorCtx;
-	
+
 		function fromCSS(string) {
 			var match = string.match(/^#(\w{1,2})(\w{1,2})(\w{1,2})$/),
 				components;
@@ -9775,7 +9775,7 @@
 			}
 			return components;
 		}
-	
+
 		var hsbIndices = [
 			[0, 3, 1],
 			[2, 0, 1],
@@ -9784,7 +9784,7 @@
 			[3, 1, 0],
 			[0, 1, 2]
 		];
-	
+
 		var converters = {
 			'rgb-hsb': function(r, g, b) {
 				var max = Math.max(r, g, b),
@@ -9796,7 +9796,7 @@
 							:			 (r - g) / delta + 4) * 60;
 				return [h, max === 0 ? 0 : delta / max, max];
 			},
-	
+
 			'hsb-rgb': function(h, s, b) {
 				h = (((h / 60) % 6) + 6) % 6;
 				var i = Math.floor(h),
@@ -9810,7 +9810,7 @@
 					];
 				return [v[i[0]], v[i[1]], v[i[2]]];
 			},
-	
+
 			'rgb-hsl': function(r, g, b) {
 				var max = Math.max(r, g, b),
 					min = Math.min(r, g, b),
@@ -9826,7 +9826,7 @@
 							: delta / (2 - max - min);
 				return [h, s, l];
 			},
-	
+
 			'hsl-rgb': function(h, s, l) {
 				h = (((h / 360) % 1) + 1) % 1;
 				if (s === 0)
@@ -9849,33 +9849,33 @@
 				}
 				return c;
 			},
-	
+
 			'rgb-gray': function(r, g, b) {
 				return [r * 0.2989 + g * 0.587 + b * 0.114];
 			},
-	
+
 			'gray-rgb': function(g) {
 				return [g, g, g];
 			},
-	
+
 			'gray-hsb': function(g) {
 				return [0, 0, g];
 			},
-	
+
 			'gray-hsl': function(g) {
 				return [0, 0, g];
 			},
-	
+
 			'gradient-rgb': function() {
 				return [];
 			},
-	
+
 			'rgb-gradient': function() {
 				return [];
 			}
-	
+
 		};
-	
+
 		return Base.each(types, function(properties, type) {
 			componentParsers[type] = [];
 			Base.each(properties, function(name, index) {
@@ -9904,14 +9904,14 @@
 							: function(value) {
 								return value == null || isNaN(value) ? 0 : value;
 							};
-	
+
 				this['get' + part] = function() {
 					return this._type === type
 						|| hasOverlap && /^hs[bl]$/.test(this._type)
 							? this._components[index]
 							: this._convert(type)[index];
 				};
-	
+
 				this['set' + part] = function(value) {
 					if (this._type !== type
 							&& !(hasOverlap && /^hs[bl]$/.test(this._type))) {
@@ -9926,7 +9926,7 @@
 		}, {
 			_class: 'Color',
 			_readIndex: true,
-	
+
 			initialize: function Color(arg) {
 				var slice = Array.prototype.slice,
 					args = arguments,
@@ -10044,7 +10044,7 @@
 				if (this.__read)
 					this.__read = read;
 			},
-	
+
 			_serialize: function(options, dictionary) {
 				var components = this.getComponents();
 				return Base.serialize(
@@ -10053,13 +10053,13 @@
 							: [this._type].concat(components),
 						options, true, dictionary);
 			},
-	
+
 			_changed: function() {
 				this._canvasStyle = null;
 				if (this._owner)
 					this._owner._changed(65);
 			},
-	
+
 			_convert: function(type) {
 				var converter;
 				return this._type === type
@@ -10070,41 +10070,41 @@
 								converters[this._type + '-rgb'].apply(this,
 									this._components));
 			},
-	
+
 			convert: function(type) {
 				return new Color(type, this._convert(type), this._alpha);
 			},
-	
+
 			getType: function() {
 				return this._type;
 			},
-	
+
 			setType: function(type) {
 				this._components = this._convert(type);
 				this._properties = types[type];
 				this._type = type;
 			},
-	
+
 			getComponents: function() {
 				var components = this._components.slice();
 				if (this._alpha != null)
 					components.push(this._alpha);
 				return components;
 			},
-	
+
 			getAlpha: function() {
 				return this._alpha != null ? this._alpha : 1;
 			},
-	
+
 			setAlpha: function(alpha) {
 				this._alpha = alpha == null ? null : Math.min(Math.max(alpha, 0), 1);
 				this._changed();
 			},
-	
+
 			hasAlpha: function() {
 				return this._alpha != null;
 			},
-	
+
 			equals: function(color) {
 				var col = Base.isPlainValue(color, true)
 						? Color.read(arguments)
@@ -10115,7 +10115,7 @@
 						&& Base.equals(this._components, col._components)
 						|| false;
 			},
-	
+
 			toString: function() {
 				var properties = this._properties,
 					parts = [],
@@ -10131,7 +10131,7 @@
 					parts.push('alpha: ' + f.number(this._alpha));
 				return '{ ' + parts.join(', ') + ' }';
 			},
-	
+
 			toCSS: function(hex) {
 				var components = this._convert('rgb'),
 					alpha = hex || this._alpha == null ? 1 : this._alpha;
@@ -10152,7 +10152,7 @@
 						: (components.length == 4 ? 'rgba(' : 'rgb(')
 							+ components.join(',') + ')';
 			},
-	
+
 			toCanvasStyle: function(ctx) {
 				if (this._canvasStyle)
 					return this._canvasStyle;
@@ -10186,7 +10186,7 @@
 				}
 				return this._canvasStyle = canvasGradient;
 			},
-	
+
 			transform: function(matrix) {
 				if (this._type === 'gradient') {
 					var components = this._components;
@@ -10197,10 +10197,10 @@
 					this._changed();
 				}
 			},
-	
+
 			statics: {
 				_types: types,
-	
+
 				random: function() {
 					var random = Math.random;
 					return new Color(random(), random(), random());
@@ -10212,20 +10212,20 @@
 			add: function(a, b) {
 				return a + b;
 			},
-	
+
 			subtract: function(a, b) {
 				return a - b;
 			},
-	
+
 			multiply: function(a, b) {
 				return a * b;
 			},
-	
+
 			divide: function(a, b) {
 				return a / b;
 			}
 		};
-	
+
 		return Base.each(operators, function(operator, name) {
 			this[name] = function(color) {
 				color = Color.read(arguments);
@@ -10242,7 +10242,7 @@
 		}, {
 		});
 	});
-	
+
 	Base.each(Color._types, function(properties, type) {
 		var ctor = this[Base.capitalize(type) + 'Color'] = function(arg) {
 				var argType = arg != null && typeof arg,
@@ -10260,10 +10260,10 @@
 			Color[acronym] = this[acronym + 'Color'] = ctor;
 		}
 	}, Base.exports);
-	
+
 	var Gradient = Base.extend({
 		_class: 'Gradient',
-	
+
 		initialize: function Gradient(stops, radial) {
 			this._id = UID.get();
 			if (stops && this._set(stops))
@@ -10274,25 +10274,25 @@
 				this.setRadial(typeof radial === 'string' && radial === 'radial'
 						|| radial || false);
 		},
-	
+
 		_serialize: function(options, dictionary) {
 			return dictionary.add(this, function() {
 				return Base.serialize([this._stops, this._radial],
 						options, true, dictionary);
 			});
 		},
-	
+
 		_changed: function() {
 			for (var i = 0, l = this._owners && this._owners.length; i < l; i++)
 				this._owners[i]._changed();
 		},
-	
+
 		_addOwner: function(color) {
 			if (!this._owners)
 				this._owners = [];
 			this._owners.push(color);
 		},
-	
+
 		_removeOwner: function(color) {
 			var index = this._owners ? this._owners.indexOf(color) : -1;
 			if (index != -1) {
@@ -10301,18 +10301,18 @@
 					this._owners = undefined;
 			}
 		},
-	
+
 		clone: function() {
 			var stops = [];
 			for (var i = 0, l = this._stops.length; i < l; i++)
 				stops[i] = this._stops[i].clone();
 			return new Gradient(stops, this._radial);
 		},
-	
+
 		getStops: function() {
 			return this._stops;
 		},
-	
+
 		setStops: function(stops) {
 			if (this.stops) {
 				for (var i = 0, l = this._stops.length; i < l; i++)
@@ -10330,16 +10330,16 @@
 			}
 			this._changed();
 		},
-	
+
 		getRadial: function() {
 			return this._radial;
 		},
-	
+
 		setRadial: function(radial) {
 			this._radial = radial;
 			this._changed();
 		},
-	
+
 		equals: function(gradient) {
 			if (gradient === this)
 				return true;
@@ -10354,10 +10354,10 @@
 			return false;
 		}
 	});
-	
+
 	var GradientStop = Base.extend({
 		_class: 'GradientStop',
-	
+
 		initialize: function GradientStop(arg0, arg1) {
 			if (arg0) {
 				var color, rampPoint;
@@ -10375,35 +10375,35 @@
 				this.setRampPoint(rampPoint);
 			}
 		},
-	
+
 		clone: function() {
 			return new GradientStop(this._color.clone(), this._rampPoint);
 		},
-	
+
 		_serialize: function(options, dictionary) {
 			return Base.serialize([this._color, this._rampPoint], options, true,
 					dictionary);
 		},
-	
+
 		_changed: function() {
 			if (this._owner)
 				this._owner._changed(65);
 		},
-	
+
 		getRampPoint: function() {
 			return this._rampPoint;
 		},
-	
+
 		setRampPoint: function(rampPoint) {
 			this._defaultRamp = rampPoint == null;
 			this._rampPoint = rampPoint || 0;
 			this._changed();
 		},
-	
+
 		getColor: function() {
 			return this._color;
 		},
-	
+
 		setColor: function(color) {
 			this._color = Color.read(arguments);
 			if (this._color === color)
@@ -10411,7 +10411,7 @@
 			this._color._owner = this;
 			this._changed();
 		},
-	
+
 		equals: function(stop) {
 			return stop === this || stop && this._class === stop._class
 					&& this._color.equals(stop._color)
@@ -10419,7 +10419,7 @@
 					|| false;
 		}
 	});
-	
+
 	var Style = Base.extend(new function() {
 		var defaults = {
 			fillColor: undefined,
@@ -10443,7 +10443,7 @@
 			leading: null,
 			justification: 'left'
 		};
-	
+
 		var flags = {
 			strokeWidth: 97,
 			strokeCap: 97,
@@ -10457,7 +10457,7 @@
 			leading: 9,
 			justification: 9
 		};
-	
+
 		var item = { beans: true },
 			fields = {
 				_defaults: defaults,
@@ -10466,7 +10466,7 @@
 				}),
 				beans: true
 			};
-	
+
 		Base.each(defaults, function(value, key) {
 			var isColor = /Color$/.test(key),
 				isPoint = key === 'shadowOffset',
@@ -10474,7 +10474,7 @@
 				flag = flags[key],
 				set = 'set' + part,
 				get = 'get' + part;
-	
+
 			fields[set] = function(value) {
 				var owner = this._owner,
 					children = owner && owner._children;
@@ -10500,7 +10500,7 @@
 					}
 				}
 			};
-	
+
 			fields[get] = function(_dontMerge) {
 				var owner = this._owner,
 					children = owner && owner._children,
@@ -10533,21 +10533,21 @@
 				}
 				return value;
 			};
-	
+
 			item[get] = function(_dontMerge) {
 				return this._style[get](_dontMerge);
 			};
-	
+
 			item[set] = function(value) {
 				this._style[set](value);
 			};
 		});
-	
+
 		Item.inject(item);
 		return fields;
 	}, {
 		_class: 'Style',
-	
+
 		initialize: function Style(style, _owner, _project) {
 			this._values = {};
 			this._owner = _owner;
@@ -10557,7 +10557,7 @@
 			if (style)
 				this.set(style);
 		},
-	
+
 		set: function(style) {
 			var isStyle = style instanceof Style,
 				values = isStyle ? style._values : style;
@@ -10571,39 +10571,39 @@
 				}
 			}
 		},
-	
+
 		equals: function(style) {
 			return style === this || style && this._class === style._class
 					&& Base.equals(this._values, style._values)
 					|| false;
 		},
-	
+
 		hasFill: function() {
 			return !!this.getFillColor();
 		},
-	
+
 		hasStroke: function() {
 			return !!this.getStrokeColor() && this.getStrokeWidth() > 0;
 		},
-	
+
 		hasShadow: function() {
 			return !!this.getShadowColor() && this.getShadowBlur() > 0;
 		},
-	
+
 		getView: function() {
 			return this._project.getView();
 		},
-	
+
 		getFontStyle: function() {
 			var fontSize = this.getFontSize();
 			return this.getFontWeight()
 					+ ' ' + fontSize + (/[a-z]/i.test(fontSize + '') ? ' ' : 'px ')
 					+ this.getFontFamily();
 		},
-	
+
 		getFont: '#getFontFamily',
 		setFont: '#setFontFamily',
-	
+
 		getLeading: function getLeading() {
 			var leading = getLeading.base.call(this),
 				fontSize = this.getFontSize();
@@ -10611,9 +10611,9 @@
 				fontSize = this.getView().getPixelSize(fontSize);
 			return leading != null ? leading : fontSize * 1.2;
 		}
-	
+
 	});
-	
+
 	var DomElement = new function() {
 		function handlePrefix(el, name, set, value) {
 			var prefixes = ['', 'webkit', 'moz', 'Moz', 'ms', 'o'],
@@ -10631,14 +10631,14 @@
 				}
 			}
 		}
-	
+
 		return {
 			getStyles: function(el) {
 				var doc = el && el.nodeType !== 9 ? el.ownerDocument : el,
 					view = doc && doc.defaultView;
 				return view && view.getComputedStyle(el, '');
 			},
-	
+
 			getBounds: function(el, viewport) {
 				var doc = el.ownerDocument,
 					body = doc.body,
@@ -10658,7 +10658,7 @@
 				}
 				return new Rectangle(x, y, rect.width, rect.height);
 			},
-	
+
 			getViewportBounds: function(el) {
 				var doc = el.ownerDocument,
 					view = doc.defaultView,
@@ -10668,29 +10668,29 @@
 					view.innerHeight || html.clientHeight
 				);
 			},
-	
+
 			getOffset: function(el, viewport) {
 				return DomElement.getBounds(el, viewport).getPoint();
 			},
-	
+
 			getSize: function(el) {
 				return DomElement.getBounds(el, true).getSize();
 			},
-	
+
 			isInvisible: function(el) {
 				return DomElement.getSize(el).equals(new Size(0, 0));
 			},
-	
+
 			isInView: function(el) {
 				return !DomElement.isInvisible(el)
 						&& DomElement.getViewportBounds(el).intersects(
 							DomElement.getBounds(el, true));
 			},
-	
+
 			getPrefixed: function(el, name) {
 				return handlePrefix(el, name);
 			},
-	
+
 			setPrefixed: function(el, name, value) {
 				if (typeof name === 'object') {
 					for (var key in name)
@@ -10701,7 +10701,7 @@
 			}
 		};
 	};
-	
+
 	var DomEvent = {
 		add: function(el, events) {
 			for (var type in events) {
@@ -10711,7 +10711,7 @@
 					el.addEventListener(parts[i], func, false);
 			}
 		},
-	
+
 		remove: function(el, events) {
 			for (var type in events) {
 				var func = events[type],
@@ -10720,7 +10720,7 @@
 					el.removeEventListener(parts[i], func, false);
 			}
 		},
-	
+
 		getPoint: function(event) {
 			var pos = event.targetTouches
 					? event.targetTouches.length
@@ -10732,33 +10732,33 @@
 				pos.pageY || pos.clientY + document.documentElement.scrollTop
 			);
 		},
-	
+
 		getTarget: function(event) {
 			return event.target || event.srcElement;
 		},
-	
+
 		getRelatedTarget: function(event) {
 			return event.relatedTarget || event.toElement;
 		},
-	
+
 		getOffset: function(event, target) {
 			return DomEvent.getPoint(event).subtract(DomElement.getOffset(
 					target || DomEvent.getTarget(event)));
 		},
-	
+
 		stop: function(event) {
 			event.stopPropagation();
 			event.preventDefault();
 		}
 	};
-	
+
 	DomEvent.requestAnimationFrame = new function() {
 		var nativeRequest = DomElement.getPrefixed(window, 'requestAnimationFrame'),
 			requested = false,
 			callbacks = [],
 			focused = true,
 			timer;
-	
+
 		DomEvent.add(window, {
 			focus: function() {
 				focused = true;
@@ -10767,7 +10767,7 @@
 				focused = false;
 			}
 		});
-	
+
 		function handleCallbacks() {
 			for (var i = callbacks.length - 1; i >= 0; i--) {
 				var entry = callbacks[i],
@@ -10787,7 +10787,7 @@
 				}
 			}
 		}
-	
+
 		return function(callback, element) {
 			callbacks.push([callback, element]);
 			if (nativeRequest) {
@@ -10800,10 +10800,10 @@
 			}
 		};
 	};
-	
+
 	var View = Base.extend(Emitter, {
 		_class: 'View',
-	
+
 		initialize: function View(project, element) {
 			this._project = project;
 			this._scope = project._scope;
@@ -10824,18 +10824,18 @@
 				userDrag: none,
 				tapHighlightColor: 'rgba(0,0,0,0)'
 			});
-	
+
 			function getSize(name) {
 				return element[name] || parseInt(element.getAttribute(name), 10);
 			};
-	
+
 			function getCanvasSize() {
 				var size = DomElement.getSize(element);
 				return size.isNaN() || size.isZero()
 						? new Size(getSize('width'), getSize('height'))
 						: size;
 			};
-	
+
 			if (PaperScope.hasAttribute(element, 'resize')) {
 				var that = this;
 				DomEvent.add(window, this._windowEvents = {
@@ -10866,7 +10866,7 @@
 			this._frameItems = {};
 			this._frameItemCount = 0;
 		},
-	
+
 		remove: function() {
 			if (!this._project)
 				return false;
@@ -10884,25 +10884,25 @@
 			this._frameItems = {};
 			return true;
 		},
-	
+
 		_events: {
 			onFrame: {
 				install: function() {
 					this.play();
 				},
-	
+
 				uninstall: function() {
 					this.pause();
 				}
 			},
-	
+
 			onResize: {}
 		},
-	
+
 		_animate: false,
 		_time: 0,
 		_count: 0,
-	
+
 		_requestFrame: function() {
 			var that = this;
 			DomEvent.requestAnimationFrame(function() {
@@ -10914,7 +10914,7 @@
 			}, this._element);
 			this._requested = true;
 		},
-	
+
 		_handleFrame: function() {
 			paper = this._scope;
 			var now = Date.now() / 1000,
@@ -10931,7 +10931,7 @@
 			this._handlingFrame = false;
 			this.update();
 		},
-	
+
 		_animateItem: function(item, animate) {
 			var items = this._frameItems;
 			if (animate) {
@@ -10949,7 +10949,7 @@
 				}
 			}
 		},
-	
+
 		_handleFrameItems: function(event) {
 			for (var i in this._frameItems) {
 				var entry = this._frameItems[i];
@@ -10959,7 +10959,7 @@
 				}));
 			}
 		},
-	
+
 		_update: function() {
 			this._project._needsUpdate = true;
 			if (this._handlingFrame)
@@ -10970,35 +10970,35 @@
 				this.update();
 			}
 		},
-	
+
 		_changed: function(flags) {
 			if (flags & 1)
 				this._project._needsUpdate = true;
 		},
-	
+
 		_transform: function(matrix) {
 			this._matrix.concatenate(matrix);
 			this._bounds = null;
 			this._update();
 		},
-	
+
 		getElement: function() {
 			return this._element;
 		},
-	
+
 		getPixelRatio: function() {
 			return this._pixelRatio;
 		},
-	
+
 		getResolution: function() {
 			return this._pixelRatio * 72;
 		},
-	
+
 		getViewSize: function() {
 			var size = this._viewSize;
 			return new LinkedSize(size.width, size.height, this, 'setViewSize');
 		},
-	
+
 		setViewSize: function() {
 			var size = Size.read(arguments),
 				delta = size.subtract(this._viewSize);
@@ -11013,79 +11013,79 @@
 			});
 			this._update();
 		},
-	
+
 		_setViewSize: function(size) {
 			var element = this._element;
 			element.width = size.width;
 			element.height = size.height;
 		},
-	
+
 		getBounds: function() {
 			if (!this._bounds)
 				this._bounds = this._matrix.inverted()._transformBounds(
 						new Rectangle(new Point(), this._viewSize));
 			return this._bounds;
 		},
-	
+
 		getSize: function() {
 			return this.getBounds().getSize();
 		},
-	
+
 		getCenter: function() {
 			return this.getBounds().getCenter();
 		},
-	
+
 		setCenter: function() {
 			var center = Point.read(arguments);
 			this.scrollBy(center.subtract(this.getCenter()));
 		},
-	
+
 		getZoom: function() {
 			return this._zoom;
 		},
-	
+
 		setZoom: function(zoom) {
 			this._transform(new Matrix().scale(zoom / this._zoom,
 				this.getCenter()));
 			this._zoom = zoom;
 		},
-	
+
 		isVisible: function() {
 			return DomElement.isInView(this._element);
 		},
-	
+
 		scrollBy: function() {
 			this._transform(new Matrix().translate(Point.read(arguments).negate()));
 		},
-	
+
 		play: function() {
 			this._animate = true;
 			if (!this._requested)
 				this._requestFrame();
 		},
-	
+
 		pause: function() {
 			this._animate = false;
 		},
-	
+
 		draw: function() {
 			this.update();
 		},
-	
+
 		projectToView: function() {
 			return this._matrix._transformPoint(Point.read(arguments));
 		},
-	
+
 		viewToProject: function() {
 			return this._matrix._inverseTransform(Point.read(arguments));
 		}
-	
+
 	}, {
 		statics: {
 			_views: [],
 			_viewsById: {},
 			_id: 0,
-	
+
 			create: function(project, element) {
 				if (typeof element === 'string')
 					element = document.getElementById(element);
@@ -11097,16 +11097,16 @@
 			prevFocus,
 			tempFocus,
 			dragging = false;
-	
+
 		function getView(event) {
 			var target = DomEvent.getTarget(event);
 			return target.getAttribute && View._viewsById[target.getAttribute('id')];
 		}
-	
+
 		function viewToProject(view, event) {
 			return view.viewToProject(DomEvent.getOffset(event, view._element));
 		}
-	
+
 		function updateFocus() {
 			if (!View._focused || !View._focused.isVisible()) {
 				for (var i = 0, l = View._views.length; i < l; i++) {
@@ -11118,7 +11118,7 @@
 				}
 			}
 		}
-	
+
 		function handleMouseMove(view, point, event) {
 			view._handleEvent('mousemove', point, event);
 			var tool = view._scope.tool;
@@ -11129,7 +11129,7 @@
 			view.update();
 			return tool;
 		}
-	
+
 		var navigator = window.navigator,
 			mousedown, mousemove, mouseup;
 		if (navigator.pointerEnabled || navigator.msPointerEnabled) {
@@ -11147,14 +11147,14 @@
 				mouseup += ' mouseup';
 			}
 		}
-	
+
 		var viewEvents = {
 			'selectstart dragstart': function(event) {
 				if (dragging)
 					event.preventDefault();
 			}
 		};
-	
+
 		var docEvents = {
 			mouseout: function(event) {
 				var view = View._focused,
@@ -11162,10 +11162,10 @@
 				if (view && (!target || target.nodeName === 'HTML'))
 					handleMouseMove(view, viewToProject(view, event), event);
 			},
-	
+
 			scroll: updateFocus
 		};
-	
+
 		viewEvents[mousedown] = function(event) {
 			var view = View._focused = getView(event),
 				point = viewToProject(view, event);
@@ -11175,7 +11175,7 @@
 				tool._handleEvent('mousedown', point, event);
 			view.update();
 		};
-	
+
 		docEvents[mousemove] = function(event) {
 			var view = View._focused;
 			if (!dragging) {
@@ -11196,7 +11196,7 @@
 					tool = handleMouseMove(view, point, event);
 			}
 		};
-	
+
 		docEvents[mouseup] = function(event) {
 			var view = View._focused;
 			if (!view || !dragging)
@@ -11208,27 +11208,27 @@
 				tool._handleEvent('mouseup', point, event);
 			view.update();
 		};
-	
+
 		DomEvent.add(document, docEvents);
-	
+
 		DomEvent.add(window, {
 			load: updateFocus
 		});
-	
+
 		return {
 			_viewEvents: viewEvents,
-	
+
 			_handleEvent: function() {},
-	
+
 			statics: {
 				updateFocus: updateFocus
 			}
 		};
 	});
-	
+
 	var CanvasView = View.extend({
 		_class: 'CanvasView',
-	
+
 		initialize: function CanvasView(project, canvas) {
 			if (!(canvas instanceof HTMLCanvasElement)) {
 				var size = Size.read(arguments, 1);
@@ -11249,7 +11249,7 @@
 			}
 			View.call(this, project, canvas);
 		},
-	
+
 		_setViewSize: function(size) {
 			var element = this._element,
 				pixelRatio = this._pixelRatio,
@@ -11266,7 +11266,7 @@
 				this._context.scale(pixelRatio, pixelRatio);
 			}
 		},
-	
+
 		getPixelSize: function(size) {
 			var browser = paper.browser,
 				pixels;
@@ -11286,7 +11286,7 @@
 			}
 			return pixels;
 		},
-	
+
 		getTextWidth: function(font, lines) {
 			var ctx = this._context,
 				prevFont = ctx.font,
@@ -11297,7 +11297,7 @@
 			ctx.font = prevFont;
 			return width;
 		},
-	
+
 		update: function(force) {
 			var project = this._project;
 			if (!project || !force && !project._needsUpdate)
@@ -11310,7 +11310,7 @@
 			return true;
 		}
 	}, new function() {
-	
+
 		var downPoint,
 			lastPoint,
 			overPoint,
@@ -11320,11 +11320,11 @@
 			dragItem,
 			dblClick,
 			clickTime;
-	
+
 		function callEvent(view, type, event, point, target, lastPoint) {
 			var item = target,
 				mouseEvent;
-	
+
 			function call(obj) {
 				if (obj.responds(type)) {
 					if (!mouseEvent) {
@@ -11337,7 +11337,7 @@
 					}
 				}
 			}
-	
+
 			while (item) {
 				if (call(item))
 					return true;
@@ -11347,7 +11347,7 @@
 				return true;
 			return false;
 		}
-	
+
 		return {
 			_handleEvent: function(type, point, event) {
 				if (!this._eventCounters[type])
@@ -11412,47 +11412,47 @@
 			}
 		};
 	});
-	
+
 	var Event = Base.extend({
 		_class: 'Event',
-	
+
 		initialize: function Event(event) {
 			this.event = event;
 		},
-	
+
 		isPrevented: false,
 		isStopped: false,
-	
+
 		preventDefault: function() {
 			this.isPrevented = true;
 			this.event.preventDefault();
 		},
-	
+
 		stopPropagation: function() {
 			this.isStopped = true;
 			this.event.stopPropagation();
 		},
-	
+
 		stop: function() {
 			this.stopPropagation();
 			this.preventDefault();
 		},
-	
+
 		getModifiers: function() {
 			return Key.modifiers;
 		}
 	});
-	
+
 	var KeyEvent = Event.extend({
 		_class: 'KeyEvent',
-	
+
 		initialize: function KeyEvent(down, key, character, event) {
 			Event.call(this, event);
 			this.type = down ? 'keydown' : 'keyup';
 			this.key = key;
 			this.character = character;
 		},
-	
+
 		toString: function() {
 			return "{ type: '" + this.type
 					+ "', key: '" + this.key
@@ -11461,9 +11461,9 @@
 					+ " }";
 		}
 	});
-	
+
 	var Key = new function() {
-	
+
 		var specialKeys = {
 			8: 'backspace',
 			9: 'tab',
@@ -11486,13 +11486,13 @@
 			93: 'command',
 			224: 'command'
 		},
-	
+
 		specialChars = {
 			9: true,
 			13: true,
 			32: true
 		},
-	
+
 		modifiers = new Base({
 			shift: false,
 			control: false,
@@ -11501,12 +11501,12 @@
 			capsLock: false,
 			space: false
 		}),
-	
+
 		charCodeMap = {},
 		keyMap = {},
 		commandFixMap,
 		downCode;
-	
+
 		function handleKey(down, keyCode, charCode, event) {
 			var character = charCode ? String.fromCharCode(charCode) : '',
 				specialKey = specialKeys[keyCode],
@@ -11546,7 +11546,7 @@
 					view.update();
 			}
 		}
-	
+
 		DomEvent.add(document, {
 			keydown: function(event) {
 				var code = event.which || event.keyCode;
@@ -11558,40 +11558,40 @@
 					downCode = code;
 				}
 			},
-	
+
 			keypress: function(event) {
 				if (downCode != null) {
 					handleKey(true, downCode, event.which || event.keyCode, event);
 					downCode = null;
 				}
 			},
-	
+
 			keyup: function(event) {
 				var code = event.which || event.keyCode;
 				if (code in charCodeMap)
 					handleKey(false, code, charCodeMap[code], event);
 			}
 		});
-	
+
 		DomEvent.add(window, {
 			blur: function(event) {
 				for (var code in charCodeMap)
 					handleKey(false, code, charCodeMap[code], event);
 			}
 		});
-	
+
 		return {
 			modifiers: modifiers,
-	
+
 			isDown: function(key) {
 				return !!keyMap[key];
 			}
 		};
 	};
-	
+
 	var MouseEvent = Event.extend({
 		_class: 'MouseEvent',
-	
+
 		initialize: function MouseEvent(type, event, point, target, delta) {
 			Event.call(this, event);
 			this.type = type;
@@ -11599,7 +11599,7 @@
 			this.target = target;
 			this.delta = delta;
 		},
-	
+
 		toString: function() {
 			return "{ type: '" + this.type
 					+ "', point: " + this.point
@@ -11609,77 +11609,77 @@
 					+ ' }';
 		}
 	});
-	
+
 	var ToolEvent = Event.extend({
 		_class: 'ToolEvent',
 		_item: null,
-	
+
 		initialize: function ToolEvent(tool, type, event) {
 			this.tool = tool;
 			this.type = type;
 			this.event = event;
 		},
-	
+
 		_choosePoint: function(point, toolPoint) {
 			return point ? point : toolPoint ? toolPoint.clone() : null;
 		},
-	
+
 		getPoint: function() {
 			return this._choosePoint(this._point, this.tool._point);
 		},
-	
+
 		setPoint: function(point) {
 			this._point = point;
 		},
-	
+
 		getLastPoint: function() {
 			return this._choosePoint(this._lastPoint, this.tool._lastPoint);
 		},
-	
+
 		setLastPoint: function(lastPoint) {
 			this._lastPoint = lastPoint;
 		},
-	
+
 		getDownPoint: function() {
 			return this._choosePoint(this._downPoint, this.tool._downPoint);
 		},
-	
+
 		setDownPoint: function(downPoint) {
 			this._downPoint = downPoint;
 		},
-	
+
 		getMiddlePoint: function() {
 			if (!this._middlePoint && this.tool._lastPoint) {
 				return this.tool._point.add(this.tool._lastPoint).divide(2);
 			}
 			return this._middlePoint;
 		},
-	
+
 		setMiddlePoint: function(middlePoint) {
 			this._middlePoint = middlePoint;
 		},
-	
+
 		getDelta: function() {
 			return !this._delta && this.tool._lastPoint
 					? this.tool._point.subtract(this.tool._lastPoint)
 					: this._delta;
 		},
-	
+
 		setDelta: function(delta) {
 			this._delta = delta;
 		},
-	
+
 		getCount: function() {
 			return /^mouse(down|up)$/.test(this.type)
 					? this.tool._downCount
 					: this.tool._count;
 		},
-	
+
 		setCount: function(count) {
 			this.tool[/^mouse(down|up)$/.test(this.type) ? 'downCount' : 'count']
 				= count;
 		},
-	
+
 		getItem: function() {
 			if (!this._item) {
 				var result = this.tool._scope.project.hitTest(this.getPoint());
@@ -11695,11 +11695,11 @@
 			}
 			return this._item;
 		},
-	
+
 		setItem: function(item) {
 			this._item = item;
 		},
-	
+
 		toString: function() {
 			return '{ type: ' + this.type
 					+ ', point: ' + this.getPoint()
@@ -11708,7 +11708,7 @@
 					+ ' }';
 		}
 	});
-	
+
 	var Tool = PaperScopeItem.extend({
 		_class: 'Tool',
 		_list: 'tools',
@@ -11716,7 +11716,7 @@
 		_events: [ 'onActivate', 'onDeactivate', 'onEditOptions',
 				'onMouseDown', 'onMouseUp', 'onMouseDrag', 'onMouseMove',
 				'onKeyDown', 'onKeyUp' ],
-	
+
 		initialize: function Tool(props) {
 			PaperScopeItem.call(this);
 			this._firstMove = true;
@@ -11724,11 +11724,11 @@
 			this._downCount = 0;
 			this._set(props);
 		},
-	
+
 		getMinDistance: function() {
 			return this._minDistance;
 		},
-	
+
 		setMinDistance: function(minDistance) {
 			this._minDistance = minDistance;
 			if (minDistance != null && this._maxDistance != null
@@ -11736,11 +11736,11 @@
 				this._maxDistance = minDistance;
 			}
 		},
-	
+
 		getMaxDistance: function() {
 			return this._maxDistance;
 		},
-	
+
 		setMaxDistance: function(maxDistance) {
 			this._maxDistance = maxDistance;
 			if (this._minDistance != null && maxDistance != null
@@ -11748,17 +11748,17 @@
 				this._minDistance = maxDistance;
 			}
 		},
-	
+
 		getFixedDistance: function() {
 			return this._minDistance == this._maxDistance
 				? this._minDistance : null;
 		},
-	
+
 		setFixedDistance: function(distance) {
 			this._minDistance = distance;
 			this._maxDistance = distance;
 		},
-	
+
 		_updateEvent: function(type, point, minDistance, maxDistance, start,
 				needsChange, matchMaxDistance) {
 			if (!start) {
@@ -11794,7 +11794,7 @@
 			this._count = start ? 0 : this._count + 1;
 			return true;
 		},
-	
+
 		_fireEvent: function(type, event) {
 			var sets = paper.project._removeSets;
 			if (sets) {
@@ -11817,7 +11817,7 @@
 			return this.responds(type)
 					&& this.emit(type, new ToolEvent(this, type, event));
 		},
-	
+
 		_handleEvent: function(type, point, event) {
 			paper = this._scope;
 			var called = false;
@@ -11860,9 +11860,9 @@
 				event.preventDefault();
 			return called;
 		}
-	
+
 	});
-	
+
 	var Http = {
 		request: function(method, url, callback, async) {
 			async = (async === undefined) ? true : async;
@@ -11885,10 +11885,10 @@
 			return xhr.send(null);
 		}
 	};
-	
+
 	var CanvasProvider = {
 		canvases: [],
-	
+
 		getCanvas: function(width, height) {
 			var canvas,
 				clear = true;
@@ -11912,18 +11912,18 @@
 			ctx.save();
 			return canvas;
 		},
-	
+
 		getContext: function(width, height) {
 			return this.getCanvas(width, height).getContext('2d');
 		},
-	
+
 		release: function(obj) {
 			var canvas = obj.canvas ? obj.canvas : obj;
 			canvas.getContext('2d').restore();
 			this.canvases.push(canvas);
 		}
 	};
-	
+
 	var BlendMode = new function() {
 		var min = Math.min,
 			max = Math.max,
@@ -11931,11 +11931,11 @@
 			sr, sg, sb, sa,
 			br, bg, bb, ba,
 			dr, dg, db;
-	
+
 		function getLum(r, g, b) {
 			return 0.2989 * r + 0.587 * g + 0.114 * b;
 		}
-	
+
 		function setLum(r, g, b, l) {
 			var d = l - getLum(r, g, b);
 			dr = r + d;
@@ -11958,11 +11958,11 @@
 				db = l + (db - l) * ln / mxl;
 			}
 		}
-	
+
 		function getSat(r, g, b) {
 			return max(r, g, b) - min(r, g, b);
 		}
-	
+
 		function setSat(r, g, b, s) {
 			var col = [r, g, b],
 				mx = max(r, g, b),
@@ -11982,26 +11982,26 @@
 			dg = col[1];
 			db = col[2];
 		}
-	
+
 		var modes = {
 			multiply: function() {
 				dr = br * sr / 255;
 				dg = bg * sg / 255;
 				db = bb * sb / 255;
 			},
-	
+
 			screen: function() {
 				dr = br + sr - (br * sr / 255);
 				dg = bg + sg - (bg * sg / 255);
 				db = bb + sb - (bb * sb / 255);
 			},
-	
+
 			overlay: function() {
 				dr = br < 128 ? 2 * br * sr / 255 : 255 - 2 * (255 - br) * (255 - sr) / 255;
 				dg = bg < 128 ? 2 * bg * sg / 255 : 255 - 2 * (255 - bg) * (255 - sg) / 255;
 				db = bb < 128 ? 2 * bb * sb / 255 : 255 - 2 * (255 - bb) * (255 - sb) / 255;
 			},
-	
+
 			'soft-light': function() {
 				var t = sr * br / 255;
 				dr = t + br * (255 - (255 - br) * (255 - sr) / 255 - t) / 255;
@@ -12010,37 +12010,37 @@
 				t = sb * bb / 255;
 				db = t + bb * (255 - (255 - bb) * (255 - sb) / 255 - t) / 255;
 			},
-	
+
 			'hard-light': function() {
 				dr = sr < 128 ? 2 * sr * br / 255 : 255 - 2 * (255 - sr) * (255 - br) / 255;
 				dg = sg < 128 ? 2 * sg * bg / 255 : 255 - 2 * (255 - sg) * (255 - bg) / 255;
 				db = sb < 128 ? 2 * sb * bb / 255 : 255 - 2 * (255 - sb) * (255 - bb) / 255;
 			},
-	
+
 			'color-dodge': function() {
 				dr = br === 0 ? 0 : sr === 255 ? 255 : min(255, 255 * br / (255 - sr));
 				dg = bg === 0 ? 0 : sg === 255 ? 255 : min(255, 255 * bg / (255 - sg));
 				db = bb === 0 ? 0 : sb === 255 ? 255 : min(255, 255 * bb / (255 - sb));
 			},
-	
+
 			'color-burn': function() {
 				dr = br === 255 ? 255 : sr === 0 ? 0 : max(0, 255 - (255 - br) * 255 / sr);
 				dg = bg === 255 ? 255 : sg === 0 ? 0 : max(0, 255 - (255 - bg) * 255 / sg);
 				db = bb === 255 ? 255 : sb === 0 ? 0 : max(0, 255 - (255 - bb) * 255 / sb);
 			},
-	
+
 			darken: function() {
 				dr = br < sr ? br : sr;
 				dg = bg < sg ? bg : sg;
 				db = bb < sb ? bb : sb;
 			},
-	
+
 			lighten: function() {
 				dr = br > sr ? br : sr;
 				dg = bg > sg ? bg : sg;
 				db = bb > sb ? bb : sb;
 			},
-	
+
 			difference: function() {
 				dr = br - sr;
 				if (dr < 0)
@@ -12052,56 +12052,56 @@
 				if (db < 0)
 					db = -db;
 			},
-	
+
 			exclusion: function() {
 				dr = br + sr * (255 - br - br) / 255;
 				dg = bg + sg * (255 - bg - bg) / 255;
 				db = bb + sb * (255 - bb - bb) / 255;
 			},
-	
+
 			hue: function() {
 				setSat(sr, sg, sb, getSat(br, bg, bb));
 				setLum(dr, dg, db, getLum(br, bg, bb));
 			},
-	
+
 			saturation: function() {
 				setSat(br, bg, bb, getSat(sr, sg, sb));
 				setLum(dr, dg, db, getLum(br, bg, bb));
 			},
-	
+
 			luminosity: function() {
 				setLum(br, bg, bb, getLum(sr, sg, sb));
 			},
-	
+
 			color: function() {
 				setLum(sr, sg, sb, getLum(br, bg, bb));
 			},
-	
+
 			add: function() {
 				dr = min(br + sr, 255);
 				dg = min(bg + sg, 255);
 				db = min(bb + sb, 255);
 			},
-	
+
 			subtract: function() {
 				dr = max(br - sr, 0);
 				dg = max(bg - sg, 0);
 				db = max(bb - sb, 0);
 			},
-	
+
 			average: function() {
 				dr = (br + sr) / 2;
 				dg = (bg + sg) / 2;
 				db = (bb + sb) / 2;
 			},
-	
+
 			negation: function() {
 				dr = 255 - abs(255 - sr - br);
 				dg = 255 - abs(255 - sg - bg);
 				db = 255 - abs(255 - sb - bb);
 			}
 		};
-	
+
 		var nativeModes = this.nativeModes = Base.each([
 			'source-over', 'source-in', 'source-out', 'source-atop',
 			'destination-over', 'destination-in', 'destination-out',
@@ -12109,7 +12109,7 @@
 		], function(mode) {
 			this[mode] = true;
 		}, {});
-	
+
 		var ctx = CanvasProvider.getContext(1, 1);
 		Base.each(modes, function(func, mode) {
 			var darken = mode === 'darken',
@@ -12129,7 +12129,7 @@
 			nativeModes[mode] = ok;
 		});
 		CanvasProvider.release(ctx);
-	
+
 		this.process = function(mode, srcContext, dstContext, alpha, offset) {
 			var srcCanvas = srcContext.canvas,
 				normal = mode === 'normal';
@@ -12171,7 +12171,7 @@
 			}
 		};
 	};
-	
+
 	var SVGStyles = Base.each({
 		fillColor: ['fill', 'color'],
 		strokeColor: ['stroke', 'color'],
@@ -12216,15 +12216,15 @@
 			set: 'set' + part
 		};
 	}, {});
-	
+
 	var SVGNamespaces = {
 		href: 'http://www.w3.org/1999/xlink',
 		xlink: 'http://www.w3.org/2000/xmlns'
 	};
-	
+
 	new function() {
 		var formatter;
-	
+
 		function setAttributes(node, attrs) {
 			for (var key in attrs) {
 				var val = attrs[key],
@@ -12239,12 +12239,12 @@
 			}
 			return node;
 		}
-	
+
 		function createElement(tag, attrs) {
 			return setAttributes(
 				document.createElementNS('http://www.w3.org/2000/svg', tag), attrs);
 		}
-	
+
 		function getTransform(matrix, coordinates, center) {
 			var attrs = new Base(),
 				trans = matrix.getTranslation();
@@ -12275,7 +12275,7 @@
 			}
 			return attrs;
 		}
-	
+
 		function exportGroup(item, options) {
 			var attrs = getTransform(item._matrix),
 				children = item._children;
@@ -12298,7 +12298,7 @@
 			}
 			return node;
 		}
-	
+
 		function exportRaster(item, options) {
 			var attrs = getTransform(item._matrix, true),
 				size = item.getSize(),
@@ -12311,7 +12311,7 @@
 					|| item.toDataURL();
 			return createElement('image', attrs);
 		}
-	
+
 		function exportPath(item, options) {
 			var matchShapes = options.matchShapes;
 			if (matchShapes) {
@@ -12348,7 +12348,7 @@
 			}
 			return createElement(type, attrs);
 		}
-	
+
 		function exportShape(item) {
 			var type = item._type,
 				radius = item._radius,
@@ -12375,7 +12375,7 @@
 			}
 			return createElement(type, attrs);
 		}
-	
+
 		function exportCompoundPath(item, options) {
 			var attrs = getTransform(item._matrix);
 			var data = item.getPathData(null, options.precision);
@@ -12383,7 +12383,7 @@
 				attrs.d = data;
 			return createElement('path', attrs);
 		}
-	
+
 		function exportPlacedSymbol(item, options) {
 			var attrs = getTransform(item._matrix, true),
 				symbol = item.getSymbol(),
@@ -12405,7 +12405,7 @@
 			attrs.overflow = 'visible';
 			return createElement('use', attrs);
 		}
-	
+
 		function exportGradient(color) {
 			var gradientNode = getDefinition(color, 'color');
 			if (!gradientNode) {
@@ -12454,13 +12454,13 @@
 			}
 			return 'url(#' + gradientNode.id + ')';
 		}
-	
+
 		function exportText(item) {
 			var node = createElement('text', getTransform(item._matrix, true));
 			node.textContent = item._content;
 			return node;
 		}
-	
+
 		var exporters = {
 			Group: exportGroup,
 			Layer: exportGroup,
@@ -12471,14 +12471,14 @@
 			PlacedSymbol: exportPlacedSymbol,
 			PointText: exportText
 		};
-	
+
 		function applyStyle(item, node, isRoot) {
 			var attrs = {},
 				parent = !isRoot && item.getParent();
-	
+
 			if (item._name != null)
 				attrs.id = item._name;
-	
+
 			Base.each(SVGStyles, function(entry) {
 				var get = entry.get,
 					type = entry.type,
@@ -12506,23 +12506,23 @@
 										: value;
 				}
 			});
-	
+
 			if (attrs.opacity === 1)
 				delete attrs.opacity;
-	
+
 			if (!item._visible)
 				attrs.visibility = 'hidden';
-	
+
 			return setAttributes(node, attrs);
 		}
-	
+
 		var definitions;
 		function getDefinition(item, type) {
 			if (!definitions)
 				definitions = { ids: {}, svgs: {} };
 			return item && definitions.svgs[type + '-' + item._id];
 		}
-	
+
 		function setDefinition(item, node, type) {
 			if (!definitions)
 				getDefinition();
@@ -12530,7 +12530,7 @@
 			node.id = type + '-' + id;
 			definitions.svgs[type + '-' + item._id] = node;
 		}
-	
+
 		function exportDefinitions(node, options) {
 			var svg = node,
 				defs = null;
@@ -12553,7 +12553,7 @@
 					? new XMLSerializer().serializeToString(svg)
 					: svg;
 		}
-	
+
 		function exportSVG(item, options, isRoot) {
 			var exporter = exporters[item._class],
 				node = exporter && exporter(item, options);
@@ -12567,21 +12567,21 @@
 			}
 			return node && applyStyle(item, node, isRoot);
 		}
-	
+
 		function setOptions(options) {
 			if (!options)
 				options = {};
 			formatter = new Formatter(options.precision);
 			return options;
 		}
-	
+
 		Item.inject({
 			exportSVG: function(options) {
 				options = setOptions(options);
 				return exportDefinitions(exportSVG(this, options, true), options);
 			}
 		});
-	
+
 		Project.inject({
 			exportSVG: function(options) {
 				options = setOptions(options);
@@ -12608,9 +12608,9 @@
 			}
 		});
 	};
-	
+
 	new function() {
-	
+
 		function getValue(node, name, isString, allowNull) {
 			var namespace = SVGNamespaces[name],
 				value = namespace
@@ -12628,21 +12628,21 @@
 						? value
 						: parseFloat(value);
 		}
-	
+
 		function getPoint(node, x, y, allowNull) {
 			x = getValue(node, x, false, allowNull);
 			y = getValue(node, y, false, allowNull);
 			return allowNull && (x == null || y == null) ? null
 					: new Point(x, y);
 		}
-	
+
 		function getSize(node, w, h, allowNull) {
 			w = getValue(node, w, false, allowNull);
 			h = getValue(node, h, false, allowNull);
 			return allowNull && (w == null || h == null) ? null
 					: new Size(w, h);
 		}
-	
+
 		function convertValue(value, type, lookup) {
 			return value === 'none'
 					? null
@@ -12656,7 +12656,7 @@
 									? lookup[value]
 									: value;
 		}
-	
+
 		function importGroup(node, type, options, isRoot) {
 			var nodes = node.childNodes,
 				isClip = type === 'clippath',
@@ -12693,7 +12693,7 @@
 			}
 			return item;
 		}
-	
+
 		function importPoly(node, type) {
 			var coords = node.getAttribute('points').match(
 						/[+-]?(?:\d*\.\d+|\d+\.?)(?:[eE][+-]?\d+)?/g),
@@ -12707,7 +12707,7 @@
 				path.closePath();
 			return path;
 		}
-	
+
 		function importPath(node) {
 			var data = node.getAttribute('d'),
 				param = { pathData: data };
@@ -12715,7 +12715,7 @@
 					? new CompoundPath(param)
 					: new Path(param);
 		}
-	
+
 		function importGradient(node, type) {
 			var id = (getValue(node, 'href', true) || '').substring(1),
 				isRadial = type === 'radialgradient',
@@ -12745,7 +12745,7 @@
 				new Color(gradient, origin, destination, highlight), node);
 			return null;
 		}
-	
+
 		var importers = {
 			'#document': function (node, type, options, isRoot) {
 				var nodes = node.childNodes;
@@ -12772,7 +12772,7 @@
 			path: importPath,
 			lineargradient: importGradient,
 			radialgradient: importGradient,
-	
+
 			image: function (node) {
 				var raster = new Raster(getValue(node, 'href', true));
 				raster.on('load', function() {
@@ -12784,13 +12784,13 @@
 				});
 				return raster;
 			},
-	
+
 			symbol: function(node, type, options, isRoot) {
 				return new Symbol(importGroup(node, type, options, isRoot), true);
 			},
-	
+
 			defs: importGroup,
-	
+
 			use: function(node) {
 				var id = (getValue(node, 'href', true) || '').substring(1),
 					definition = definitions[id],
@@ -12801,31 +12801,31 @@
 							: definition.clone().translate(point)
 						: null;
 			},
-	
+
 			circle: function(node) {
 				return new Shape.Circle(getPoint(node, 'cx', 'cy'),
 						getValue(node, 'r'));
 			},
-	
+
 			ellipse: function(node) {
 				return new Shape.Ellipse({
 					center: getPoint(node, 'cx', 'cy'),
 					radius: getSize(node, 'rx', 'ry')
 				});
 			},
-	
+
 			rect: function(node) {
 				var point = getPoint(node, 'x', 'y'),
 					size = getSize(node, 'width', 'height'),
 					radius = getSize(node, 'rx', 'ry');
 				return new Shape.Rectangle(new Rectangle(point, size), radius);
 			},
-	
+
 			line: function(node) {
 				return new Path.Line(getPoint(node, 'x1', 'y1'),
 						getPoint(node, 'x2', 'y2'));
 			},
-	
+
 			text: function(node) {
 				var text = new PointText(getPoint(node, 'x', 'y')
 						.add(getPoint(node, 'dx', 'dy')));
@@ -12833,7 +12833,7 @@
 				return text;
 			}
 		};
-	
+
 		function applyTransform(item, value, name, node) {
 			var transforms = (node.getAttribute(name) || '').split(/\)\s*/g),
 				matrix = new Matrix();
@@ -12870,14 +12870,14 @@
 			}
 			item.transform(matrix);
 		}
-	
+
 		function applyOpacity(item, value, name) {
 			var color = item[name === 'fill-opacity' ? 'getFillColor'
 					: 'getStrokeColor']();
 			if (color)
 				color.setAlpha(parseFloat(value));
 		}
-	
+
 		var attributes = Base.set(Base.each(SVGStyles, function(entry) {
 			this[entry.attribute] = function(item, value) {
 				item[entry.set](convertValue(value, entry.type, entry.fromSVG));
@@ -12894,7 +12894,7 @@
 				if (item.setName)
 					item.setName(value);
 			},
-	
+
 			'clip-path': function(item, value) {
 				var clip = getDefinition(value);
 				if (clip) {
@@ -12907,38 +12907,38 @@
 					}
 				}
 			},
-	
+
 			gradientTransform: applyTransform,
 			transform: applyTransform,
-	
+
 			'fill-opacity': applyOpacity,
 			'stroke-opacity': applyOpacity,
-	
+
 			visibility: function(item, value) {
 				item.setVisible(value === 'visible');
 			},
-	
+
 			display: function(item, value) {
 				item.setVisible(value !== null);
 			},
-	
+
 			'stop-color': function(item, value) {
 				if (item.setColor)
 					item.setColor(value);
 			},
-	
+
 			'stop-opacity': function(item, value) {
 				if (item._color)
 					item._color.setAlpha(parseFloat(value));
 			},
-	
+
 			offset: function(item, value) {
 				var percentage = value.match(/(.*)%$/);
 				item.setRampPoint(percentage
 						? percentage[1] / 100
 						: parseFloat(value));
 			},
-	
+
 			viewBox: function(item, value, name, node, styles) {
 				var rect = new Rectangle(convertValue(value, 'array')),
 					size = getSize(node, 'width', 'height', true);
@@ -12959,7 +12959,7 @@
 				}
 			}
 		});
-	
+
 		function getAttribute(node, name, styles) {
 			var attr = node.attributes[name],
 				value = attr && attr.value;
@@ -12975,7 +12975,7 @@
 						? null
 						: value;
 		}
-	
+
 		function applyAttributes(item, node, isRoot) {
 			var styles = {
 				node: DomElement.getStyles(node) || {},
@@ -12988,13 +12988,13 @@
 			});
 			return item;
 		}
-	
+
 		var definitions = {};
 		function getDefinition(value) {
 			var match = value && value.match(/\((?:#|)([^)']+)/);
 			return match && definitions[match[1]];
 		}
-	
+
 		function importSVG(source, options, isRoot) {
 			if (!source)
 				return null;
@@ -13003,10 +13003,10 @@
 			} else if (typeof options === 'function') {
 				options = { onLoad: options };
 			}
-	
+
 			var node = source,
 				scope = paper;
-	
+
 			function onLoadCallback(svg) {
 				paper = scope;
 				var item = importSVG(svg, options, isRoot),
@@ -13016,7 +13016,7 @@
 					onLoad.call(this, item);
 				view.update();
 			}
-	
+
 			if (isRoot) {
 				if (typeof source === 'string' && !/^.*</.test(source)) {
 					node = document.getElementById(source);
@@ -13033,7 +13033,7 @@
 					return reader.readAsText(source);
 				}
 			}
-	
+
 			if (typeof source === 'string')
 				node = new DOMParser().parseFromString(source, 'image/svg+xml');
 			if (!node.nodeName)
@@ -13067,13 +13067,13 @@
 			}
 			return item;
 		}
-	
+
 		Item.inject({
 			importSVG: function(node, options) {
 				return this.addChild(importSVG(node, options, true));
 			}
 		});
-	
+
 		Project.inject({
 			importSVG: function(node, options) {
 				this.activate();
@@ -13081,12 +13081,12 @@
 			}
 		});
 	};
-	
+
 	Base.exports.PaperScript = (function() {
 		var exports, define,
 			scope = this;
 	!function(e,r){return"object"==typeof exports&&"object"==typeof module?r(exports):"function"==typeof define&&define.amd?define(["exports"],r):(r(e.acorn||(e.acorn={})),void 0)}(this,function(e){"use strict";function r(e){fr=e||{};for(var r in mr)Object.prototype.hasOwnProperty.call(fr,r)||(fr[r]=mr[r]);hr=fr.sourceFile||null}function t(e,r){var t=vr(dr,e);r+=" ("+t.line+":"+t.column+")";var n=new SyntaxError(r);throw n.pos=e,n.loc=t,n.raisedAt=br,n}function n(e){function r(e){if(1==e.length)return t+="return str === "+JSON.stringify(e[0])+";";t+="switch(str){";for(var r=0;r<e.length;++r)t+="case "+JSON.stringify(e[r])+":";t+="return true}return false;"}e=e.split(" ");var t="",n=[];e:for(var a=0;a<e.length;++a){for(var o=0;o<n.length;++o)if(n[o][0].length==e[a].length){n[o].push(e[a]);continue e}n.push([e[a]])}if(n.length>3){n.sort(function(e,r){return r.length-e.length}),t+="switch(str.length){";for(var a=0;a<n.length;++a){var i=n[a];t+="case "+i[0].length+":",r(i)}t+="}"}else r(e);return new Function("str",t)}function a(){this.line=Ar,this.column=br-Sr}function o(){Ar=1,br=Sr=0,Er=!0,u()}function i(e,r){gr=br,fr.locations&&(kr=new a),wr=e,u(),Cr=r,Er=e.beforeExpr}function s(){var e=fr.onComment&&fr.locations&&new a,r=br,n=dr.indexOf("*/",br+=2);if(-1===n&&t(br-2,"Unterminated comment"),br=n+2,fr.locations){Kt.lastIndex=r;for(var o;(o=Kt.exec(dr))&&o.index<br;)++Ar,Sr=o.index+o[0].length}fr.onComment&&fr.onComment(!0,dr.slice(r+2,n),r,br,e,fr.locations&&new a)}function c(){for(var e=br,r=fr.onComment&&fr.locations&&new a,t=dr.charCodeAt(br+=2);pr>br&&10!==t&&13!==t&&8232!==t&&8233!==t;)++br,t=dr.charCodeAt(br);fr.onComment&&fr.onComment(!1,dr.slice(e+2,br),e,br,r,fr.locations&&new a)}function u(){for(;pr>br;){var e=dr.charCodeAt(br);if(32===e)++br;else if(13===e){++br;var r=dr.charCodeAt(br);10===r&&++br,fr.locations&&(++Ar,Sr=br)}else if(10===e||8232===e||8233===e)++br,fr.locations&&(++Ar,Sr=br);else if(e>8&&14>e)++br;else if(47===e){var r=dr.charCodeAt(br+1);if(42===r)s();else{if(47!==r)break;c()}}else if(160===e)++br;else{if(!(e>=5760&&Jt.test(String.fromCharCode(e))))break;++br}}}function l(){var e=dr.charCodeAt(br+1);return e>=48&&57>=e?E(!0):(++br,i(xt))}function f(){var e=dr.charCodeAt(br+1);return Er?(++br,k()):61===e?x(Et,2):x(wt,1)}function d(){var e=dr.charCodeAt(br+1);return 61===e?x(Et,2):x(Dt,1)}function p(e){var r=dr.charCodeAt(br+1);return r===e?x(124===e?Lt:Ut,2):61===r?x(Et,2):x(124===e?Rt:Tt,1)}function h(){var e=dr.charCodeAt(br+1);return 61===e?x(Et,2):x(Vt,1)}function m(e){var r=dr.charCodeAt(br+1);return r===e?45==r&&62==dr.charCodeAt(br+2)&&Gt.test(dr.slice(Lr,br))?(br+=3,c(),u(),g()):x(St,2):61===r?x(Et,2):x(At,1)}function v(e){var r=dr.charCodeAt(br+1),t=1;return r===e?(t=62===e&&62===dr.charCodeAt(br+2)?3:2,61===dr.charCodeAt(br+t)?x(Et,t+1):x(jt,t)):33==r&&60==e&&45==dr.charCodeAt(br+2)&&45==dr.charCodeAt(br+3)?(br+=4,c(),u(),g()):(61===r&&(t=61===dr.charCodeAt(br+2)?3:2),x(Ot,t))}function b(e){var r=dr.charCodeAt(br+1);return 61===r?x(qt,61===dr.charCodeAt(br+2)?3:2):x(61===e?Ct:It,1)}function y(e){switch(e){case 46:return l();case 40:return++br,i(mt);case 41:return++br,i(vt);case 59:return++br,i(yt);case 44:return++br,i(bt);case 91:return++br,i(ft);case 93:return++br,i(dt);case 123:return++br,i(pt);case 125:return++br,i(ht);case 58:return++br,i(gt);case 63:return++br,i(kt);case 48:var r=dr.charCodeAt(br+1);if(120===r||88===r)return C();case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:return E(!1);case 34:case 39:return A(e);case 47:return f(e);case 37:case 42:return d();case 124:case 38:return p(e);case 94:return h();case 43:case 45:return m(e);case 60:case 62:return v(e);case 61:case 33:return b(e);case 126:return x(It,1)}return!1}function g(e){if(e?br=yr+1:yr=br,fr.locations&&(xr=new a),e)return k();if(br>=pr)return i(Br);var r=dr.charCodeAt(br);if(Qt(r)||92===r)return L();var n=y(r);if(n===!1){var o=String.fromCharCode(r);if("\\"===o||$t.test(o))return L();t(br,"Unexpected character '"+o+"'")}return n}function x(e,r){var t=dr.slice(br,br+r);br+=r,i(e,t)}function k(){for(var e,r,n="",a=br;;){br>=pr&&t(a,"Unterminated regular expression");var o=dr.charAt(br);if(Gt.test(o)&&t(a,"Unterminated regular expression"),e)e=!1;else{if("["===o)r=!0;else if("]"===o&&r)r=!1;else if("/"===o&&!r)break;e="\\"===o}++br}var n=dr.slice(a,br);++br;var s=I();return s&&!/^[gmsiy]*$/.test(s)&&t(a,"Invalid regexp flag"),i(jr,new RegExp(n,s))}function w(e,r){for(var t=br,n=0,a=0,o=null==r?1/0:r;o>a;++a){var i,s=dr.charCodeAt(br);if(i=s>=97?s-97+10:s>=65?s-65+10:s>=48&&57>=s?s-48:1/0,i>=e)break;++br,n=n*e+i}return br===t||null!=r&&br-t!==r?null:n}function C(){br+=2;var e=w(16);return null==e&&t(yr+2,"Expected hexadecimal number"),Qt(dr.charCodeAt(br))&&t(br,"Identifier directly after number"),i(Or,e)}function E(e){var r=br,n=!1,a=48===dr.charCodeAt(br);e||null!==w(10)||t(r,"Invalid number"),46===dr.charCodeAt(br)&&(++br,w(10),n=!0);var o=dr.charCodeAt(br);(69===o||101===o)&&(o=dr.charCodeAt(++br),(43===o||45===o)&&++br,null===w(10)&&t(r,"Invalid number"),n=!0),Qt(dr.charCodeAt(br))&&t(br,"Identifier directly after number");var s,c=dr.slice(r,br);return n?s=parseFloat(c):a&&1!==c.length?/[89]/.test(c)||Tr?t(r,"Invalid number"):s=parseInt(c,8):s=parseInt(c,10),i(Or,s)}function A(e){br++;for(var r="";;){br>=pr&&t(yr,"Unterminated string constant");var n=dr.charCodeAt(br);if(n===e)return++br,i(Dr,r);if(92===n){n=dr.charCodeAt(++br);var a=/^[0-7]+/.exec(dr.slice(br,br+3));for(a&&(a=a[0]);a&&parseInt(a,8)>255;)a=a.slice(0,a.length-1);if("0"===a&&(a=null),++br,a)Tr&&t(br-2,"Octal literal in strict mode"),r+=String.fromCharCode(parseInt(a,8)),br+=a.length-1;else switch(n){case 110:r+="\n";break;case 114:r+="\r";break;case 120:r+=String.fromCharCode(S(2));break;case 117:r+=String.fromCharCode(S(4));break;case 85:r+=String.fromCharCode(S(8));break;case 116:r+="	";break;case 98:r+="\b";break;case 118:r+="";break;case 102:r+="\f";break;case 48:r+="\0";break;case 13:10===dr.charCodeAt(br)&&++br;case 10:fr.locations&&(Sr=br,++Ar);break;default:r+=String.fromCharCode(n)}}else(13===n||10===n||8232===n||8233===n)&&t(yr,"Unterminated string constant"),r+=String.fromCharCode(n),++br}}function S(e){var r=w(16,e);return null===r&&t(yr,"Bad character escape sequence"),r}function I(){Bt=!1;for(var e,r=!0,n=br;;){var a=dr.charCodeAt(br);if(Yt(a))Bt&&(e+=dr.charAt(br)),++br;else{if(92!==a)break;Bt||(e=dr.slice(n,br)),Bt=!0,117!=dr.charCodeAt(++br)&&t(br,"Expecting Unicode escape sequence \\uXXXX"),++br;var o=S(4),i=String.fromCharCode(o);i||t(br-1,"Invalid Unicode escape"),(r?Qt(o):Yt(o))||t(br-4,"Invalid Unicode escape"),e+=i}r=!1}return Bt?e:dr.slice(n,br)}function L(){var e=I(),r=Fr;return Bt||(Wt(e)?r=lt[e]:(fr.forbidReserved&&(3===fr.ecmaVersion?Mt:zt)(e)||Tr&&Xt(e))&&t(yr,"The keyword '"+e+"' is reserved")),i(r,e)}function U(){Ir=yr,Lr=gr,Ur=kr,g()}function R(e){if(Tr=e,br=Lr,fr.locations)for(;Sr>br;)Sr=dr.lastIndexOf("\n",Sr-2)+1,--Ar;u(),g()}function V(){this.type=null,this.start=yr,this.end=null}function T(){this.start=xr,this.end=null,null!==hr&&(this.source=hr)}function q(){var e=new V;return fr.locations&&(e.loc=new T),fr.ranges&&(e.range=[yr,0]),e}function O(e){var r=new V;return r.start=e.start,fr.locations&&(r.loc=new T,r.loc.start=e.loc.start),fr.ranges&&(r.range=[e.range[0],0]),r}function j(e,r){return e.type=r,e.end=Lr,fr.locations&&(e.loc.end=Ur),fr.ranges&&(e.range[1]=Lr),e}function D(e){return fr.ecmaVersion>=5&&"ExpressionStatement"===e.type&&"Literal"===e.expression.type&&"use strict"===e.expression.value}function F(e){return wr===e?(U(),!0):void 0}function B(){return!fr.strictSemicolons&&(wr===Br||wr===ht||Gt.test(dr.slice(Lr,yr)))}function M(){F(yt)||B()||X()}function z(e){wr===e?U():X()}function X(){t(yr,"Unexpected token")}function N(e){"Identifier"!==e.type&&"MemberExpression"!==e.type&&t(e.start,"Assigning to rvalue"),Tr&&"Identifier"===e.type&&Nt(e.name)&&t(e.start,"Assigning to "+e.name+" in strict mode")}function W(e){Ir=Lr=br,fr.locations&&(Ur=new a),Rr=Tr=null,Vr=[],g();var r=e||q(),t=!0;for(e||(r.body=[]);wr!==Br;){var n=J();r.body.push(n),t&&D(n)&&R(!0),t=!1}return j(r,"Program")}function J(){(wr===wt||wr===Et&&"/="==Cr)&&g(!0);var e=wr,r=q();switch(e){case Mr:case Nr:U();var n=e===Mr;F(yt)||B()?r.label=null:wr!==Fr?X():(r.label=lr(),M());for(var a=0;a<Vr.length;++a){var o=Vr[a];if(null==r.label||o.name===r.label.name){if(null!=o.kind&&(n||"loop"===o.kind))break;if(r.label&&n)break}}return a===Vr.length&&t(r.start,"Unsyntactic "+e.keyword),j(r,n?"BreakStatement":"ContinueStatement");case Wr:return U(),M(),j(r,"DebuggerStatement");case Pr:return U(),Vr.push(Zt),r.body=J(),Vr.pop(),z(tt),r.test=P(),M(),j(r,"DoWhileStatement");case _r:if(U(),Vr.push(Zt),z(mt),wr===yt)return $(r,null);if(wr===rt){var i=q();return U(),G(i,!0),j(i,"VariableDeclaration"),1===i.declarations.length&&F(ut)?_(r,i):$(r,i)}var i=K(!1,!0);return F(ut)?(N(i),_(r,i)):$(r,i);case Gr:return U(),cr(r,!0);case Kr:return U(),r.test=P(),r.consequent=J(),r.alternate=F(Hr)?J():null,j(r,"IfStatement");case Qr:return Rr||t(yr,"'return' outside of function"),U(),F(yt)||B()?r.argument=null:(r.argument=K(),M()),j(r,"ReturnStatement");case Yr:U(),r.discriminant=P(),r.cases=[],z(pt),Vr.push(en);for(var s,c;wr!=ht;)if(wr===zr||wr===Jr){var u=wr===zr;s&&j(s,"SwitchCase"),r.cases.push(s=q()),s.consequent=[],U(),u?s.test=K():(c&&t(Ir,"Multiple default clauses"),c=!0,s.test=null),z(gt)}else s||X(),s.consequent.push(J());return s&&j(s,"SwitchCase"),U(),Vr.pop(),j(r,"SwitchStatement");case Zr:return U(),Gt.test(dr.slice(Lr,yr))&&t(Lr,"Illegal newline after throw"),r.argument=K(),M(),j(r,"ThrowStatement");case et:if(U(),r.block=H(),r.handler=null,wr===Xr){var l=q();U(),z(mt),l.param=lr(),Tr&&Nt(l.param.name)&&t(l.param.start,"Binding "+l.param.name+" in strict mode"),z(vt),l.guard=null,l.body=H(),r.handler=j(l,"CatchClause")}return r.guardedHandlers=qr,r.finalizer=F($r)?H():null,r.handler||r.finalizer||t(r.start,"Missing catch or finally clause"),j(r,"TryStatement");case rt:return U(),G(r),M(),j(r,"VariableDeclaration");case tt:return U(),r.test=P(),Vr.push(Zt),r.body=J(),Vr.pop(),j(r,"WhileStatement");case nt:return Tr&&t(yr,"'with' in strict mode"),U(),r.object=P(),r.body=J(),j(r,"WithStatement");case pt:return H();case yt:return U(),j(r,"EmptyStatement");default:var f=Cr,d=K();if(e===Fr&&"Identifier"===d.type&&F(gt)){for(var a=0;a<Vr.length;++a)Vr[a].name===f&&t(d.start,"Label '"+f+"' is already declared");var p=wr.isLoop?"loop":wr===Yr?"switch":null;return Vr.push({name:f,kind:p}),r.body=J(),Vr.pop(),r.label=d,j(r,"LabeledStatement")}return r.expression=d,M(),j(r,"ExpressionStatement")}}function P(){z(mt);var e=K();return z(vt),e}function H(e){var r,t=q(),n=!0,a=!1;for(t.body=[],z(pt);!F(ht);){var o=J();t.body.push(o),n&&e&&D(o)&&(r=a,R(a=!0)),n=!1}return a&&!r&&R(!1),j(t,"BlockStatement")}function $(e,r){return e.init=r,z(yt),e.test=wr===yt?null:K(),z(yt),e.update=wr===vt?null:K(),z(vt),e.body=J(),Vr.pop(),j(e,"ForStatement")}function _(e,r){return e.left=r,e.right=K(),z(vt),e.body=J(),Vr.pop(),j(e,"ForInStatement")}function G(e,r){for(e.declarations=[],e.kind="var";;){var n=q();if(n.id=lr(),Tr&&Nt(n.id.name)&&t(n.id.start,"Binding "+n.id.name+" in strict mode"),n.init=F(Ct)?K(!0,r):null,e.declarations.push(j(n,"VariableDeclarator")),!F(bt))break}return e}function K(e,r){var t=Q(r);if(!e&&wr===bt){var n=O(t);for(n.expressions=[t];F(bt);)n.expressions.push(Q(r));return j(n,"SequenceExpression")}return t}function Q(e){var r=Y(e);if(wr.isAssign){var t=O(r);return t.operator=Cr,t.left=r,U(),t.right=Q(e),N(r),j(t,"AssignmentExpression")}return r}function Y(e){var r=Z(e);if(F(kt)){var t=O(r);return t.test=r,t.consequent=K(!0),z(gt),t.alternate=K(!0,e),j(t,"ConditionalExpression")}return r}function Z(e){return er(rr(),-1,e)}function er(e,r,t){var n=wr.binop;if(null!=n&&(!t||wr!==ut)&&n>r){var a=O(e);a.left=e,a.operator=Cr,U(),a.right=er(rr(),n,t);var o=j(a,/&&|\|\|/.test(a.operator)?"LogicalExpression":"BinaryExpression");return er(o,r,t)}return e}function rr(){if(wr.prefix){var e=q(),r=wr.isUpdate;return e.operator=Cr,e.prefix=!0,Er=!0,U(),e.argument=rr(),r?N(e.argument):Tr&&"delete"===e.operator&&"Identifier"===e.argument.type&&t(e.start,"Deleting local variable in strict mode"),j(e,r?"UpdateExpression":"UnaryExpression")}for(var n=tr();wr.postfix&&!B();){var e=O(n);e.operator=Cr,e.prefix=!1,e.argument=n,N(n),U(),n=j(e,"UpdateExpression")}return n}function tr(){return nr(ar())}function nr(e,r){if(F(xt)){var t=O(e);return t.object=e,t.property=lr(!0),t.computed=!1,nr(j(t,"MemberExpression"),r)}if(F(ft)){var t=O(e);return t.object=e,t.property=K(),t.computed=!0,z(dt),nr(j(t,"MemberExpression"),r)}if(!r&&F(mt)){var t=O(e);return t.callee=e,t.arguments=ur(vt,!1),nr(j(t,"CallExpression"),r)}return e}function ar(){switch(wr){case ot:var e=q();return U(),j(e,"ThisExpression");case Fr:return lr();case Or:case Dr:case jr:var e=q();return e.value=Cr,e.raw=dr.slice(yr,gr),U(),j(e,"Literal");case it:case st:case ct:var e=q();return e.value=wr.atomValue,e.raw=wr.keyword,U(),j(e,"Literal");case mt:var r=xr,t=yr;U();var n=K();return n.start=t,n.end=gr,fr.locations&&(n.loc.start=r,n.loc.end=kr),fr.ranges&&(n.range=[t,gr]),z(vt),n;case ft:var e=q();return U(),e.elements=ur(dt,!0,!0),j(e,"ArrayExpression");case pt:return ir();case Gr:var e=q();return U(),cr(e,!1);case at:return or();default:X()}}function or(){var e=q();return U(),e.callee=nr(ar(),!0),e.arguments=F(mt)?ur(vt,!1):qr,j(e,"NewExpression")}function ir(){var e=q(),r=!0,n=!1;for(e.properties=[],U();!F(ht);){if(r)r=!1;else if(z(bt),fr.allowTrailingCommas&&F(ht))break;var a,o={key:sr()},i=!1;if(F(gt)?(o.value=K(!0),a=o.kind="init"):fr.ecmaVersion>=5&&"Identifier"===o.key.type&&("get"===o.key.name||"set"===o.key.name)?(i=n=!0,a=o.kind=o.key.name,o.key=sr(),wr!==mt&&X(),o.value=cr(q(),!1)):X(),"Identifier"===o.key.type&&(Tr||n))for(var s=0;s<e.properties.length;++s){var c=e.properties[s];if(c.key.name===o.key.name){var u=a==c.kind||i&&"init"===c.kind||"init"===a&&("get"===c.kind||"set"===c.kind);u&&!Tr&&"init"===a&&"init"===c.kind&&(u=!1),u&&t(o.key.start,"Redefinition of property")}}e.properties.push(o)}return j(e,"ObjectExpression")}function sr(){return wr===Or||wr===Dr?ar():lr(!0)}function cr(e,r){wr===Fr?e.id=lr():r?X():e.id=null,e.params=[];var n=!0;for(z(mt);!F(vt);)n?n=!1:z(bt),e.params.push(lr());var a=Rr,o=Vr;if(Rr=!0,Vr=[],e.body=H(!0),Rr=a,Vr=o,Tr||e.body.body.length&&D(e.body.body[0]))for(var i=e.id?-1:0;i<e.params.length;++i){var s=0>i?e.id:e.params[i];if((Xt(s.name)||Nt(s.name))&&t(s.start,"Defining '"+s.name+"' in strict mode"),i>=0)for(var c=0;i>c;++c)s.name===e.params[c].name&&t(s.start,"Argument name clash in strict mode")}return j(e,r?"FunctionDeclaration":"FunctionExpression")}function ur(e,r,t){for(var n=[],a=!0;!F(e);){if(a)a=!1;else if(z(bt),r&&fr.allowTrailingCommas&&F(e))break;t&&wr===bt?n.push(null):n.push(K(!0))}return n}function lr(e){var r=q();return r.name=wr===Fr?Cr:e&&!fr.forbidReserved&&wr.keyword||X(),Er=!1,U(),j(r,"Identifier")}e.version="0.4.0";var fr,dr,pr,hr;e.parse=function(e,t){return dr=String(e),pr=dr.length,r(t),o(),W(fr.program)};var mr=e.defaultOptions={ecmaVersion:5,strictSemicolons:!1,allowTrailingCommas:!0,forbidReserved:!1,locations:!1,onComment:null,ranges:!1,program:null,sourceFile:null},vr=e.getLineInfo=function(e,r){for(var t=1,n=0;;){Kt.lastIndex=n;var a=Kt.exec(e);if(!(a&&a.index<r))break;++t,n=a.index+a[0].length}return{line:t,column:r-n}};e.tokenize=function(e,t){function n(e){return g(e),a.start=yr,a.end=gr,a.startLoc=xr,a.endLoc=kr,a.type=wr,a.value=Cr,a}dr=String(e),pr=dr.length,r(t),o();var a={};return n.jumpTo=function(e,r){if(br=e,fr.locations){Ar=1,Sr=Kt.lastIndex=0;for(var t;(t=Kt.exec(dr))&&t.index<e;)++Ar,Sr=t.index+t[0].length}Er=r,u()},n};var br,yr,gr,xr,kr,wr,Cr,Er,Ar,Sr,Ir,Lr,Ur,Rr,Vr,Tr,qr=[],Or={type:"num"},jr={type:"regexp"},Dr={type:"string"},Fr={type:"name"},Br={type:"eof"},Mr={keyword:"break"},zr={keyword:"case",beforeExpr:!0},Xr={keyword:"catch"},Nr={keyword:"continue"},Wr={keyword:"debugger"},Jr={keyword:"default"},Pr={keyword:"do",isLoop:!0},Hr={keyword:"else",beforeExpr:!0},$r={keyword:"finally"},_r={keyword:"for",isLoop:!0},Gr={keyword:"function"},Kr={keyword:"if"},Qr={keyword:"return",beforeExpr:!0},Yr={keyword:"switch"},Zr={keyword:"throw",beforeExpr:!0},et={keyword:"try"},rt={keyword:"var"},tt={keyword:"while",isLoop:!0},nt={keyword:"with"},at={keyword:"new",beforeExpr:!0},ot={keyword:"this"},it={keyword:"null",atomValue:null},st={keyword:"true",atomValue:!0},ct={keyword:"false",atomValue:!1},ut={keyword:"in",binop:7,beforeExpr:!0},lt={"break":Mr,"case":zr,"catch":Xr,"continue":Nr,"debugger":Wr,"default":Jr,"do":Pr,"else":Hr,"finally":$r,"for":_r,"function":Gr,"if":Kr,"return":Qr,"switch":Yr,"throw":Zr,"try":et,"var":rt,"while":tt,"with":nt,"null":it,"true":st,"false":ct,"new":at,"in":ut,"instanceof":{keyword:"instanceof",binop:7,beforeExpr:!0},"this":ot,"typeof":{keyword:"typeof",prefix:!0,beforeExpr:!0},"void":{keyword:"void",prefix:!0,beforeExpr:!0},"delete":{keyword:"delete",prefix:!0,beforeExpr:!0}},ft={type:"[",beforeExpr:!0},dt={type:"]"},pt={type:"{",beforeExpr:!0},ht={type:"}"},mt={type:"(",beforeExpr:!0},vt={type:")"},bt={type:",",beforeExpr:!0},yt={type:";",beforeExpr:!0},gt={type:":",beforeExpr:!0},xt={type:"."},kt={type:"?",beforeExpr:!0},wt={binop:10,beforeExpr:!0},Ct={isAssign:!0,beforeExpr:!0},Et={isAssign:!0,beforeExpr:!0},At={binop:9,prefix:!0,beforeExpr:!0},St={postfix:!0,prefix:!0,isUpdate:!0},It={prefix:!0,beforeExpr:!0},Lt={binop:1,beforeExpr:!0},Ut={binop:2,beforeExpr:!0},Rt={binop:3,beforeExpr:!0},Vt={binop:4,beforeExpr:!0},Tt={binop:5,beforeExpr:!0},qt={binop:6,beforeExpr:!0},Ot={binop:7,beforeExpr:!0},jt={binop:8,beforeExpr:!0},Dt={binop:10,beforeExpr:!0};e.tokTypes={bracketL:ft,bracketR:dt,braceL:pt,braceR:ht,parenL:mt,parenR:vt,comma:bt,semi:yt,colon:gt,dot:xt,question:kt,slash:wt,eq:Ct,name:Fr,eof:Br,num:Or,regexp:jr,string:Dr};for(var Ft in lt)e.tokTypes["_"+Ft]=lt[Ft];var Bt,Mt=n("abstract boolean byte char class double enum export extends final float goto implements import int interface long native package private protected public short static super synchronized throws transient volatile"),zt=n("class enum extends super const export import"),Xt=n("implements interface let package private protected public static yield"),Nt=n("eval arguments"),Wt=n("break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this"),Jt=/[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/,Pt="\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u0527\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0\u08a2-\u08ac\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0977\u0979-\u097f\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c33\u0c35-\u0c39\u0c3d\u0c58\u0c59\u0c60\u0c61\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d60\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f4\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f0\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191c\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19c1-\u19c7\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2119-\u211d\u2124\u2126\u2128\u212a-\u212d\u212f-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u2e2f\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309d-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fcc\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua697\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua78e\ua790-\ua793\ua7a0-\ua7aa\ua7f8-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa80-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uabc0-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc",Ht="\u0300-\u036f\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u0620-\u0649\u0672-\u06d3\u06e7-\u06e8\u06fb-\u06fc\u0730-\u074a\u0800-\u0814\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0840-\u0857\u08e4-\u08fe\u0900-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962-\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09d7\u09df-\u09e0\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2-\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b5f-\u0b60\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c01-\u0c03\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62-\u0c63\u0c66-\u0c6f\u0c82\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2-\u0ce3\u0ce6-\u0cef\u0d02\u0d03\u0d46-\u0d48\u0d57\u0d62-\u0d63\u0d66-\u0d6f\u0d82\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0df2\u0df3\u0e34-\u0e3a\u0e40-\u0e45\u0e50-\u0e59\u0eb4-\u0eb9\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f41-\u0f47\u0f71-\u0f84\u0f86-\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u1000-\u1029\u1040-\u1049\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u170e-\u1710\u1720-\u1730\u1740-\u1750\u1772\u1773\u1780-\u17b2\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u1920-\u192b\u1930-\u193b\u1951-\u196d\u19b0-\u19c0\u19c8-\u19c9\u19d0-\u19d9\u1a00-\u1a15\u1a20-\u1a53\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1b46-\u1b4b\u1b50-\u1b59\u1b6b-\u1b73\u1bb0-\u1bb9\u1be6-\u1bf3\u1c00-\u1c22\u1c40-\u1c49\u1c5b-\u1c7d\u1cd0-\u1cd2\u1d00-\u1dbe\u1e01-\u1f15\u200c\u200d\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2d81-\u2d96\u2de0-\u2dff\u3021-\u3028\u3099\u309a\ua640-\ua66d\ua674-\ua67d\ua69f\ua6f0-\ua6f1\ua7f8-\ua800\ua806\ua80b\ua823-\ua827\ua880-\ua881\ua8b4-\ua8c4\ua8d0-\ua8d9\ua8f3-\ua8f7\ua900-\ua909\ua926-\ua92d\ua930-\ua945\ua980-\ua983\ua9b3-\ua9c0\uaa00-\uaa27\uaa40-\uaa41\uaa4c-\uaa4d\uaa50-\uaa59\uaa7b\uaae0-\uaae9\uaaf2-\uaaf3\uabc0-\uabe1\uabec\uabed\uabf0-\uabf9\ufb20-\ufb28\ufe00-\ufe0f\ufe20-\ufe26\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f",$t=new RegExp("["+Pt+"]"),_t=new RegExp("["+Pt+Ht+"]"),Gt=/[\n\r\u2028\u2029]/,Kt=/\r\n|[\n\r\u2028\u2029]/g,Qt=e.isIdentifierStart=function(e){return 65>e?36===e:91>e?!0:97>e?95===e:123>e?!0:e>=170&&$t.test(String.fromCharCode(e))},Yt=e.isIdentifierChar=function(e){return 48>e?36===e:58>e?!0:65>e?!1:91>e?!0:97>e?95===e:123>e?!0:e>=170&&_t.test(String.fromCharCode(e))},Zt={kind:"loop"},en={kind:"switch"}});
-	
+
 		var binaryOperators = {
 			'+': '__add',
 			'-': '__subtract',
@@ -13096,12 +13096,12 @@
 			'==': 'equals',
 			'!=': 'equals'
 		};
-	
+
 		var unaryOperators = {
 			'-': '__negate',
 			'+': null
 		};
-	
+
 		var fields = Base.each(
 			['add', 'subtract', 'multiply', 'divide', 'modulo', 'negate'],
 			function(name) {
@@ -13112,7 +13112,7 @@
 		Point.inject(fields);
 		Size.inject(fields);
 		Color.inject(fields);
-	
+
 		function __$__(left, operator, right) {
 			var handler = binaryOperators[operator];
 			if (left && left[handler]) {
@@ -13129,7 +13129,7 @@
 			case '!=': return left != right;
 			}
 		}
-	
+
 		function $__(operator, value) {
 			var handler = unaryOperators[operator];
 			if (handler && value && value[handler])
@@ -13139,19 +13139,19 @@
 			case '-': return -value;
 			}
 		}
-	
+
 		function parse(code, options) {
 			return scope.acorn.parse(code, options);
 		}
-	
+
 		function compile(code, url, options) {
 			if (!code)
 				return '';
 			options = options || {};
 			url = url || '';
-	
+
 			var insertions = [];
-	
+
 			function getOffset(offset) {
 				for (var i = 0, l = insertions.length; i < l; i++) {
 					var insertion = insertions[i];
@@ -13161,17 +13161,17 @@
 				}
 				return offset;
 			}
-	
+
 			function getCode(node) {
 				return code.substring(getOffset(node.range[0]),
 						getOffset(node.range[1]));
 			}
-	
+
 			function getBetween(left, right) {
 				return code.substring(getOffset(left.range[1]),
 						getOffset(right.range[0]));
 			}
-	
+
 			function replaceCode(node, str) {
 				var start = getOffset(node.range[0]),
 					end = getOffset(node.range[1]),
@@ -13185,7 +13185,7 @@
 				insertions.splice(insert, 0, [start, str.length - end + start]);
 				code = code.substring(0, start) + str + code.substring(end);
 			}
-	
+
 			function walkAST(node, parent) {
 				if (!node)
 					return;
@@ -13294,7 +13294,7 @@
 			}
 			return code;
 		}
-	
+
 		function execute(code, scope, url, options) {
 			paper = scope;
 			var view = scope.getView(),
@@ -13361,7 +13361,7 @@
 				view.update();
 			}
 		}
-	
+
 		function loadScript(script) {
 			if (/^text\/(?:x-|)paperscript$/.test(script.type)
 					&& PaperScope.getAttribute(script, 'ignore') !== 'true') {
@@ -13387,43 +13387,43 @@
 				return scope;
 			}
 		}
-	
+
 		function loadAll() {
 			Base.each(document.getElementsByTagName('script'), loadScript);
 		}
-	
+
 		function load(script) {
 			return script ? loadScript(script) : loadAll();
 		}
-	
+
 		if (document.readyState === 'complete') {
 			setTimeout(loadAll);
 		} else {
 			DomEvent.add(window, { load: loadAll });
 		}
-	
+
 		return {
 			compile: compile,
 			execute: execute,
 			load: load,
 			parse: parse
 		};
-	
+
 	}).call(this);
-	
+
 	paper = new (PaperScope.inject(Base.exports, {
 		enumerable: true,
 		Base: Base,
 		Numerical: Numerical,
 		Key: Key
 	}))();
-	
+
 	if (true) {
 		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (paper), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else if (typeof module === 'object' && module) {
 		module.exports = paper;
 	}
-	
+
 	return paper;
 	};
 
@@ -13433,19 +13433,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 	exports.changeCenter = changeCenter;
 	exports.changeZoom = changeZoom;
 	var Paper = __webpack_require__(2);
-	
+
 	function changeCenter(oldCenter, offset, factor) {
 	  offset = offset.multiply(factor);
 	  return offset;
 	}
-	
+
 	function changeZoom(oldZoom, delta, center, position) {
 	  var factor = 1.05;
 	  var newZoom = delta < 0 ? oldZoom * factor : oldZoom / factor;
@@ -13469,32 +13469,32 @@
 	 * spline.get(x) => returns the easing value | x must be in [0, 1] range
 	 *
 	 */
-	
+
 	// These values are established by empiricism with tests (tradeoff: performance VS precision)
 	var NEWTON_ITERATIONS = 4;
 	var NEWTON_MIN_SLOPE = 0.001;
 	var SUBDIVISION_PRECISION = 0.0000001;
 	var SUBDIVISION_MAX_ITERATIONS = 10;
-	
+
 	var kSplineTableSize = 11;
 	var kSampleStepSize = 1.0 / (kSplineTableSize - 1.0);
-	
+
 	var float32ArraySupported = typeof Float32Array === "function";
-	
+
 	function A (aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
 	function B (aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
 	function C (aA1)      { return 3.0 * aA1; }
-	
+
 	// Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
 	function calcBezier (aT, aA1, aA2) {
 	  return ((A(aA1, aA2)*aT + B(aA1, aA2))*aT + C(aA1))*aT;
 	}
-	
+
 	// Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
 	function getSlope (aT, aA1, aA2) {
 	  return 3.0 * A(aA1, aA2)*aT*aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
 	}
-	
+
 	function binarySubdivide (aX, aA, aB, mX1, mX2) {
 	  var currentX, currentT, i = 0;
 	  do {
@@ -13508,7 +13508,7 @@
 	  } while (Math.abs(currentX) > SUBDIVISION_PRECISION && ++i < SUBDIVISION_MAX_ITERATIONS);
 	  return currentT;
 	}
-	
+
 	function newtonRaphsonIterate (aX, aGuessT, mX1, mX2) {
 	  for (var i = 0; i < NEWTON_ITERATIONS; ++i) {
 	    var currentSlope = getSlope(aGuessT, mX1, mX2);
@@ -13518,7 +13518,7 @@
 	  }
 	  return aGuessT;
 	}
-	
+
 	/**
 	 * points is an array of [ mX1, mY1, mX2, mY2 ]
 	 */
@@ -13527,7 +13527,7 @@
 	    return new BezierEasing([ points, b, c, d ]);
 	  }
 	  if (!(this instanceof BezierEasing)) return new BezierEasing(points);
-	
+
 	  if (!points || points.length !== 4) {
 	    throw new Error("BezierEasing: points must contains 4 values");
 	  }
@@ -13539,18 +13539,18 @@
 	  if (points[0] < 0 || points[0] > 1 || points[2] < 0 || points[2] > 1) {
 	    throw new Error("BezierEasing x values must be in [0, 1] range.");
 	  }
-	
+
 	  this._str = "BezierEasing("+points+")";
 	  this._css = "cubic-bezier("+points+")";
 	  this._p = points;
 	  this._mSampleValues = float32ArraySupported ? new Float32Array(kSplineTableSize) : new Array(kSplineTableSize);
 	  this._precomputed = false;
-	
+
 	  this.get = this.get.bind(this);
 	}
-	
+
 	BezierEasing.prototype = {
-	
+
 	  get: function (x) {
 	    var mX1 = this._p[0],
 	      mY1 = this._p[1],
@@ -13563,21 +13563,21 @@
 	    if (x === 1) return 1;
 	    return calcBezier(this._getTForX(x), mY1, mY2);
 	  },
-	
+
 	  getPoints: function() {
 	    return this._p;
 	  },
-	
+
 	  toString: function () {
 	    return this._str;
 	  },
-	
+
 	  toCSS: function () {
 	    return this._css;
 	  },
-	
+
 	  // Private part
-	
+
 	  _precompute: function () {
 	    var mX1 = this._p[0],
 	      mY1 = this._p[1],
@@ -13587,7 +13587,7 @@
 	    if (mX1 !== mY1 || mX2 !== mY2)
 	      this._calcSampleValues();
 	  },
-	
+
 	  _calcSampleValues: function () {
 	    var mX1 = this._p[0],
 	      mX2 = this._p[2];
@@ -13595,7 +13595,7 @@
 	      this._mSampleValues[i] = calcBezier(i * kSampleStepSize, mX1, mX2);
 	    }
 	  },
-	
+
 	  /**
 	   * getTForX chose the fastest heuristic to determine the percentage value precisely from a given X projection.
 	   */
@@ -13603,20 +13603,20 @@
 	    var mX1 = this._p[0],
 	      mX2 = this._p[2],
 	      mSampleValues = this._mSampleValues;
-	
+
 	    var intervalStart = 0.0;
 	    var currentSample = 1;
 	    var lastSample = kSplineTableSize - 1;
-	
+
 	    for (; currentSample !== lastSample && mSampleValues[currentSample] <= aX; ++currentSample) {
 	      intervalStart += kSampleStepSize;
 	    }
 	    --currentSample;
-	
+
 	    // Interpolate to provide an initial guess for t
 	    var dist = (aX - mSampleValues[currentSample]) / (mSampleValues[currentSample+1] - mSampleValues[currentSample]);
 	    var guessForT = intervalStart + dist * kSampleStepSize;
-	
+
 	    var initialSlope = getSlope(guessForT, mX1, mX2);
 	    if (initialSlope >= NEWTON_MIN_SLOPE) {
 	      return newtonRaphsonIterate(aX, guessForT, mX1, mX2);
@@ -13627,7 +13627,7 @@
 	    }
 	  }
 	};
-	
+
 	// CSS mapping
 	BezierEasing.css = {
 	  "ease":        BezierEasing.ease      = BezierEasing(0.25, 0.1, 0.25, 1.0),
@@ -13636,7 +13636,7 @@
 	  "ease-out":    BezierEasing.easeOut   = BezierEasing(0.00, 0.0, 0.58, 1.0),
 	  "ease-in-out": BezierEasing.easeInOut = BezierEasing(0.42, 0.0, 0.58, 1.0)
 	};
-	
+
 	module.exports = BezierEasing;
 
 
@@ -13645,44 +13645,44 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	var Paper = __webpack_require__(2);
 	var view = __webpack_require__(1);
-	
+
 	var Menu = (function () {
 	  function Menu(onDone, params) {
 	    var _this = this;
-	
+
 	    _classCallCheck(this, Menu);
-	
+
 	    view.reset();
 	    this.onDone = onDone;
 	    this.savedMaps = [];
 	    for (var i = 0; i < localStorage.length; i++) {
 	      var key = localStorage.key(i);
-	      if (key.startsWith('map')) {
+	      if (key.indexOf(‘map') === 0) {
 	        this.savedMaps.push(JSON.parse(localStorage.getItem(key)));
 	      }
 	    }
-	
+
 	    this.menu = document.querySelector('#menu');
 	    this.menu.style.display = 'initial';
-	
+
 	    var createMapButton = document.querySelector('#createMapButton');
 	    createMapButton.addEventListener('click', function () {
 	      return _this.onDone({ view: 'Create map' });
 	    });
-	
+
 	    this.maps = document.querySelector('#maps');
-	
+
 	    this.savedMaps.forEach(function (map) {
 	      var mapDiv = document.createElement('div');
 	      mapDiv.className = "mapDiv";
@@ -13695,7 +13695,7 @@
 	      _this.maps.appendChild(mapDiv);
 	    });
 	  }
-	
+
 	  _createClass(Menu, [{
 	    key: 'dispose',
 	    value: function dispose() {
@@ -13705,10 +13705,10 @@
 	      }
 	    }
 	  }]);
-	
+
 	  return Menu;
 	})();
-	
+
 	exports['default'] = Menu;
 	module.exports = exports['default'];
 
@@ -13717,24 +13717,24 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	var Paper = __webpack_require__(2);
 	var view = __webpack_require__(1);
-	
+
 	var MapEditor = (function () {
 	  function MapEditor(callback) {
 	    var _this = this;
-	
+
 	    _classCallCheck(this, MapEditor);
-	
+
 	    this.callback = callback;
 	    this.track = new Paper.Path();
 	    this.track.closed = true;
@@ -13746,7 +13746,7 @@
 	    this.course = new Paper.Group(this.track, this.start, this.end);
 	    this.steps = [this.track, this.start, this.end];
 	    this.currentStep = 0;
-	
+
 	    this.mouseControls = new Paper.Tool();
 	    this.mouseControls.onMouseDrag = function (e) {
 	      return _this.onMouseDrag(e);
@@ -13755,7 +13755,7 @@
 	      return _this.onMouseUp(e);
 	    };
 	  }
-	
+
 	  _createClass(MapEditor, [{
 	    key: 'onMouseDrag',
 	    value: function onMouseDrag(event) {
@@ -13775,7 +13775,7 @@
 	    key: 'done',
 	    value: function done() {
 	      this.mouseControls.remove();
-	
+
 	      view.addCourse(this.course);
 	      var track = this.track;
 	      var startArea = this.start.intersect(this.track);
@@ -13787,13 +13787,13 @@
 	        start: startArea,
 	        end: endArea
 	      };
-	
+
 	      view.setView(this.track.bounds.expand(50));
 	      this.start.remove();
 	      this.end.remove();
 	      Paper.view.draw();
 	      var dataURL = document.querySelector('canvas').toDataURL("image/png");
-	
+
 	      this.course.remove();
 	      var key = 'map-' + new Date().toISOString();
 	      var value = {
@@ -13818,10 +13818,10 @@
 	      this.course.remove();
 	    }
 	  }]);
-	
+
 	  return MapEditor;
 	})();
-	
+
 	exports['default'] = MapEditor;
 	module.exports = exports['default'];
 
@@ -13830,26 +13830,26 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	var Paper = __webpack_require__(2);
 	var Player = __webpack_require__(8);
 	var Game = __webpack_require__(9);
 	var view = __webpack_require__(1);
-	
+
 	var GameGui = (function () {
 	  function GameGui(callback, params) {
 	    var _this = this;
-	
+
 	    _classCallCheck(this, GameGui);
-	
+
 	    this.callback = callback;
 	    this.game;
 	    this.nbrOfPlayers = 2;
@@ -13862,36 +13862,36 @@
 	    this.mouseControls.onMouseDown = function (e) {
 	      return _this.addPlayerClickEvent(e);
 	    };
-	
+
 	    this.game = new Game(params);
-	
+
 	    var track = this.game.track;
 	    track.closed = true;
 	    track.fillColor = 'purple';
-	
+
 	    var startArea = this.game.start;
 	    startArea.fillColor = 'teal';
-	
+
 	    var endArea = this.game.end;
 	    endArea.fillColor = 'yellow';
-	
+
 	    // this.border = track.clone();
 	    // this.border.fillColor.alpha = 0;
 	    // this.border.strokeColor = 'white';
 	    // this.border.strokeWidth = 0.5;
-	
+
 	    this.course.addChild(track);
 	    this.course.addChild(startArea);
 	    this.course.addChild(endArea);
 	    view.addCourse(this.course);
-	
+
 	    this.setViewToTrack();
-	
+
 	    document.addEventListener('mousewheel', function (event) {
 	      return _this.mousewheel(event.wheelDelta);
 	    });
 	  }
-	
+
 	  _createClass(GameGui, [{
 	    key: 'addPlayerClickEvent',
 	    value: function addPlayerClickEvent(event) {
@@ -13910,7 +13910,7 @@
 	    key: 'startGame',
 	    value: function startGame() {
 	      var _this2 = this;
-	
+
 	      this.players.forEach(function (p) {
 	        return _this2.foreGround.appendBottom(p.elements);
 	      });
@@ -13966,7 +13966,7 @@
 	    key: 'drawControls',
 	    value: function drawControls() {
 	      var _this3 = this;
-	
+
 	      this.game.vectorsForControls.map(function (v) {
 	        return _this3.createControl(v);
 	      }).forEach(function (control) {
@@ -14001,7 +14001,7 @@
 	    key: 'dispose',
 	    value: function dispose() {
 	      var _this4 = this;
-	
+
 	      this.course.remove();
 	      this.foreGround.remove();
 	      setTimeout(function () {
@@ -14014,10 +14014,10 @@
 	      return this.players[this.game.currentPlayerIndex];
 	    }
 	  }]);
-	
+
 	  return GameGui;
 	})();
-	
+
 	exports['default'] = GameGui;
 	module.exports = exports['default'];
 
@@ -14026,31 +14026,31 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	var Paper = __webpack_require__(2);
-	
+
 	var Player = (function () {
 	  function Player(color, position) {
 	    _classCallCheck(this, Player);
-	
+
 	    this.color = color;
 	    this.path = new Paper.Path({
 	      strokeColor: 'white',
 	      strokeWidth: 1
 	    });
 	    this.elements = new Paper.Group([this.path]);
-	
+
 	    this.addPosition(position);
 	  }
-	
+
 	  _createClass(Player, [{
 	    key: 'addPosition',
 	    value: function addPosition(position) {
@@ -14069,10 +14069,10 @@
 	      return circle;
 	    }
 	  }]);
-	
+
 	  return Player;
 	})();
-	
+
 	exports['default'] = Player;
 	module.exports = exports['default'];
 
@@ -14081,22 +14081,22 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
+
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
+
 	var Car = __webpack_require__(10);
 	var Paper = __webpack_require__(2);
-	
+
 	var Game = (function () {
 	  function Game(map) {
 	    _classCallCheck(this, Game);
-	
+
 	    this.scale = 20;
 	    this.players = [];
 	    this.start = new Paper.Path(map.start);
@@ -14108,7 +14108,7 @@
 	    this.currentPlayerIndex = 0;
 	    this.vectorsForControls = [];
 	  }
-	
+
 	  _createClass(Game, [{
 	    key: 'startGame',
 	    value: function startGame() {
@@ -14131,11 +14131,11 @@
 	          }
 	        }
 	      }
-	
+
 	      if (vectorsForControls.length === 0) {
 	        player.isAlive = false;
 	      }
-	
+
 	      this.vectorsForControls = vectorsForControls;
 	    }
 	  }, {
@@ -14186,10 +14186,10 @@
 	      return this.players[this.currentPlayerIndex];
 	    }
 	  }]);
-	
+
 	  return Game;
 	})();
-	
+
 	exports['default'] = Game;
 	module.exports = exports['default'];
 
@@ -14198,33 +14198,33 @@
 /***/ function(module, exports) {
 
 	"use strict";
-	
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-	
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
+
 	var Car = (function () {
 	  function Car(position, direction) {
 	    _classCallCheck(this, Car);
-	
+
 	    this.positions = [position];
 	    this.currentPositionIndex = 0;
 	    this.direction = direction;
 	    this.isAlive = true;
 	    this.isInEndZone = false;
 	  }
-	
+
 	  _createClass(Car, [{
 	    key: "move",
 	    value: function move(vector) {
 	      if (!this.isValidMove(this.direction, vector)) {
 	        return;
 	      }
-	
+
 	      this.position = this.position.clone().add(vector);
 	      this.direction = vector;
 	    }
@@ -14248,10 +14248,10 @@
 	      return this.positions[this.currentPositionIndex - 1];
 	    }
 	  }]);
-	
+
 	  return Car;
 	})();
-	
+
 	exports["default"] = Car;
 	module.exports = exports["default"];
 
