@@ -8,7 +8,7 @@ export default class Menu{
     this.savedMaps = [];
     for (var i = 0; i < localStorage.length; i++){
       var key = localStorage.key(i);
-      if(key.startsWith('map')){
+      if(key.indexOf('map') === 0){
         this.savedMaps.push(JSON.parse(localStorage.getItem(key)));
       }
     }

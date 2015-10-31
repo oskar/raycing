@@ -122,7 +122,7 @@ function animateStar(start, velocity, distance){
   });
 }
 
-for(var i = 0; i < 1000; i++){
+for(var i = 0; i < 100; i++){
   var start = new Paper.Point.random().multiply(outerBounds.bottomRight);
   createStar(start);
 }
