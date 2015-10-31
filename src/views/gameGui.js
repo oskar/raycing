@@ -115,12 +115,13 @@ export default class GameGui{
   }
 
   setViewToControls(){
+    if(!this.game.currentPlayer) return;
     var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
     view.setView(playerBounds.expand(100));
   }
 
   setViewToTrack(){
-    view.setView(this.game.track.bounds.expand(100));
+    view.setView(this.game.track.bounds);
   }
 
   createControl(controlObject){

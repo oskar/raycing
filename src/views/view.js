@@ -62,9 +62,7 @@ function createGrid(viewBounds){
       new Paper.Point(x - 0.5, viewBounds.top),
       new Paper.Point(x + 0.5, Paper.view.bounds.bottom)
     );
-    line.fillColor = 'black';
-    line.shadowColor = new Paper.Color(0,0,0);
-    line.shadowBlur = 10;
+    line.fillColor = 'white';
 
     grid.addChild(line);
   }
@@ -73,7 +71,7 @@ function createGrid(viewBounds){
       new Paper.Point(viewBounds.left, y),
       new Paper.Point(Paper.view.bounds.right, y + 1)
     );
-    line.fillColor = 'black';
+    line.fillColor = 'white';
 
     grid.addChild(line);
   }
@@ -104,23 +102,27 @@ function animateView(center, zoom){
       var dtZoom = deltaZoom * easeValue;
       Paper.view.zoom = startZoom + dtZoom;
     }
-    return true;
   });
-  // Paper.view.onFrame = event => {
-  //   if(!animating) return;
-  //   elapsedTime += event.delta;
-  //   if(elapsedTime > animationDuration){
-  //     Paper.view.center = center;
-  //     Paper.view.zoom = zoom;
-  //     animating = false;
-  //     return;
-  //   }
-  //   if(event.delta > 0){
-  //     var easeValue = elapsedTime/animationDuration;
-  //     var dtCenter = deltaCenter.multiply(easeValue);
-  //     Paper.view.center = startCenter.add(dtCenter);
-  //     var dtZoom = deltaZoom * easeValue;
-  //     Paper.view.zoom = startZoom + dtZoom;
-  //   }
-  // }
+}
+
+function createStar(start){
+  animateStar(start, new Paper.Point(100,1), 4 + Math.random() * 11);
+}
+
+function animateStar(start, velocity, distance){
+  var star = new Paper.Path.Circle(start, 5 / distance);
+  star.fillColor = 'white';
+  animation.add(elapsedTime => {
+    star.position = start.add(velocity.multiply(elapsedTime / distance));
+    if(!outerBounds.contains(star.position)){
+      var newStart = new Paper.Point.random().multiply(outerBounds.bottomLeft);
+      createStar(newStart);
+      return false;
+    }
+  });
+}
+
+for(var i = 0; i < 1000; i++){
+  var start = new Paper.Point.random().multiply(outerBounds.bottomRight);
+  createStar(start);
 }

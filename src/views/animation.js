@@ -11,7 +11,7 @@ function onFrame(event){
   animations.forEach((animation, index) => {
     animation.elapsedTime += event.delta;
     var continueAnimation = animation.callback(animation.elapsedTime);
-    if(!continueAnimation) {
+    if(continueAnimation === false) {
       stop(index);
     }
   });
