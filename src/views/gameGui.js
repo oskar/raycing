@@ -40,9 +40,12 @@ export default class GameGui{
 
     this.setViewToTrack();
 
-    document.addEventListener('mousewheel', event => this.mousewheel(event.wheelDelta));
+    this.mousewheelListener = document.addEventListener('mousewheel', event => {
+      if(event.wheelDelta === 0) return;
+      this.mousewheel(event.wheelDelta < 0);
+    });
 
-    document.addEventListener('gestureend', e => this.mousewheel(e.scale), false);
+    this.gestureendListener = document.addEventListener('gestureend', e => this.mousewheel(e.scale < 1), false);
   }
 
   get currentPlayer(){
@@ -80,10 +83,10 @@ export default class GameGui{
     }
   }
 
-  mousewheel(delta){
-    if(delta < 0) {
+  mousewheel(shouldZoomOut){
+    if(shouldZoomOut) {
       this.setViewToTrack();
-    } else if(delta > 0) {
+    } else {
       this.setViewToControls();
     }
   }
@@ -137,6 +140,8 @@ export default class GameGui{
   dispose(){
     this.course.remove();
     this.foreGround.remove();
+    document.removeEventListener('gestureend', this.gestureendListener);
+    document.removeEventListener('mosewheel', this.mousewheelListener);
     setTimeout(() => this.mouseControls.remove());
   }
 }
