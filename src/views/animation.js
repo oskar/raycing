@@ -2,17 +2,17 @@ var Paper = require('paper');
 
 var animations = [];
 
-function stop(index){
-  animations.splice(index, 1);
+function remove(animation){
+  animations = animations.filter(a => a !== animation);
 }
 
 function onFrame(event){
   if(event.delta === 0) return;
-  animations.forEach((animation, index) => {
+  animations.forEach(animation => {
     animation.elapsedTime += event.delta;
     var continueAnimation = animation.callback(animation.elapsedTime);
     if(continueAnimation === false) {
-      stop(index);
+      remove(animation);
     }
   });
 }
@@ -22,8 +22,10 @@ export function init(){
 }
 
 export function add(callback){
-  animations.push({
+  var animation = {
     callback,
     elapsedTime: 0
-  });
+  };
+  animations.push(animation);
+  return () => remove(animation);
 }
