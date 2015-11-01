@@ -7,16 +7,16 @@ export default class GameGui{
   constructor(callback, params){
     this.callback = callback;
     this.game;
-    this.nbrOfPlayers = 2;
+    this.nbrOfPlayers = params.nrbOfPlayers;
     this.players = [];
-    this.colors = ['#ff0000', '#0000ff'];
+    this.colors = ['#ffff00', '#0000ff', '#ff0000', '#00ff00'];
     this.controls = new Paper.Group();
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
-    this.game = new Game(params);
+    this.game = new Game(params.map);
 
     var track = this.game.track;
     track.closed = true;
