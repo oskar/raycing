@@ -28,11 +28,6 @@ export default class GameGui{
     var endArea = this.game.end;
     endArea.fillColor = 'yellow';
 
-    // this.border = track.clone();
-    // this.border.fillColor.alpha = 0;
-    // this.border.strokeColor = 'white';
-    // this.border.strokeWidth = 0.5;
-
     this.course.addChild(track);
     this.course.addChild(startArea);
     this.course.addChild(endArea);
