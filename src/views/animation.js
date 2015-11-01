@@ -8,6 +8,7 @@ function remove(animation){
 
 function onFrame(event){
   if(event.delta === 0) return;
+  console.log(animations.length);
   animations.forEach(animation => {
     animation.elapsedTime += event.delta;
     var continueAnimation = animation.callback(animation.elapsedTime);
@@ -27,5 +28,7 @@ export function add(callback){
     elapsedTime: 0
   };
   animations.push(animation);
-  return () => remove(animation);
+  return {
+    remove: () => remove(animation)
+  };
 }

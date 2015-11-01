@@ -35,7 +35,6 @@ export function setView(bounds){
   }
   var newZoom = Paper.view.viewSize.width/size.width;
   newZoom = newZoom > 1 ? newZoom : 1;
-  console.log('New view:', bounds.center, newZoom);
   animateView(bounds.center, newZoom);
 }
 

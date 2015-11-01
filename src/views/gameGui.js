@@ -2,6 +2,7 @@ var Paper = require('paper');
 var Player = require('./player');
 var Game = require('../game');
 var view = require('./view');
+var animation = require('./animation');
 
 export default class GameGui{
   constructor(callback, params){
@@ -11,6 +12,7 @@ export default class GameGui{
     this.players = [];
     this.colors = ['#ffff00', '#0000ff', '#ff0000', '#00ff00'];
     this.controls = new Paper.Group();
+    this.controlAnimations = [];
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
@@ -98,7 +100,7 @@ export default class GameGui{
 
   nextTurn(){
     this.game.nextTurn();
-    this.controls.removeChildren();
+    this.clearControls();
     if(!this.game.currentPlayer.isAlive){
       this.nextTurn();
     }
@@ -106,10 +108,17 @@ export default class GameGui{
   }
 
   drawControls(){
-    this.game.vectorsForControls
-      .map(v => this.createControl(v))
-      .forEach(control => this.controls.addChild(control));
+    var circles = this.game.vectorsForControls.map(v => this.createControl(v));
+    this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
+      circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
+    }));
+    circles.forEach(circle => this.controls.addChild(circle));
     this.setViewToControls();
+  }
+
+  clearControls(){
+    this.controls.removeChildren();
+    this.controlAnimations.forEach(animation => animation.remove());
   }
 
   setViewToControls(){
