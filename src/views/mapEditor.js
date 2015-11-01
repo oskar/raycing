@@ -4,72 +4,82 @@ var view = require('./view');
 export default class MapEditor{
   constructor(callback){
     this.callback = callback;
-    this.track = new Paper.Path();
-    this.track.closed = true;
-    this.track.strokeColor = 'white';
-    this.start = new Paper.Path();
-    this.start.strokeColor = 'teal';
-    this.end = new Paper.Path();
-    this.end.strokeColor = 'yellow';
-    this.course = new Paper.Group(this.track, this.start, this.end);
-    this.steps = [this.track, this.start, this.end];
-    this.currentStep = 0;
+    this.course;
+    this.track;
+    this.start;
+    this.end;
 
     this.mouseControls = new Paper.Tool();
+    var lastClick;
+    this.mouseControls.onMouseDown = e => {
+      var now = Date.now();
+      if(now - lastClick < 200) {
+        this.onDoubleClick(e);
+      } else {
+        this.onMouseDown(e);
+      }
+      lastClick = now;
+    }
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
-    this.mouseControls.onMouseUp = e => this.onMouseUp(e);
+  }
+
+  onMouseDown(event) {
+    if(!this.track){
+      this.track = new Paper.Path.Circle(event.point, 40);
+      this.track.fillColor = 'purple';
+      this.course = new Paper.Group(this.track);
+      view.addCourse(this.course);
+    }
+    if(this.track.contains(event.point)) {
+      this.isAdding = true;
+    } else {
+      this.isAdding = false;
+    }
+  }
+
+  onDoubleClick(event) {
+    if(!this.start) {
+      this.start = new Paper.Path.Circle(event.point, 60).intersect(this.track);
+      this.start.fillColor = 'teal';
+      this.course.addChild(this.start);
+    } else {
+      this.end = new Paper.Path.Circle(event.point, 60).intersect(this.track);
+      this.end.fillColor = 'yellow';
+      this.course.addChild(this.end);
+      this.done();
+    }
   }
 
   onMouseDrag(event) {
-    this.steps[this.currentStep].add(event.point);
-  }
-
-  onMouseUp(event) {
-    this.steps[this.currentStep].simplify(5);
-    this.steps[this.currentStep].closed = true;
-    this.currentStep++;
-    if(this.currentStep === this.steps.length) {
-      this.done();
+    var editCircle = new Paper.Path.Circle(event.point, 40);
+    var newTrack;
+    if(this.isAdding){
+      newTrack = this.track.unite(editCircle);
+    } else {
+      newTrack = this.track.subtract(editCircle);
     }
+    this.track.remove();
+    this.track = newTrack;
   }
 
   done(){
     this.mouseControls.remove();
 
-    view.addCourse(this.course);
-    var track = this.track;
-    var startArea = this.start.intersect(this.track);
-    startArea.fillColor = 'teal';
-    var endArea = this.end.intersect(this.track);
-    endArea.fillColor = 'yellow';
     var map = {
-      track: track,
-      start: startArea,
-      end: endArea
+      track: this.track.toJSON(),
+      start: this.start.toJSON(),
+      end: this.end.toJSON()
     }
 
     view.setView(this.track.bounds.expand(100));
-    this.start.remove();
-    this.end.remove();
-    Paper.view.draw();
+
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
 
     this.course.remove();
     var key = 'map-' + (new Date()).toISOString();
-    var value = {
-      dataURL,
-      map: this.paperToStorage(map)
-    };
+    var value = { dataURL, map };
     localStorage.setItem(key, JSON.stringify(value));
     this.callback({ view: 'Menu' });
-  }
-
-  paperToStorage(map){
-    return {
-      track: map.track.segments,
-      start: map.start.segments,
-      end: map.end.segments,
-    }
   }
 
   dispose(){

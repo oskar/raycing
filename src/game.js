@@ -5,12 +5,9 @@ export default class Game{
   constructor(map){
     this.scale = 20;
     this.players = [];
-    this.start = new Paper.Path(map.start);
-    this.start.closed = true;
-    this.end = new Paper.Path(map.end);
-    this.end.closed = true;
-    this.track = new Paper.Path(map.track);
-    this.track.closed = true;
+    this.start = Paper.project.importJSON(map.start);
+    this.end = Paper.project.importJSON(map.end);
+    this.track = Paper.project.importJSON(map.track);
     this.currentPlayerIndex = 0;
     this.vectorsForControls = [];
   }
