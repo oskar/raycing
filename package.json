@@ -39,5 +39,7 @@
     "webpack": "1.12.2",
     "webpack-dev-server": "1.12.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "debounce": "^1.0.0"
+  }
 }

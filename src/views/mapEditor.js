@@ -1,8 +1,11 @@
 var Paper = require('paper');
 var view = require('./view');
+var debounce = require('debounce');
+var animation = require('./animation');
 
 export default class MapEditor{
   constructor(onDone, params){
+    this.brushsize_ = 3;
     this.onDone = onDone;
     this.course;
     if(params) {
@@ -33,11 +36,30 @@ export default class MapEditor{
       lastClick = now;
     }
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
+
+    this.mousewheelListener = document.addEventListener('mousewheel', debounce(event => {
+      if(event.wheelDelta === 0) return;
+      this.mousewheel(event.wheelDelta < 0);
+    }), 100);
+
+    this.gestureendListener = document.addEventListener('gestureend', debounce(e => this.mousewheel(e.scale < 1), false), 100);
+  }
+
+  mousewheel(zoomOut){
+    this.brushsize = zoomOut ? this.brushsize + 1 : this.brushsize - 1;
+  }
+
+  get brushsize(){
+    return this.brushsize_;
+  }
+
+  set brushsize(value) {
+    this.brushsize_ = Math.max(2, Math.min(value, 6));
   }
 
   onMouseDown(event) {
     if(this.track.isEmpty()){
-      this.track = new Paper.Path.Circle(event.point, 40);
+      this.track = new Paper.Path.Circle(event.point, this.brushsize * 8);
       this.track.fillColor = 'purple';
       this.course.addChild(this.track);
     }
@@ -67,7 +89,7 @@ export default class MapEditor{
   }
 
   onMouseDrag(event) {
-    var editCircle = new Paper.Path.Circle(event.point, 40);
+    var editCircle = new Paper.Path.Circle(event.point, this.brushsize * 8);
     var newTrack;
     if(this.isAdding){
       newTrack = this.track.unite(editCircle);
