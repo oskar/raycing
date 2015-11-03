@@ -37,16 +37,31 @@ export default class MapEditor{
     }
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
 
-    this.mousewheelListener = document.addEventListener('mousewheel', debounce(event => {
+    this.mousewheelListener = document.addEventListener('mousewheel', event => {
       if(event.wheelDelta === 0) return;
-      this.mousewheel(event.wheelDelta < 0);
-    }), 100);
+      this.mousewheel(event.wheelDelta < 0, new Paper.Point(event.clientX, event.clientY));
+    });
 
-    this.gestureendListener = document.addEventListener('gestureend', debounce(e => this.mousewheel(e.scale < 1), false), 100);
+    this.gestureendListener = document.addEventListener('gestureend',
+      e => this.mousewheel(e.scale < 1, new Paper.Point(event.clientX, event.clientY)), false);
   }
 
-  mousewheel(zoomOut){
+  mousewheel(zoomOut, point){
+    var oldValue = this.brushsize;
     this.brushsize = zoomOut ? this.brushsize + 1 : this.brushsize - 1;
+    if(oldValue === this.brushsize) return;
+
+    var brush = new Paper.Path.Circle(point, this.brushsize);
+    brush.fillColor = 'white';
+    this.course.addChild(brush);
+    animation.add(elapsedTime => {
+      var opacity = 1 - elapsedTime;
+      brush.opacity = opacity;
+      if(opacity < 0) {
+        brush.remove();
+        return false;
+      }
+    });
   }
 
   get brushsize(){
@@ -54,12 +69,12 @@ export default class MapEditor{
   }
 
   set brushsize(value) {
-    this.brushsize_ = Math.max(2, Math.min(value, 6));
+    this.brushsize_ = Math.max(1, Math.min(value, 60));
   }
 
   onMouseDown(event) {
     if(this.track.isEmpty()){
-      this.track = new Paper.Path.Circle(event.point, this.brushsize * 8);
+      this.track = new Paper.Path.Circle(event.point, this.brushsize);
       this.track.fillColor = 'purple';
       this.course.addChild(this.track);
     }
@@ -89,7 +104,7 @@ export default class MapEditor{
   }
 
   onMouseDrag(event) {
-    var editCircle = new Paper.Path.Circle(event.point, this.brushsize * 8);
+    var editCircle = new Paper.Path.Circle(event.point, this.brushsize);
     var newTrack;
     if(this.isAdding){
       newTrack = this.track.unite(editCircle);
