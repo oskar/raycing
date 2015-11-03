@@ -10,8 +10,6 @@ var height = document.body.clientHeight;
 
 initPaper(canvas, width, height);
 
-var mouseControls;
-
 var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
 
 var course = new Paper.Group(createGrid(outerBounds));

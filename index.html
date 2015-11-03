@@ -10,15 +10,25 @@
 </head>
 <body>
   <div id="menu" class="menu">
-    <div class="container flexContainer">
-      <div class="playerMenu">
-        <span id="fewerPlayersButton" class="button">-</span>
-        <span id="nbrOfPlayers">2</span>
-        Players
-        <span id="morePlayersButton" class="button">+</span>
+    <div class="playerMenu">
+      <span id="fewerPlayersButton" class="button centeredContainer">&nbsp;</span>
+      <span id="nbrOfPlayers">2</span>
+      Players
+      <span id="morePlayersButton" class="button centeredContainer">&nbsp;</span>
+    </div>
+    <div class="mapsMenu">
+      <div id="maps">
+        <div>
+          <span id="createMapButton" class="button centeredContainer">&nbsp;</span>
+        </div>
       </div>
-      <div id="maps" class="flexContainer"></div>
-      <span id="createMapButton" class="button">+</span>
+      <div class="selectedMap">
+        <img id="selectedMapImage" />
+        <div class="mapControls">
+          <span id="editMapButton" class="button">Edit</span>
+          <span id="deleteMapButton" class="button">Delete</span>
+        </div>
+      </div>
     </div>
   </div>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>

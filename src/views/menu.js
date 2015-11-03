@@ -3,15 +3,15 @@ var view = require('./view');
 
 export default class Menu{
   constructor(onDone, params){
+    this.selectedMapImage = document.querySelector('#selectedMapImage');
+    this.maps = document.querySelector('#maps');
+
     view.reset();
     this.onDone = onDone;
-    this.savedMaps = [];
-    for (var i = 0; i < localStorage.length; i++){
-      var key = localStorage.key(i);
-      if(key.indexOf('map') === 0){
-        this.savedMaps.push(JSON.parse(localStorage.getItem(key)));
-      }
-    }
+
+    this.savedMaps = this.getMapsFromLocalStorage();
+    this.selectedMap = this.savedMaps[0];
+    this.renderMapsList();
 
     this.nbrOfPlayers_ = 2;
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
@@ -28,21 +28,20 @@ export default class Menu{
     var morePlayersButton = document.querySelector('#morePlayersButton');
     morePlayersButton.addEventListener('click', () => this.nbrOfPlayers++);
 
-    this.maps = document.querySelector('#maps');
+    var editMapButton = document.querySelector('#editMapButton');
+    editMapButton.addEventListener('click', () => this.onDone({ view: 'Create map', params: this.selectedMap }));
 
-    this.savedMaps.forEach(map => {
-      var img = document.createElement('img');
-      img.src = map.dataURL;
-      img.addEventListener('click', () => this.onDone(
-        {
-          view: 'Game',
-          params: {
-            map: map.map,
-            nrbOfPlayers: this.nbrOfPlayers
-          }
-        })
-      );
-      this.maps.appendChild(img);
+    var deleteMapButton = document.querySelector('#deleteMapButton');
+    deleteMapButton.addEventListener('click', () => this.removeCurrentMap());
+
+    selectedMapImage.addEventListener('click', () => {
+      this.onDone({
+        view: 'Game',
+        params: {
+          map: this.selectedMap.map,
+          nrbOfPlayers: this.nbrOfPlayers
+        }
+      })
     });
   }
 
@@ -55,10 +54,53 @@ export default class Menu{
     this.nbrOfPlayersElement.innerText = this.nbrOfPlayers_;
   }
 
+  get selectedMap() {
+    return this.selectedMap_;
+  }
+
+  set selectedMap(value) {
+    this.selectedMap_ = value;
+    this.selectedMapImage.setAttribute('src', this.selectedMap_.dataURL);
+  }
+
+  getMapsFromLocalStorage(){
+    var maps = [];
+    for (var i = 0; i < localStorage.length; i++){
+      var key = localStorage.key(i);
+      if(key.indexOf('map') === 0){
+        maps.push(JSON.parse(localStorage.getItem(key)));
+      }
+    }
+
+    return maps;
+  }
+
+  removeCurrentMap(){
+    localStorage.removeItem(this.selectedMap.key);
+    this.savedMaps = this.getMapsFromLocalStorage();
+    this.selectedMap = this.savedMaps[0];
+    this.clearMapsList();
+    this.renderMapsList();
+  }
+
+  renderMapsList(){
+    this.savedMaps.forEach((map, index) => {
+      if(index === 0) this.selectedMap = map;
+      var img = document.createElement('img');
+      img.src = map.dataURL;
+      img.addEventListener('click', () => this.selectedMap = map);
+      this.maps.appendChild(img);
+    });
+  }
+
+  clearMapsList(){
+    while (this.maps.children.length > 1) {
+      this.maps.removeChild(this.maps.lastChild);
+    }
+  }
+
   dispose(){
     this.menu.style.display = '';
-    while (this.maps.firstChild) {
-      this.maps.removeChild(this.maps.firstChild);
-    }
+    this.clearMapsList();
   }
 }

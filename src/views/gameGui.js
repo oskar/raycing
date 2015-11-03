@@ -21,12 +21,9 @@ export default class GameGui{
     this.game = new Game(params.map);
 
     var track = this.game.track;
-    track.closed = true;
     track.fillColor = 'purple';
-
     var startArea = this.game.start;
     startArea.fillColor = 'teal';
-
     var endArea = this.game.end;
     endArea.fillColor = 'yellow';
 

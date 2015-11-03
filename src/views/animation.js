@@ -8,7 +8,6 @@ function remove(animation){
 
 function onFrame(event){
   if(event.delta === 0) return;
-  console.log(animations.length);
   animations.forEach(animation => {
     animation.elapsedTime += event.delta;
     var continueAnimation = animation.callback(animation.elapsedTime);
