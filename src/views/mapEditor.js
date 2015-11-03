@@ -74,6 +74,7 @@ export default class MapEditor{
     } else {
       newTrack = this.track.subtract(editCircle);
     }
+    editCircle.remove();
     this.track.remove();
     if(this.track.removeSegments){
       this.track.removeSegments();
