@@ -10,7 +10,7 @@ export default class Menu{
     this.onDone = onDone;
 
     this.savedMaps = this.getMapsFromLocalStorage();
-    this.selectedMap = this.savedMaps[0];
+    if(this.savedMaps.length) this.selectedMap = this.savedMaps[0];
     this.renderMapsList();
 
     this.nbrOfPlayers_ = 2;
