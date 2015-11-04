@@ -146,6 +146,6 @@ export default class GameGui{
     this.foreGround.remove();
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
-    setTimeout(() => this.mouseControls.remove());
+    this.mouseControls.remove();
   }
 }
