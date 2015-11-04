@@ -5,7 +5,7 @@ var animation = require('./animation');
 
 export default class MapEditor{
   constructor(onDone, params){
-    this.brushsize_ = 3;
+    this.brushsize_ = 40;
     this.onDone = onDone;
     this.course;
     if(params) {
@@ -39,16 +39,16 @@ export default class MapEditor{
 
     this.mousewheelListener = document.addEventListener('mousewheel', event => {
       if(event.wheelDelta === 0) return;
-      this.mousewheel(event.wheelDelta < 0, new Paper.Point(event.clientX, event.clientY));
+      this.mousewheel(event.wheelDelta < 0, 1, new Paper.Point(event.clientX, event.clientY));
     });
 
     this.gestureendListener = document.addEventListener('gestureend',
-      e => this.mousewheel(e.scale < 1, new Paper.Point(event.clientX, event.clientY)), false);
+      e => this.mousewheel(e.scale < 1, e.scale, new Paper.Point(event.clientX, event.clientY)), false);
   }
 
-  mousewheel(zoomOut, point){
+  mousewheel(zoomOut, delta, point){
     var oldValue = this.brushsize;
-    this.brushsize = zoomOut ? this.brushsize + 1 : this.brushsize - 1;
+    this.brushsize = zoomOut ? this.brushsize + delta : this.brushsize - delta;
     if(oldValue === this.brushsize) return;
 
     var brush = new Paper.Path.Circle(point, this.brushsize);
@@ -145,5 +145,8 @@ export default class MapEditor{
 
   dispose(){
     this.course.remove();
+    document.removeEventListener('gestureend', this.gestureendListener);
+    document.removeEventListener('mosewheel', this.mousewheelListener);
+    setTimeout(() => this.mouseControls.remove());
   }
 }

@@ -89,7 +89,7 @@ export default class GameGui{
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
     if(player.isInEndZone){
-      this.endGame(player);
+      return this.endGame(player);
     }
     guiPlayer.addPosition(player.position);
     this.nextTurn();
@@ -99,7 +99,10 @@ export default class GameGui{
     this.game.nextTurn();
     this.clearControls();
     if(!this.game.currentPlayer.isAlive){
-      this.nextTurn();
+      return this.nextTurn();
+    }
+    if(this.game.gameOver) {
+      return this.endGame();
     }
     this.drawControls();
   }
