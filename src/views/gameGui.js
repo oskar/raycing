@@ -3,6 +3,7 @@ var Player = require('./player');
 var Game = require('../game');
 var view = require('./view');
 var animation = require('./animation');
+var audio = require('../audio');
 
 export default class GameGui{
   constructor(callback, params){
@@ -47,6 +48,7 @@ export default class GameGui{
   }
 
   addPlayerClickEvent(event){
+    audio.playClick();
     var x = Math.round(event.point.x / 20) * 20;
     var y = Math.round(event.point.y / 20) * 20;
     var point = new Paper.Point(x, y);
@@ -67,6 +69,7 @@ export default class GameGui{
   }
 
   onMouseDown(event){
+    audio.playClick();
     var item = event.getItem();
     if(!item){
       return;

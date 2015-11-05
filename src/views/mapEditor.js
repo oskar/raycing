@@ -2,6 +2,7 @@ var Paper = require('paper');
 var view = require('./view');
 var debounce = require('debounce');
 var animation = require('./animation');
+var audio = require('../audio');
 
 export default class MapEditor{
   constructor(onDone, params){
@@ -27,6 +28,7 @@ export default class MapEditor{
     this.mouseControls = new Paper.Tool();
     var lastClick;
     this.mouseControls.onMouseDown = e => {
+      audio.playClick();
       var now = Date.now();
       if(now - lastClick < 200) {
         this.onDoubleClick(e);

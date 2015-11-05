@@ -3,6 +3,7 @@ var context = new AudioContext();
 
 var click;
 loadArrayBuffer('sounds/click2.wav', context, buffer => click = buffer);
+
 export function playClick(){
   var sound = createSourceAndGain(click);
   sound.gainNode.gain.value = 0.5;
