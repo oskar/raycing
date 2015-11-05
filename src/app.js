@@ -1,3 +1,4 @@
+var audio = require('./audio');
 var view = require('./views/view');
 var Menu = require('./views/menu');
 var MapEditor = require('./views/mapEditor');
