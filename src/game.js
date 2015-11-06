@@ -10,7 +10,6 @@ export default class Game{
     this.end = Paper.project.importJSON(map.end);
     this.currentPlayerIndex = 0;
     this.vectorsForControls = [];
-    this.gameOver = false;
   }
 
   get currentPlayer(){
@@ -58,7 +57,6 @@ export default class Game{
   nextTurn(){
     this.setNextPlayer();
     this.setVectorsForControls();
-    if(this.players.filter(p => p.isAlive).length === 0) this.gameOver = true;
   }
 
   setNextPlayer(){
@@ -77,5 +75,9 @@ export default class Game{
 
   isInZone(zone, position){
     return zone.contains(position);
+  }
+
+  gameOver() {
+    return this.players.filter(p => p.isAlive).length === 0;
   }
 }

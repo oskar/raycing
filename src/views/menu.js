@@ -20,8 +20,8 @@ export default class Menu{
       this.setMaps(maps);
     }
 
-    this.nbrOfPlayers_ = 2;
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
+    this.nbrOfPlayers = 2;
 
     this.menu = document.querySelector('#menu');
     this.menu.style.visibility = 'initial';

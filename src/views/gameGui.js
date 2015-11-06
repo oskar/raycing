@@ -12,10 +12,10 @@ export default class GameGui{
     this.nbrOfPlayers = params.nrbOfPlayers;
     this.players = [];
     this.playerConfigs = [
-      { name: 'Green', color: '#ffff00' },
-      { name: 'Red', color: '#0000ff' },
-      { name: 'Blue', color: '#ff0000' },
-      { name: 'Yellow', color: '#00ff00' },
+      { name: 'Yellow', color: '#ffff00' },
+      { name: 'Blue', color: '#0000ff' },
+      { name: 'Red', color: '#ff0000' },
+      { name: 'Green', color: '#00ff00' },
     ]
     this.controls = new Paper.Group();
     this.controlAnimations = [];
@@ -103,22 +103,24 @@ export default class GameGui{
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
     if(player.isInEndZone){
-      return this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won!');
+      this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won!');
+    } else {
+      guiPlayer.addPosition(player.position);
+      this.nextTurn();
     }
-    guiPlayer.addPosition(player.position);
-    this.nextTurn();
   }
 
   nextTurn(){
     this.game.nextTurn();
     this.clearControls();
-    if(!this.game.currentPlayer.isAlive){
-      return this.nextTurn();
+
+    if(this.game.gameOver()) {
+      this.endGame('Everybody crashed, you all lost!');
+    } else if(!this.game.currentPlayer.isAlive){
+      this.nextTurn();
+    } else {
+      this.drawControls();
     }
-    if(this.game.gameOver) {
-      return this.endGame();
-    }
-    this.drawControls();
   }
 
   drawControls(){
