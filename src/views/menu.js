@@ -1,6 +1,7 @@
 var Paper = require('paper');
 var view = require('./view');
 var audio = require('../audio');
+var prepop = require('../prepop/mapPrepopulator');
 
 export default class Menu{
   constructor(onDone, params){
@@ -12,9 +13,12 @@ export default class Menu{
 
     this.clickListeners = [];
 
-    this.savedMaps = this.getMapsFromLocalStorage();
-    if(this.savedMaps.length) this.selectedMap = this.savedMaps[0];
-    this.renderMapsList();
+    var maps = this.getMapsFromLocalStorage();
+    if(!maps.length) {
+      prepop.prepopulateMaps(maps => this.setMaps(maps));
+    } else {
+      this.setMaps(maps);
+    }
 
     this.nbrOfPlayers_ = 2;
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
@@ -46,6 +50,12 @@ export default class Menu{
         }
       })
     });
+  }
+
+  setMaps(maps) {
+    this.savedMaps = maps;
+    this.selectedMap = this.savedMaps[0];
+    this.renderMapsList();
   }
 
   addClickListener(element, onclick) {

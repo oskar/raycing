@@ -51,7 +51,7 @@ body:before{
 
 #createMapButton {
   font-size: 5vw;
-  display:s flex;
+  display: flex;
 }
 
 #fewerPlayersButton:after {

@@ -38,33 +38,7 @@ export default class MapEditor{
       lastClick = now;
     }
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
-
-    // this.mousewheelListener = document.addEventListener('mousewheel', event => {
-    //   if(event.wheelDelta === 0) return;
-    //   this.mousewheel(event.wheelDelta < 0, 1, new Paper.Point(event.clientX, event.clientY));
-    // });
-    //
-    // this.gestureendListener = document.addEventListener('gestureend',
-    //   e => this.mousewheel(e.scale < 1, e.scale, new Paper.Point(event.clientX, event.clientY)), false);
   }
-
-  // mousewheel(zoomOut, delta, point){
-  //   var oldValue = this.brushsize;
-  //   this.brushsize = zoomOut ? this.brushsize + delta : this.brushsize - delta;
-  //   if(oldValue === this.brushsize) return;
-  //
-  //   var brush = new Paper.Path.Circle(point, this.brushsize);
-  //   brush.fillColor = 'white';
-  //   this.course.addChild(brush);
-  //   animation.add(elapsedTime => {
-  //     var opacity = 1 - elapsedTime;
-  //     brush.opacity = opacity;
-  //     if(opacity < 0) {
-  //       brush.remove();
-  //       return false;
-  //     }
-  //   });
-  // }
 
   get brushsize(){
     return this.brushsize_;
