@@ -24,7 +24,7 @@ export default class Menu{
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
 
     this.menu = document.querySelector('#menu');
-    this.menu.style.display = 'initial';
+    this.menu.style.visibility = 'initial';
 
     var createMapButton = document.querySelector('#createMapButton');
     this.addClickListener(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -122,7 +122,7 @@ export default class Menu{
   }
 
   dispose(){
-    this.menu.style.display = '';
+    this.menu.style.visibility = '';
     this.clearMapsList();
     this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
   }

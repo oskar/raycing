@@ -1,8 +1,9 @@
 var Paper = require('paper');
 
 export default class Player{
-  constructor(color, position){
-    this.color = color;
+  constructor(config, position){
+    this.color = config.color;
+    this.name = config.name;
     this.path = new Paper.Path({
       strokeColor: 'white',
       strokeWidth: 1

@@ -11,7 +11,12 @@ export default class GameGui{
     this.game;
     this.nbrOfPlayers = params.nrbOfPlayers;
     this.players = [];
-    this.colors = ['#ffff00', '#0000ff', '#ff0000', '#00ff00'];
+    this.playerConfigs = [
+      { name: 'Green', color: '#ffff00' },
+      { name: 'Red', color: '#0000ff' },
+      { name: 'Blue', color: '#ff0000' },
+      { name: 'Yellow', color: '#00ff00' },
+    ]
     this.controls = new Paper.Group();
     this.controlAnimations = [];
     this.foreGround = new Paper.Group([this.controls]);
@@ -41,6 +46,12 @@ export default class GameGui{
     });
 
     this.gestureendListener = document.addEventListener('gestureend', e => this.mousewheel(e.scale < 1), false);
+
+    this.endGameScreen = document.querySelector('#endGameScreen');
+    this.endGameButton = document.querySelector('#endGameButton');
+    this.endGameText = document.querySelector('#endGameText');
+    this.clickListeners = [];
+    this.addClickListener(endGameButton, () => this.endGameButtonListener());
   }
 
   get currentPlayer(){
@@ -54,7 +65,7 @@ export default class GameGui{
     var point = new Paper.Point(x, y);
     if(this.game.start.contains(point)){
       this.game.addPlayer(point, new Paper.Point(0, 0));
-      this.players.push(new Player(this.colors.pop(), point));
+      this.players.push(new Player(this.playerConfigs.pop(), point));
       if(this.players.length === this.nbrOfPlayers){
         this.startGame();
       }
@@ -92,7 +103,7 @@ export default class GameGui{
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
     if(player.isInEndZone){
-      return this.endGame(player);
+      return this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won!');
     }
     guiPlayer.addPosition(player.position);
     this.nextTurn();
@@ -127,7 +138,7 @@ export default class GameGui{
   setViewToControls(){
     if(!this.game.currentPlayer) return;
     var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
-    view.setView(playerBounds.expand(100));
+    view.setView(playerBounds.expand(200));
   }
 
   setViewToTrack(){
@@ -140,8 +151,22 @@ export default class GameGui{
     return circle;
   }
 
-  endGame(player){
-    this.callback({ view: 'Menu', params: player });
+  endGame(text){
+    this.endGameScreen.style.visibility = 'visible';
+    this.endGameText.textContent = text;
+  }
+
+  endGameButtonListener() {
+    this.callback({ view: 'Menu' });
+  }
+
+  addClickListener(element, onclick) {
+    var callback = event => {
+      audio.playClick();
+      onclick(event);
+    }
+    element.addEventListener('click', callback);
+    this.clickListeners.push({element, callback});
   }
 
   dispose(){
@@ -149,6 +174,9 @@ export default class GameGui{
     this.foreGround.remove();
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
+    this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
+    this.endGameScreen.style.visibility = '';
+    this.endGameText.textContent = '';
     this.mouseControls.remove();
   }
 }

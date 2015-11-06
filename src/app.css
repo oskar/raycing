@@ -29,7 +29,7 @@ body:before{
 }
 
 .menu {
-  display: none;
+  visibility: hidden;
   position: absolute;
   top: 5vw;
   left: 0;
@@ -71,9 +71,14 @@ body:before{
   height: 40vw;
 }
 
-.playerMenu {
+.playerMenu,
+.endGameScreen {
   text-align: center;
-  font-size: 20px;
+  font-size: 2vw;
+}
+
+.endGameText {
+    margin-bottom: 2vw;
 }
 
 .button {
