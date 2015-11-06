@@ -6,7 +6,8 @@
   "scripts": {
     "postinstall": "bower install && webpack-dev-server",
     "test": "karma start karma.conf.js",
-    "gh": "webpack"
+    "gh": "webpack",
+    "local": "webpack && http-server"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "bezier-easing": "^1.1.1",
     "bower": "^1.6.5",
     "css-loader": "^0.19.0",
+    "http-server": "^0.8.5",
     "jasmine-core": "2.3.4",
     "karma": "0.13.10",
     "karma-jasmine": "0.3.6",
