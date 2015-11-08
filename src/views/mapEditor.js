@@ -51,6 +51,7 @@ export default class MapEditor{
   onMouseDown(event) {
     if(this.track.isEmpty()){
       this.track = new Paper.Path.Circle(event.point, this.brushsize);
+      this.track.simplify();
       this.track.fillColor = 'purple';
       this.course.addChild(this.track);
     }
@@ -81,6 +82,7 @@ export default class MapEditor{
 
   onMouseDrag(event) {
     var editCircle = new Paper.Path.Circle(event.point, this.brushsize);
+    editCircle.simplify();
     var newTrack;
     if(this.isAdding){
       newTrack = this.track.unite(editCircle);

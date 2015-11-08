@@ -38,7 +38,7 @@ export default class GameGui{
     this.course.addChild(endArea);
     view.addCourse(this.course);
 
-    this.setViewToTrack();
+    this.setViewToStart();
 
     this.mousewheelListener = document.addEventListener('mousewheel', event => {
       if(event.wheelDelta === 0) return;
@@ -95,7 +95,11 @@ export default class GameGui{
     if(shouldZoomOut) {
       this.setViewToTrack();
     } else {
-      this.setViewToControls();
+      if(!this.game.currentPlayer) {
+        this.setViewToStart();
+      } else {
+        this.setViewToControls();
+      }
     }
   }
 
@@ -137,8 +141,11 @@ export default class GameGui{
     this.controlAnimations.forEach(animation => animation.remove());
   }
 
+  setViewToStart() {
+    view.setView(this.game.start.bounds.expand(200));
+  }
+
   setViewToControls(){
-    if(!this.game.currentPlayer) return;
     var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
     view.setView(playerBounds.expand(200));
   }
@@ -154,6 +161,7 @@ export default class GameGui{
   }
 
   endGame(text){
+    this.clearControls();
     this.endGameScreen.style.visibility = 'visible';
     this.endGameText.textContent = text;
   }

@@ -11,7 +11,7 @@ var height = document.body.clientHeight;
 
 initPaper(canvas, width, height);
 
-var outerBounds = new Paper.Rectangle(0, 0, width * 2, height * 2);
+var outerBounds = new Paper.Rectangle(0, 0, width, height);
 
 var course = new Paper.Group(createGrid(outerBounds));
 course.clipped = true;
@@ -113,6 +113,7 @@ function animateStar(start, velocity, distance){
   animation.add(elapsedTime => {
     star.position = start.add(velocity.multiply(elapsedTime / distance));
     if(!outerBounds.contains(star.position)){
+      star.remove();
       var newStart = new Paper.Point.random().multiply(outerBounds.bottomLeft);
       createStar(newStart);
       return false;
