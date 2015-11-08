@@ -4,6 +4,7 @@ var changeZoom = require('./utils').changeZoom;
 var animation = require('./animation');
 
 var canvas = document.createElement('canvas');
+canvas.setAttribute('keepalive', true);
 
 var width = document.body.clientWidth;
 var height = document.body.clientHeight;
