@@ -106,10 +106,10 @@ export default class GameGui{
   movePlayer(relativeVector){
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
+    guiPlayer.addPosition(player.position);
     if(player.isInEndZone){
       this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won!');
     } else {
-      guiPlayer.addPosition(player.position);
       this.nextTurn();
     }
   }
