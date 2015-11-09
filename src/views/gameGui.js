@@ -128,7 +128,7 @@ export default class GameGui{
   }
 
   drawControls(){
-    var circles = this.game.vectorsForControls.map(v => this.createControl(v));
+    var circles = this.game.vectorsForControls.map(controlObject => this.createControl(controlObject));
     this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
       circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
     }));
@@ -155,8 +155,9 @@ export default class GameGui{
   }
 
   createControl(controlObject){
-    var circle = this.currentPlayer.createPositionElement(controlObject.absolute);
+    var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
     circle.movePlayerData = controlObject.relative;
+    circle.opacity = 0.5;
     return circle;
   }
 

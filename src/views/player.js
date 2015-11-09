@@ -4,11 +4,14 @@ export default class Player{
   constructor(config, position){
     this.color = config.color;
     this.name = config.name;
+    this.radius = 5;
+    this.positions = [];
     this.path = new Paper.Path({
-      strokeColor: 'white',
-      strokeWidth: 1
+      strokeColor: this.color,
+      strokeWidth: 0.5
     });
-    this.elements = new Paper.Group([this.path]);
+    this.circles = new Paper.Group();
+    this.elements = new Paper.Group([this.path, this.circles]);
 
     this.addPosition(position);
   }
@@ -16,14 +19,18 @@ export default class Player{
   addPosition(position){
     this.path.add(position);
     this.path.smooth();
-    var circle = this.createPositionElement(position);
-    this.elements.addChild(circle);
+
+    this.circles.removeChildren();
+    this.positions.push(position);
+    this.positions
+      .map((p, index) => this.createPositionElement(p, this.radius * (index + 1) / this.positions.length))
+      .forEach(circle => this.circles.addChild(circle));
   }
 
-  createPositionElement(position){
-    var circle = new Paper.Path.Circle(position, 5);
-    circle.fillColor = this.color;
-    circle.strokeColor = 'white';
+  createPositionElement(position, radius){
+    var circle = new Paper.Path.Circle(position, radius);
+    circle.fillColor = 'black';
+    circle.strokeColor = this.color;
     circle.strokeWidth = 0.5;
     return circle;
   }
