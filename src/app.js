@@ -5,6 +5,7 @@ var view = require('./views/view');
 var Menu = require('./views/menu');
 var MapEditor = require('./views/mapEditor');
 var GameGui = require('./views/gameGui');
+var attachFastClick = require('fastclick');
 
 var currentView = new Menu(data => onDone(data));
 
@@ -24,3 +25,7 @@ function onDone(data){
       break;
   }
 }
+
+window.addEventListener('load', () => {
+  attachFastClick.attach(document.body);
+}, false);
