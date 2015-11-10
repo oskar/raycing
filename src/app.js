@@ -2,9 +2,9 @@ require('./app.css');
 
 var audio = require('./audio');
 var view = require('./views/view');
-var Menu = require('./views/menu');
-var MapEditor = require('./views/mapEditor');
-var GameGui = require('./views/gameGui');
+var Menu = require('./views/menu/menu');
+var MapEditor = require('./views/mapEditor/mapEditor');
+var GameGui = require('./views/gameGui/gameGui');
 var attachFastClick = require('fastclick');
 
 var currentView = new Menu(data => onDone(data));

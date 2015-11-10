@@ -1,0 +1,56 @@
+.mapsMenu {
+  display: flex;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.mapsMenu > * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#createMapButton {
+  font-size: 5vw;
+  display: flex;
+}
+
+#fewerPlayersButton:after {
+  content: "-";
+}
+
+#morePlayersButton:after,
+#createMapButton:after {
+    content: "+";
+}
+
+.selectedMap {
+  margin-left: 4vw;
+}
+
+.selectedMap img {
+  width: 40vw;
+  height: 40vw;
+}
+
+#createMapButton,
+#maps img {
+  width: 9vw;
+  height: 9vw;
+}
+
+#maps * + * {
+  margin-top: 1vw;
+}
+
+.mapControls {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+img {
+  cursor: pointer;
+  background-color: black;
+  border-radius: 5px;
+  border: 1px solid white;
+}

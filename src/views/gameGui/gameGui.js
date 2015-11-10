@@ -1,9 +1,10 @@
+require('./gameGui.css');
 var Paper = require('paper');
 var Player = require('./player');
-var Game = require('../game');
-var view = require('./view');
-var animation = require('./animation');
-var audio = require('../audio');
+var Game = require('../../game/game');
+var view = require('../view');
+var animation = require('../animation');
+var audio = require('../../audio');
 
 export default class GameGui{
   constructor(callback, params){

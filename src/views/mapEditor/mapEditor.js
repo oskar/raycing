@@ -1,8 +1,7 @@
 var Paper = require('paper');
-var view = require('./view');
-var debounce = require('debounce');
-var animation = require('./animation');
-var audio = require('../audio');
+var view = require('../view');
+var animation = require('../animation');
+var audio = require('../../audio');
 
 export default class MapEditor{
   constructor(onDone, params){
