@@ -1,5 +1,4 @@
 require('./menu.css');
-var Paper = require('paper');
 var view = require('../view');
 var audio = require('../../audio');
 var prepop = require('../../prepop/mapPrepopulator');
