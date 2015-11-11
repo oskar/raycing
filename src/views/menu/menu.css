@@ -1,3 +1,7 @@
+#menu {
+  top: 5vw;
+}
+
 .mapsMenu {
   display: flex;
   margin-top: 30px;
@@ -13,15 +17,6 @@
 #createMapButton {
   font-size: 5vw;
   display: flex;
-}
-
-#fewerPlayersButton:after {
-  content: "-";
-}
-
-#morePlayersButton:after,
-#createMapButton:after {
-    content: "+";
 }
 
 .selectedMap {

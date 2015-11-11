@@ -1,3 +1,4 @@
+require('./mapEditor.css')
 var Paper = require('paper');
 var view = require('../view');
 var animation = require('../animation');
@@ -37,6 +38,9 @@ export default class MapEditor{
       lastClick = now;
     }
     this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
+
+    this.mapEditor = document.querySelector('#mapEditor');
+    this.mapEditor.style.visibility = 'visible';
   }
 
   get brushsize(){

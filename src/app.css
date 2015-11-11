@@ -31,7 +31,6 @@ body:before{
 .menu {
   visibility: hidden;
   position: absolute;
-  top: 5vw;
   left: 0;
   right: 0;
   color: white;
@@ -51,8 +50,13 @@ body:before{
   cursor: pointer;
 }
 
+.button.selected {
+  border-color: currentColor;
+}
+
 .centeredContainer{
   position: relative;
+  text-align: center;
 }
 
 .centeredContainer:after {
@@ -62,4 +66,12 @@ body:before{
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
+}
+
+.minusButton:after {
+  content: "-";
+}
+
+.plusButton:after {
+    content: "+";
 }

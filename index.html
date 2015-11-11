@@ -10,15 +10,15 @@
 <body style="background-color: black;">
   <div id="menu" class="menu">
     <div class="infoText">
-      <span id="fewerPlayersButton" class="button centeredContainer">&nbsp;</span>
+      <span id="fewerPlayersButton" class="button plusButton centeredContainer">&nbsp;</span>
       <span id="nbrOfPlayers">2</span>
       Players
-      <span id="morePlayersButton" class="button centeredContainer">&nbsp;</span>
+      <span id="morePlayersButton" class="button minusButton centeredContainer">&nbsp;</span>
     </div>
     <div class="mapsMenu">
       <div id="maps">
         <div>
-          <span id="createMapButton" class="button centeredContainer">&nbsp;</span>
+          <span id="createMapButton" class="button plusButton centeredContainer">&nbsp;</span>
         </div>
       </div>
       <div class="selectedMap">
@@ -33,6 +33,16 @@
   <div id="gameGui" class="menu infoText">
     <div id="endGameText" class="endGameText"></div>
     <span id="endGameButton" class="button">Ok</span>
+  </div>
+  <div id="mapEditor">
+    <div>
+      <span id="decreaseBrushButton" class="button minusButton centeredContainer">&nbsp;</span>
+      Brushsize
+      <span id="increaseBrushButton" class="button plusButton centeredContainer">&nbsp;</span>
+    </div>
+    <div id="createTrackButton" class="button selected centeredContainer">Create track</div>
+    <div id="createStartButton" class="button centeredContainer">Create start</div>
+    <div id="createEndButton" class="button centeredContainer">Create end</div>
   </div>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>
 </body>
