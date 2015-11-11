@@ -48,7 +48,7 @@ export default class GameGui{
 
     this.gestureendListener = document.addEventListener('gestureend', e => this.mousewheel(e.scale < 1), false);
 
-    this.endGameScreen = document.querySelector('#endGameScreen');
+    this.gameGui = document.querySelector('#gameGui');
     this.endGameButton = document.querySelector('#endGameButton');
     this.endGameText = document.querySelector('#endGameText');
     this.clickListeners = [];
@@ -164,7 +164,7 @@ export default class GameGui{
 
   endGame(text){
     this.clearControls();
-    this.endGameScreen.style.visibility = 'visible';
+    this.gameGui.style.visibility = 'visible';
     this.endGameText.textContent = text;
   }
 
@@ -187,7 +187,7 @@ export default class GameGui{
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
     this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
-    this.endGameScreen.style.visibility = '';
+    this.gameGui.style.visibility = '';
     this.endGameText.textContent = '';
     this.mouseControls.remove();
   }
