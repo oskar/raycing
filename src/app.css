@@ -51,7 +51,12 @@ body:before{
 }
 
 .button.selected {
-  border-color: currentColor;
+  border-color: white;
+}
+
+.button.disabled {
+  color: gray;
+  border-color: gray;
 }
 
 .centeredContainer{

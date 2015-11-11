@@ -16,12 +16,15 @@
 
 #createTrackButton {
   color: purple;
+  border-color: currentColor;
 }
 
 #createStartButton {
   color: green;
+  border-color: currentColor;
 }
 
 #createEndButton {
   color: yellow;
+  border-color: currentColor;
 }
