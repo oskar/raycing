@@ -5,6 +5,7 @@ var Game = require('../../game/game');
 var view = require('../view');
 var animation = require('../animation');
 var audio = require('../../audio');
+var ClickListenerHandler = require('../clickListenerHandler');
 
 export default class GameGui{
   constructor(callback, params){
@@ -51,8 +52,9 @@ export default class GameGui{
     this.gameGui = document.querySelector('#gameGui');
     this.endGameButton = document.querySelector('#endGameButton');
     this.endGameText = document.querySelector('#endGameText');
-    this.clickListeners = [];
-    this.addClickListener(endGameButton, () => this.endGameButtonListener());
+
+    this.clickListenerHandler = new ClickListenerHandler();
+    this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
   }
 
   get currentPlayer(){
@@ -172,21 +174,12 @@ export default class GameGui{
     this.callback({ view: 'Menu' });
   }
 
-  addClickListener(element, onclick) {
-    var callback = event => {
-      audio.playClick();
-      onclick(event);
-    }
-    element.addEventListener('click', callback);
-    this.clickListeners.push({element, callback});
-  }
-
   dispose(){
     this.course.remove();
     this.foreGround.remove();
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
-    this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
+    this.clickListenerHandler.dispose();
     this.gameGui.style.visibility = '';
     this.endGameText.textContent = '';
     this.mouseControls.remove();
