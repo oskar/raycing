@@ -48,23 +48,11 @@ body:before{
   border-radius: 3px;
   border: 1px solid white;
   cursor: pointer;
+    position: relative;
+    text-align: center;
 }
 
-.button.selected {
-  border-color: white;
-}
-
-.button.disabled {
-  color: gray;
-  border-color: gray;
-}
-
-.centeredContainer{
-  position: relative;
-  text-align: center;
-}
-
-.centeredContainer:after {
+.button:after {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -79,4 +67,27 @@ body:before{
 
 .plusButton:after {
     content: "+";
+}
+.button.purple {
+  color: purple;
+  border-color: currentColor;
+}
+
+.button.green {
+  color: green;
+  border-color: currentColor;
+}
+
+.button.yellow {
+  color: yellow;
+  border-color: currentColor;
+}
+
+.button.selected {
+  border-color: white;
+}
+
+.button.disabled {
+  color: gray;
+  border-color: gray;
 }

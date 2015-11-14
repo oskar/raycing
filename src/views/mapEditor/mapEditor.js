@@ -3,12 +3,13 @@ var Paper = require('paper');
 var view = require('../view');
 var animation = require('../animation');
 var audio = require('../../audio');
+var ClickListenerHandler = require('../clickListenerHandler');
 
 export default class MapEditor{
   constructor(onDone, params){
     this.brushsize_ = 40;
     this.onDone = onDone;
-    this.course;
+
     if(params) {
       this.key = params.key;
       this.track = Paper.project.importJSON(params.map.track);
@@ -19,28 +20,65 @@ export default class MapEditor{
       this.start = new Paper.Path();
       this.end = new Paper.Path();
     }
-    this.track.fillColor = 'purple';
-    this.start.fillColor = 'teal';
-    this.end.fillColor = 'yellow';
+    this.tools = [
+      {
+        name: 'track',
+        color: 'purple',
+        path: this.track,
+        element: document.querySelector('#createTrackButton'),
+        init: newCircle => newCircle
+      },
+      {
+        name: 'start',
+        color: 'teal',
+        path: this.start,
+        element: document.querySelector('#createStartButton'),
+        init: newCircle => this.getTool('track').path.intersect(newCircle)
+      },
+      {
+        name: 'end',
+        color: 'yellow',
+        path: this.end,
+        element: document.querySelector('#createEndButton'),
+        init: newCircle => this.getTool('track').path.intersect(newCircle)
+      }
+    ];
+    this.tools.forEach(tool => tool.path.fillColor = tool.color);
+
     this.course = new Paper.Group(this.track, this.start, this.end);
     view.addCourse(this.course);
 
-    this.mouseControls = new Paper.Tool();
-    var lastClick;
-    this.mouseControls.onMouseDown = e => {
-      audio.playClick();
-      var now = Date.now();
-      if(now - lastClick < 200) {
-        this.onDoubleClick(e);
-      } else {
-        this.onMouseDown(e);
-      }
-      lastClick = now;
-    }
-    this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
+    this.clickListenerHandler = new ClickListenerHandler();
+    this.tools.forEach(tool =>
+      this.clickListenerHandler.add(tool.element, () => this.selectedTool = tool.name));
 
     this.mapEditor = document.querySelector('#mapEditor');
     this.mapEditor.style.visibility = 'visible';
+
+    this.mouseControls = new Paper.Tool();
+    this.mouseControls.onMouseDown = e => {
+      audio.playClick();
+      this.onMouseDown(e);
+    }
+    this.mouseControls.onMouseDrag = e => this.onMouseDrag(e);
+
+    this.saveMapButton = document.querySelector('#saveMapButton');
+    this.saveMapButton.classList.add('disabled');
+    this.clickListenerHandler.add(this.saveMapButton, () => this.done());
+    this.exitMapEditorButton = document.querySelector('#exitMapEditorButton');
+    this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Menu' }));
+
+    this.selectedTool = 'track';
+    this.resetToolClasses();
+  }
+
+  get selectedTool(){
+    return this.selectedTool_;
+  }
+
+  set selectedTool(value){
+    this.selectedTool_ = value;
+    this.setButtonStates();
   }
 
   get brushsize(){
@@ -51,77 +89,90 @@ export default class MapEditor{
     this.brushsize_ = Math.max(1, Math.min(value, 60));
   }
 
-  onMouseDown(event) {
-    if(this.track.isEmpty()){
-      this.track = new Paper.Path.Circle(event.point, this.brushsize);
-      this.track.simplify();
-      this.track.fillColor = 'purple';
-      this.course.addChild(this.track);
-    }
-    if(this.track.contains(event.point)) {
-      this.isAdding = true;
-    } else {
-      this.isAdding = false;
-    }
+  getTool(name){
+    return this.tools.filter(tool => tool.name === name)[0]
   }
 
-  onDoubleClick(event) {
-    if(!this.start.isEmpty() && this.start.contains(event.point)) {
-      this.start.removeSegments();
-    } else if(!this.end.isEmpty() && this.end.contains(event.point)) {
-      this.end.removeSegments();
-    } else if(this.start.isEmpty() && this.track.contains(event.point)) {
-      this.start = new Paper.Path.Circle(event.point, 60).intersect(this.track);
-      this.start.fillColor = 'teal';
-      this.course.addChild(this.start);
-    } else if(this.end.isEmpty() && this.track.contains(event.point)) {
-      this.end = new Paper.Path.Circle(event.point, 60).intersect(this.track);
-      this.end.fillColor = 'yellow';
-      this.course.addChild(this.end);
-    } else if(!this.start.isEmpty() && !this.end.isEmpty() && !this.track.contains(event.point)) {
-      this.done();
+  setButtonStates() {
+    if(!this.getTool('track').path.isEmpty()) {
+      this.getTool('start').element.classList.remove("disabled");
+      this.getTool('end').element.classList.remove("disabled");
     }
+
+    if(this.tools.filter(tool => tool.path.isEmpty()).length === 0) {
+      this.saveMapButton.classList.remove('disabled');
+    }
+
+    this.tools.forEach(tool => tool.element.classList.remove("selected"));
+    this.getTool(this.selectedTool).element.classList.add("selected");
+  }
+
+  onMouseDown(event) {
+    var tool = this.getTool(this.selectedTool);
+    if(tool.path.isEmpty()){
+      var path = new Paper.Path.Circle(event.point, this.brushsize);
+      tool.path = path;
+      tool.path.fillColor = tool.color;
+      tool.path.simplify();
+      this.course.addChild(tool.path);
+    }
+    this.isAdding = tool.path.contains(event.point);
+    this.setButtonStates();
   }
 
   onMouseDrag(event) {
     var editCircle = new Paper.Path.Circle(event.point, this.brushsize);
-    editCircle.simplify();
-    var newTrack;
-    if(this.isAdding){
-      newTrack = this.track.unite(editCircle);
+    var tool = this.getTool(this.selectedTool);
+    editCircle.reduce();
+
+    var newPath = this.isAdding ? tool.path.unite(editCircle) : tool.path.subtract(editCircle);
+    this.removePath(editCircle);
+    this.removePath(tool.path);
+    tool.path = newPath;
+    tool.path.fillColor = tool.color;
+    tool.path.reduce();
+    this.setButtonStates();
+  }
+
+  removePath(path){
+    path.remove();
+    if(path.removeSegments){
+      path.removeSegments();
     } else {
-      newTrack = this.track.subtract(editCircle);
-    }
-    editCircle.remove();
-    this.track.remove();
-    if(this.track.removeSegments){
-      this.track.removeSegments();
-    } else {
-      this.track.children.forEach(c => c.removeSegments());
-      this.track.removeChildren();
+      path.children.forEach(c => c.removeSegments());
+      path.removeChildren();
     };
-    this.track = newTrack;
   }
 
   done(){
-    var map = {
-      track: this.track.toJSON(),
-      start: this.start.toJSON(),
-      end: this.end.toJSON()
-    }
+    var track = this.getTool('track');
+    this.tools
+      .filter(tool => tool.name != 'track')
+      .forEach(tool => {
+        var newPath = track.path.unite(tool.path);
+        track.path.remove();
+        track.path = newPath;
+      });
+    var map = {};
+    this.tools.forEach(tool => map[tool.name] = tool.path.toJSON());
 
     view.setView(this.track.bounds);
 
     Paper.view.draw();
-    setTimeout(() => this.mouseControls.remove());
 
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
-
-    this.course.remove();
     var key = this.key ? this.key : 'map-' + (new Date()).toISOString();
     var value = { dataURL, map, key };
     localStorage.setItem(key, JSON.stringify(value));
     this.onDone({ view: 'Menu' });
+  }
+
+  resetToolClasses(){
+    this.tools
+      .filter(tool => tool.name !== 'track')
+      .forEach(tool => tool.element.classList.add('disabled'));
+    this.getTool('track').element.classList.add('selected');
+    this.saveMapButton.classList.add('disabled');
   }
 
   dispose(){
@@ -129,5 +180,7 @@ export default class MapEditor{
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
     this.mouseControls.remove();
+    this.clickListenerHandler.dispose();
+    this.mapEditor.style.visibility = '';
   }
 }
