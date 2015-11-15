@@ -5,26 +5,24 @@
   border: 1px solid white;
   display: inline-block;
   visibility: hidden;
-  padding: 1vw;
   color: white;
   font-size: 1.2vw;
+  text-align: center;
+  background-color: rgba(0, 128, 128, 0.2);
+}
+
+#mapEditor > * {
+  padding: 1vw;
 }
 
 #mapEditor > * + * {
-    margin-top: 1vw;
+  border-top: 1px solid white;
 }
 
-#createTrackButton {
-  color: purple;
-  border-color: currentColor;
+.mapEditorSteps > * {
+  display: block;
 }
 
-#createStartButton {
-  color: green;
-  border-color: currentColor;
-}
-
-#createEndButton {
-  color: yellow;
-  border-color: currentColor;
+.mapEditorSteps > * + * {
+  margin-top: 1vw;
 }

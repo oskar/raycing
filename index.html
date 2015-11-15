@@ -10,15 +10,15 @@
 <body style="background-color: black;">
   <div id="menu" class="menu">
     <div class="infoText">
-      <span id="fewerPlayersButton" class="button minusButton centeredContainer">&nbsp;</span>
+      <span id="fewerPlayersButton" class="button minusButton">&nbsp;</span>
       <span id="nbrOfPlayers">2</span>
       Players
-      <span id="morePlayersButton" class="button plusButton centeredContainer">&nbsp;</span>
+      <span id="morePlayersButton" class="button plusButton">&nbsp;</span>
     </div>
     <div class="mapsMenu">
       <div id="maps">
         <div>
-          <span id="createMapButton" class="button plusButton centeredContainer">&nbsp;</span>
+          <span id="createMapButton" class="button plusButton">&nbsp;</span>
         </div>
       </div>
       <div class="selectedMap">
@@ -36,14 +36,25 @@
   </div>
   <div id="mapEditor">
     <div>
-      <span id="decreaseBrushButton" class="button minusButton centeredContainer">&nbsp;</span>
       Brushsize
-      <span id="increaseBrushButton" class="button plusButton centeredContainer">&nbsp;</span>
+      <div>
+        <span id="brushSize1" class="button">20</span>
+        <span id="brushSize2" class="button">40</span>
+        <span id="brushSize3" class="button">60</span>
+      </div>
     </div>
-    <div id="createTrackButton" class="button selected centeredContainer">Create track</div>
-    <div id="createStartButton" class="button centeredContainer">Create start</div>
-    <div id="createEndButton" class="button centeredContainer">Create end</div>
-    <div id="saveMapButton" class="button disabled centeredContainer">Save</div>
+    <div>
+      Create map
+      <div class="mapEditorSteps">
+        <span id="createTrackButton" class="button purple">Track</span>
+        <span id="createStartButton" class="button green">Startzone</span>
+        <span id="createEndButton" class="button yellow">Endzone</span>
+        <span id="saveMapButton" class="button">Save map</span>
+      </div>
+    </div>
+    <div>
+      <span id="exitMapEditorButton" class="button">Back</span>
+    </div>
   </div>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>
 </body>

@@ -35,6 +35,7 @@ export function setView(bounds){
   var newZoom = Paper.view.viewSize.width/size.width;
   newZoom = newZoom > 1 ? newZoom : 1;
   animateView(bounds.center, newZoom);
+  Paper.view.draw();
 }
 
 export function reset(){
@@ -103,11 +104,15 @@ function animateView(center, zoom){
   });
 }
 
-function createStar(start){
-  animateStar(start, new Paper.Point(100,1), 4 + Math.random() * 11);
+var stars = new Paper.Group();
+
+export function setStarsVisibility(visible){
+  stars.visible = visible;
 }
 
-function animateStar(start, velocity, distance){
+function animateStar(start){
+  var velocity = new Paper.Point(100,1);
+  var distance = 4 + Math.random() * 11;
   var star = new Paper.Path.Circle(start, 5 / distance);
   star.fillColor = 'white';
   animation.add(elapsedTime => {
@@ -115,13 +120,15 @@ function animateStar(start, velocity, distance){
     if(!outerBounds.contains(star.position)){
       star.remove();
       var newStart = new Paper.Point.random().multiply(outerBounds.bottomLeft);
-      createStar(newStart);
+      animateStar(newStart);
       return false;
     }
   });
+
+  stars.addChild(star);
 }
 
 for(var i = 0; i < 100; i++){
   var start = new Paper.Point.random().multiply(outerBounds.bottomRight);
-  createStar(start);
+  animateStar(start);
 }

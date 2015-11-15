@@ -9,8 +9,8 @@ var attachFastClick = require('fastclick');
 var currentView = new Menu(data => onDone(data));
 
 function onDone(data){
-  view.reset();
   currentView.dispose();
+  view.reset();
 
   switch(data.view){
     case 'Create map':

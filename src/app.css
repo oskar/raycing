@@ -44,27 +44,16 @@ body:before{
 .button {
   background-color: black;
   color: teal;
-  padding: 0.2em 0.4em;
+  padding: 0.3em 0.5em;
   border-radius: 3px;
   border: 1px solid white;
   cursor: pointer;
-}
-
-.button.selected {
-  border-color: white;
-}
-
-.button.disabled {
-  color: gray;
-  border-color: gray;
-}
-
-.centeredContainer{
   position: relative;
   text-align: center;
+  display: inline-block;
 }
 
-.centeredContainer:after {
+.button:after {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -79,4 +68,27 @@ body:before{
 
 .plusButton:after {
     content: "+";
+}
+.button.purple {
+  color: purple;
+  border-color: purple;
+}
+
+.button.green {
+  color: green;
+  border-color: green;
+}
+
+.button.yellow {
+  color: yellow;
+  border-color: yellow;
+}
+
+.button.selected {
+  color: white;
+}
+
+.button.disabled {
+  color: gray;
+  border-color: gray;
 }
