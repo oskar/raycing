@@ -7,7 +7,6 @@ var ClickListenerHandler = require('../clickListenerHandler');
 
 export default class MapEditor{
   constructor(onDone, params){
-    this.brushsize_ = 40;
     this.onDone = onDone;
 
     if(params) {
@@ -68,8 +67,13 @@ export default class MapEditor{
     this.exitMapEditorButton = document.querySelector('#exitMapEditorButton');
     this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Menu' }));
 
+    this.brushButtons = ['#brushSize1', '#brushSize2', '#brushSize3']
+      .map(buttonSelector => document.querySelector(buttonSelector));
+    this.brushButtons
+      .forEach((element, i) => this.clickListenerHandler.add(element, () => this.brushsize = i + 1));
+
+    this.brushsize = 2;
     this.selectedTool = 'track';
-    this.resetToolClasses();
   }
 
   get selectedTool(){
@@ -82,11 +86,13 @@ export default class MapEditor{
   }
 
   get brushsize(){
-    return this.brushsize_;
+    return this.brushsize_ * 20;
   }
 
-  set brushsize(value) {
-    this.brushsize_ = Math.max(1, Math.min(value, 60));
+  set brushsize(value){
+    this.brushsize_ = value;
+    this.brushButtons.forEach(element => element.classList.remove('selected'));
+    this.brushButtons[value - 1].classList.add('selected');
   }
 
   getTool(name){
@@ -123,14 +129,12 @@ export default class MapEditor{
   onMouseDrag(event) {
     var editCircle = new Paper.Path.Circle(event.point, this.brushsize);
     var tool = this.getTool(this.selectedTool);
-    editCircle.reduce();
 
     var newPath = this.isAdding ? tool.path.unite(editCircle) : tool.path.subtract(editCircle);
     this.removePath(editCircle);
     this.removePath(tool.path);
     tool.path = newPath;
     tool.path.fillColor = tool.color;
-    tool.path.reduce();
     this.setButtonStates();
   }
 
@@ -156,23 +160,11 @@ export default class MapEditor{
     var map = {};
     this.tools.forEach(tool => map[tool.name] = tool.path.toJSON());
 
-    view.setView(this.track.bounds);
-
-    Paper.view.draw();
-
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
     var key = this.key ? this.key : 'map-' + (new Date()).toISOString();
     var value = { dataURL, map, key };
     localStorage.setItem(key, JSON.stringify(value));
     this.onDone({ view: 'Menu' });
-  }
-
-  resetToolClasses(){
-    this.tools
-      .filter(tool => tool.name !== 'track')
-      .forEach(tool => tool.element.classList.add('disabled'));
-    this.getTool('track').element.classList.add('selected');
-    this.saveMapButton.classList.add('disabled');
   }
 
   dispose(){

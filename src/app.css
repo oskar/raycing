@@ -44,12 +44,13 @@ body:before{
 .button {
   background-color: black;
   color: teal;
-  padding: 0.2em 0.4em;
+  padding: 0.3em 0.5em;
   border-radius: 3px;
   border: 1px solid white;
   cursor: pointer;
-    position: relative;
-    text-align: center;
+  position: relative;
+  text-align: center;
+  display: inline-block;
 }
 
 .button:after {
@@ -70,21 +71,21 @@ body:before{
 }
 .button.purple {
   color: purple;
-  border-color: currentColor;
+  border-color: purple;
 }
 
 .button.green {
   color: green;
-  border-color: currentColor;
+  border-color: green;
 }
 
 .button.yellow {
   color: yellow;
-  border-color: currentColor;
+  border-color: yellow;
 }
 
 .button.selected {
-  border-color: white;
+  color: white;
 }
 
 .button.disabled {
