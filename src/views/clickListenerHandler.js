@@ -10,11 +10,11 @@ export default class ClickListenerHandler {
       audio.playClick();
       onclick(event);
     }
-    element.addEventListener('mouseup', callback);
+    element.addEventListener('click', callback);
     this.clickListeners.push({element, callback});
   }
 
   dispose () {
-    this.clickListeners.forEach(listener => listener.element.removeEventListener('mouseup', listener.callback));
+    this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
   }
 }
