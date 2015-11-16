@@ -1,0 +1,28 @@
+#mapEditor {
+  position: absolute;
+  margin: 1vw;
+  border-radius: 3px;
+  display: inline-block;
+  visibility: hidden;
+  color: white;
+  text-align: center;
+  font-size: 1.2vw;
+  background-color: rgba(0, 128, 128, 0.2);
+  border: 1px solid white;
+}
+
+#mapEditor > * {
+  padding: 1vw;
+}
+
+#mapEditor > * + * {
+  border-top: 1px solid white;
+}
+
+.mapEditorSteps > * {
+  display: block;
+}
+
+.mapEditorSteps > * + * {
+  margin-top: 1vw;
+}

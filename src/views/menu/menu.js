@@ -1,17 +1,17 @@
-var Paper = require('paper');
-var view = require('./view');
-var audio = require('../audio');
-var prepop = require('../prepop/mapPrepopulator');
+require('./menu.css');
+var view = require('../view');
+var audio = require('../../audio');
+var prepop = require('../../prepop/mapPrepopulator');
+var ClickListenerHandler = require('../clickListenerHandler');
 
 export default class Menu{
   constructor(onDone, params){
+    this.clickListenerHandler = new ClickListenerHandler();
     this.selectedMapImage = document.querySelector('#selectedMapImage');
     this.maps = document.querySelector('#maps');
 
     view.reset();
     this.onDone = onDone;
-
-    this.clickListeners = [];
 
     var maps = this.getMapsFromLocalStorage();
     if(!maps.length) {
@@ -27,21 +27,21 @@ export default class Menu{
     this.menu.style.visibility = 'initial';
 
     var createMapButton = document.querySelector('#createMapButton');
-    this.addClickListener(createMapButton, () => this.onDone({ view: 'Create map' }));
+    this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
 
     var fewerPlayersButton = document.querySelector('#fewerPlayersButton');
-    this.addClickListener(fewerPlayersButton, () => this.nbrOfPlayers--);
+    this.clickListenerHandler.add(fewerPlayersButton, () => this.nbrOfPlayers--);
 
     var morePlayersButton = document.querySelector('#morePlayersButton');
-    this.addClickListener(morePlayersButton, () => this.nbrOfPlayers++);
+    this.clickListenerHandler.add(morePlayersButton, () => this.nbrOfPlayers++);
 
     var editMapButton = document.querySelector('#editMapButton');
-    this.addClickListener(editMapButton, () => this.onDone({ view: 'Create map', params: this.selectedMap }));
+    this.clickListenerHandler.add(editMapButton, () => this.onDone({ view: 'Create map', params: this.selectedMap }));
 
     var deleteMapButton = document.querySelector('#deleteMapButton');
-    this.addClickListener(deleteMapButton, () => this.removeCurrentMap());
+    this.clickListenerHandler.add(deleteMapButton, () => this.removeCurrentMap());
 
-    this.addClickListener(selectedMapImage, () => {
+    this.clickListenerHandler.add(selectedMapImage, () => {
       this.onDone({
         view: 'Game',
         params: {
@@ -56,15 +56,6 @@ export default class Menu{
     this.savedMaps = maps;
     this.selectedMap = this.savedMaps[0];
     this.renderMapsList();
-  }
-
-  addClickListener(element, onclick) {
-    var callback = event => {
-      audio.playClick();
-      onclick(event);
-    }
-    element.addEventListener('click', callback);
-    this.clickListeners.push({element, callback});
   }
 
   get nbrOfPlayers(){
@@ -110,7 +101,7 @@ export default class Menu{
       if(index === 0) this.selectedMap = map;
       var img = document.createElement('img');
       img.src = map.dataURL;
-      this.addClickListener(img, () => this.selectedMap = map);
+      this.clickListenerHandler.add(img, () => this.selectedMap = map);
       this.maps.appendChild(img);
     });
   }
@@ -124,6 +115,6 @@ export default class Menu{
   dispose(){
     this.menu.style.visibility = '';
     this.clearMapsList();
-    this.clickListeners.forEach(listener => listener.element.removeEventListener('click', listener.callback));
+    this.clickListenerHandler.dispose();
   }
 }

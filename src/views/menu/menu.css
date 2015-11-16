@@ -1,0 +1,56 @@
+#menu {
+  top: 5vw;
+  bottom: 5vw;
+  padding: 1vw;
+  background-color: rgba(0, 128, 128, 0.2);
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
+.mapsMenu {
+  display: flex;
+  margin-top: 1vw;
+  justify-content: center;
+}
+
+.mapsMenu > * {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#createMapButton {
+  font-size: 5vw;
+  display: flex;
+}
+
+.selectedMap {
+  margin-left: 1vw;
+}
+
+.selectedMap img {
+  width: 40vw;
+  height: 40vw;
+}
+
+#createMapButton,
+#maps img {
+  width: 9vw;
+  height: 9vw;
+}
+
+#maps * + * {
+  margin-top: 1vw;
+}
+
+.mapControls {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+img {
+  cursor: pointer;
+  background-color: black;
+  border-radius: 5px;
+  border: 1px solid white;
+}
