@@ -111,7 +111,8 @@ export default class GameGui{
     var player = this.game.movePlayer(relativeVector);
     guiPlayer.addPosition(player.position);
     if(player.isInEndZone){
-      this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won!');
+      var moves = player.positions.length - 1;
+      this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won in ' + moves + ' moves!');
     } else {
       this.nextTurn();
     }
