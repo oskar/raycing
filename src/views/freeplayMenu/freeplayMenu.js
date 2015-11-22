@@ -1,4 +1,4 @@
-require('./menu.css');
+require('./freeplayMenu.css');
 var view = require('../view');
 var audio = require('../../audio');
 var storage = require('../../storage');
@@ -30,8 +30,8 @@ export default class Menu{
     }
     this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
 
-    this.menu = document.querySelector('#menu');
-    this.menu.style.visibility = 'initial';
+    this.freeplayMenu = document.querySelector('#freeplayMenu');
+    this.freeplayMenu.style.visibility = 'initial';
 
     var createMapButton = document.querySelector('#createMapButton');
     this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -119,7 +119,7 @@ export default class Menu{
   }
 
   dispose(){
-    this.menu.style.visibility = '';
+    this.freeplayMenu.style.visibility = '';
     this.clearMapsList();
     this.clickListenerHandler.dispose();
   }

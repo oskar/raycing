@@ -1,12 +1,12 @@
 require('./app.css');
 
 var view = require('./views/view');
-var Menu = require('./views/menu/menu');
+var FreeplayMenu = require('./views/freeplayMenu/freeplayMenu');
 var MapEditor = require('./views/mapEditor/mapEditor');
 var GameGui = require('./views/gameGui/gameGui');
 var attachFastClick = require('fastclick');
 
-var currentView = new Menu(data => onDone(data));
+var currentView = new FreeplayMenu(data => onDone(data));
 
 function onDone(data){
   currentView.dispose();
@@ -20,7 +20,7 @@ function onDone(data){
       currentView = new GameGui(data => onDone(data), data.params);
       break;
     default:
-      currentView = new Menu(data => onDone(data), data.params);
+      currentView = new FreeplayMenu(data => onDone(data), data.params);
       break;
   }
 }
