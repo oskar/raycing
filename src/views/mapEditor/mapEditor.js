@@ -116,7 +116,8 @@ export default class MapEditor{
 
   onMouseDown(event) {
     var tool = this.getTool(this.selectedTool);
-    if(tool.path.isEmpty()){
+    if(tool.path.area < 50){
+      this.removePath(tool.path);
       var path = new Paper.Path.Circle(event.point, this.brushsize);
       tool.path = path;
       tool.path.fillColor = tool.color;
