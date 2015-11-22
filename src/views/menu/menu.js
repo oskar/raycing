@@ -24,6 +24,12 @@ export default class Menu{
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
     this.nbrOfPlayersElement.innerText = this.nbrOfPlayers;
 
+    this.muteButton = document.querySelector('#muteButton');
+    if(storage.GetIsMuted()) {
+      this.muteButton.classList.add('selected');
+    }
+    this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
+
     this.menu = document.querySelector('#menu');
     this.menu.style.visibility = 'initial';
 
@@ -76,6 +82,15 @@ export default class Menu{
   set selectedMap(value) {
     this.selectedMap_ = value;
     this.selectedMapImage.setAttribute('src', this.selectedMap_.dataURL);
+  }
+
+  toggleIsMuted(){
+    var isMuted = audio.ToggleIsMuted();
+    if(isMuted) {
+      this.muteButton.classList.add('selected');
+    } else {
+      this.muteButton.classList.remove('selected');
+    }
   }
 
   removeCurrentMap(){

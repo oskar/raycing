@@ -1,13 +1,14 @@
 function GetUserConfig() {
   var config = localStorage.getItem('UserConfig');
   if(!config) {
-    config = {
-      nbrOfPlayers: 2
-    };
-    localStorage.setItem('UserConfig', JSON.stringify(config));
+    config = {};
+    SetUserConfig(config);
   }
-
   return JSON.parse(config);
+}
+
+function SetUserConfig(config) {
+  localStorage.setItem('UserConfig', JSON.stringify(config));;
 }
 
 export function GetMaps() {
@@ -33,9 +34,34 @@ export function RemoveMap(map) {
 export function SetNbrOfPlayers(nbrOfPlayers) {
   var config = GetUserConfig();
   config.nbrOfPlayers = nbrOfPlayers;
-  localStorage.setItem('UserConfig', JSON.stringify(config));
+  SetUserConfig(config);
 }
 
 export function GetNbrOfPlayers() {
-  return GetUserConfig().nbrOfPlayers;
+  var nbrOfPlayers = GetUserConfig().nbrOfPlayers;
+  if(!nbrOfPlayers) {
+    nbrOfPlayers = 2;
+    var config = GetUserConfig();
+    config.nbrOfPlayers = nbrOfPlayers;
+    SetUserConfig(config);
+  }
+  return nbrOfPlayers;
+}
+
+export function GetIsMuted() {
+  var isMuted = GetUserConfig().isMuted;
+  if(!isMuted) {
+    isMuted = false;
+    var config = GetUserConfig();
+    config.isMuted = isMuted;
+    SetUserConfig(config);
+
+  }
+  return isMuted;
+}
+
+export function SetIsMuted(isMuted) {
+  var config = GetUserConfig();
+  config.isMuted = isMuted;
+  SetUserConfig(config);
 }
