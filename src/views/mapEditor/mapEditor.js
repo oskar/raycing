@@ -30,7 +30,7 @@ export default class MapEditor{
       },
       {
         name: 'start',
-        color: 'teal',
+        color: 'green',
         path: this.start,
         element: document.querySelector('#createStartButton'),
         init: newCircle => this.getTool('track').path.intersect(newCircle)

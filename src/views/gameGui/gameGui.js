@@ -31,7 +31,7 @@ export default class GameGui{
     var track = this.game.track;
     track.fillColor = 'purple';
     var startArea = this.game.start;
-    startArea.fillColor = 'teal';
+    startArea.fillColor = 'green';
     var endArea = this.game.end;
     endArea.fillColor = 'yellow';
 
