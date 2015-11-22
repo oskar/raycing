@@ -4,6 +4,7 @@ var view = require('../view');
 var animation = require('../animation');
 var audio = require('../../audio');
 var ClickListenerHandler = require('../clickListenerHandler');
+var storage = require('../../storage');
 
 export default class MapEditor{
   constructor(onDone, params){
@@ -162,8 +163,7 @@ export default class MapEditor{
 
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
     var key = this.key ? this.key : 'map-' + (new Date()).toISOString();
-    var value = { dataURL, map, key };
-    localStorage.setItem(key, JSON.stringify(value));
+    storage.AddMap({ dataURL, map, key });
     this.onDone({ view: 'Menu' });
   }
 
