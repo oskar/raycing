@@ -5,7 +5,7 @@ var storage = require('../../storage');
 var prepop = require('../../prepop/mapPrepopulator');
 var ClickListenerHandler = require('../clickListenerHandler');
 
-export default class Menu{
+export default class FreeplayMenu{
   constructor(onDone, params){
     this.clickListenerHandler = new ClickListenerHandler();
     this.selectedMapImage = document.querySelector('#selectedMapImage');
