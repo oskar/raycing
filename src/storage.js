@@ -11,6 +11,23 @@ function SetUserConfig(config) {
   localStorage.setItem('UserConfig', JSON.stringify(config));;
 }
 
+function GetUserConfigValue(key, defaultValue) {
+  var config = GetUserConfig();
+
+  if(!config[key]) {
+    config[key] = defaultValue;
+    SetUserConfig(config);
+  }
+
+  return config[key];
+}
+
+function SetUserConfigValue(key, value) {
+  var config = GetUserConfig();
+  config[key] = value;
+  SetUserConfig(config);
+}
+
 export function GetMaps() {
   var maps = [];
   for (var i = 0; i < localStorage.length; i++) {
@@ -32,36 +49,17 @@ export function RemoveMap(map) {
 }
 
 export function SetNbrOfPlayers(nbrOfPlayers) {
-  var config = GetUserConfig();
-  config.nbrOfPlayers = nbrOfPlayers;
-  SetUserConfig(config);
+  SetUserConfigValue('nbrOfPlayers', nbrOfPlayers);
 }
 
 export function GetNbrOfPlayers() {
-  var nbrOfPlayers = GetUserConfig().nbrOfPlayers;
-  if(!nbrOfPlayers) {
-    nbrOfPlayers = 2;
-    var config = GetUserConfig();
-    config.nbrOfPlayers = nbrOfPlayers;
-    SetUserConfig(config);
-  }
-  return nbrOfPlayers;
+  return GetUserConfigValue('nbrOfPlayers', 2);
 }
 
 export function GetIsMuted() {
-  var isMuted = GetUserConfig().isMuted;
-  if(!isMuted) {
-    isMuted = false;
-    var config = GetUserConfig();
-    config.isMuted = isMuted;
-    SetUserConfig(config);
-
-  }
-  return isMuted;
+  return GetUserConfigValue('isMuted', false);
 }
 
 export function SetIsMuted(isMuted) {
-  var config = GetUserConfig();
-  config.isMuted = isMuted;
-  SetUserConfig(config);
+  SetUserConfigValue('isMuted', isMuted);
 }
