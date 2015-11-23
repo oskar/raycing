@@ -1,37 +1,32 @@
 var Car = require('./car');
-var Victor = require('victor');
+var Paper = require('paper');
 
-describe("A Car", function() {
-  it("can move", function() {
-    // Arrange
-    var car = new Car(new Victor(0,0), new Victor(0,2));
-
+describe('Car', function() {
+  it('has initial position', function() {
     // Act
-    car.move(new Victor(0,3));
+    var car = new Car(new Paper.Point(1, 3), new Paper.Point(0, 0));
 
     // Assert
-    expect(car.position).toEqual(new Victor(0,3));
-    expect(car.direction).toEqual(new Victor(0,3));
-
-    // Act
-    car.move(new Victor(1,4));
-
-    // Assert
-    expect(car.position).toEqual(new Victor(1,7));
-    expect(car.direction).toEqual(new Victor(1,4));
+    expect(car.position).toEqual(new Paper.Point(1, 3));
   });
 
-  it('can validate moves', function() {
-    var car = new Car(new Victor(0,0), new Victor(1,1));
+  it('has initial direction', function() {
+    // Act
+    var car = new Car(new Paper.Point(0, 0), new Paper.Point(3, 4));
 
-    expect(car.isValidMove(new Victor(1,1), new Victor(0,0))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(0,1))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(0,2))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(1,0))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(1,1))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(1,2))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(2,0))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(2,1))).toBeTruthy();
-    expect(car.isValidMove(new Victor(1,1), new Victor(2,2))).toBeTruthy();
+    // Assert
+    expect(car.direction).toEqual(new Paper.Point(3, 4));
+  });
+
+  it('can move', function() {
+    // Arrange
+    var car = new Car(new Paper.Point(1, 1), new Paper.Point(0, 0));
+
+    // Act
+    car.move(new Paper.Point(2, 2));
+
+    // Assert
+    expect(car.position).toEqual(new Paper.Point(3, 3));
+    expect(car.direction).toEqual(new Paper.Point(2, 2));
   });
 });
