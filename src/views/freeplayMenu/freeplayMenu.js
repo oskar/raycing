@@ -30,6 +30,9 @@ export default class FreeplayMenu{
     }
     this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
 
+    this.starsButton = document.querySelector('#starsButton');
+    this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
+
     this.freeplayMenu = document.querySelector('#freeplayMenu');
     this.freeplayMenu.style.visibility = 'initial';
 
@@ -90,6 +93,15 @@ export default class FreeplayMenu{
       this.muteButton.classList.add('selected');
     } else {
       this.muteButton.classList.remove('selected');
+    }
+  }
+
+  toggleStarsVisibility() {
+    var newStarsVisibility = view.toggleStarsVisibility();
+    if(newStarsVisibility) {
+      this.starsButton.classList.add('selected');
+    } else {
+      this.starsButton.classList.remove('selected');
     }
   }
 

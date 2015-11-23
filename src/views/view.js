@@ -106,8 +106,9 @@ function animateView(center, zoom){
 
 var stars = new Paper.Group();
 
-export function setStarsVisibility(visible){
-  stars.visible = visible;
+export function toggleStarsVisibility(){
+  stars.visible = !stars.visible;
+  return stars.visible;
 }
 
 function animateStar(start){
