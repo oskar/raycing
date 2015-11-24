@@ -1,0 +1,19 @@
+.mainMenu {
+  text-align: center;
+  padding-top: 20vh;
+}
+
+.titleText {
+  font-size: 10vw;
+  margin-bottom: 5vw;
+}
+
+.mainMenuButton {
+  height: 10vw;
+  width: 10vw;
+  font-size: 2vw;
+}
+
+.mainMenuButton + * {
+  margin-left: 2vw;
+}

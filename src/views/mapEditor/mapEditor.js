@@ -1,4 +1,4 @@
-require('./mapEditor.css')
+require('./mapEditor.css');
 var Paper = require('paper');
 var view = require('../view');
 var animation = require('../animation');
@@ -66,7 +66,7 @@ export default class MapEditor{
     this.saveMapButton.classList.add('disabled');
     this.clickListenerHandler.add(this.saveMapButton, () => this.done());
     this.exitMapEditorButton = document.querySelector('#exitMapEditorButton');
-    this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Menu' }));
+    this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Main menu' }));
 
     this.brushButtons = ['#brushSize1', '#brushSize2', '#brushSize3']
       .map(buttonSelector => document.querySelector(buttonSelector));
@@ -165,7 +165,7 @@ export default class MapEditor{
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
     var key = this.key ? this.key : 'map-' + (new Date()).toISOString();
     storage.AddMap({ dataURL, map, key });
-    this.onDone({ view: 'Menu' });
+    this.onDone({ view: 'Main menu' });
   }
 
   dispose(){
