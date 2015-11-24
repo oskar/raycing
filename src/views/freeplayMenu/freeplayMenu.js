@@ -31,6 +31,9 @@ export default class FreeplayMenu{
     this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
 
     this.starsButton = document.querySelector('#starsButton');
+    if(storage.GetEnableStars()) {
+      this.starsButton.classList.add('selected');
+    }
     this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
 
     this.freeplayMenu = document.querySelector('#freeplayMenu');
