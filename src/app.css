@@ -53,7 +53,8 @@ body:before{
   display: inline-block;
 }
 
-.button:after {
+.button:after,
+.button > * {
   margin: 0;
   position: absolute;
   top: 50%;

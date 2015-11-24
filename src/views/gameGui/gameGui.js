@@ -172,7 +172,7 @@ export default class GameGui{
   }
 
   endGameButtonListener() {
-    this.callback({ view: 'Menu' });
+    this.callback({ view: 'Main menu' });
   }
 
   dispose(){
