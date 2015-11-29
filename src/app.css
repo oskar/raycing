@@ -116,11 +116,16 @@ body:before{
   opacity: 0.8;
 }
 
-.bottomMiddle{
+.menuBottom{
   position: absolute;
   bottom: -10px;
   width: 100%;
   height: 70vw;
+}
+
+.menuBottomArea{
+  height: 100%;
+  width: 100%;
 }
 
 .menuElement{
@@ -133,7 +138,6 @@ body:before{
 
 .icon{
   position: absolute;
-  width: 6vw;
   opacity: 0.5;
 }
 
@@ -142,7 +146,23 @@ body:before{
   fill: white;
 }
 
+.icon-puzzle{
+  bottom: 5vw;
+  left: 27vw;
+  width: 9vw;
+  height: 9vw;
+}
+
+.icon-free{
+  bottom: 5vw;
+  left: 47vw;
+  width: 9vw;
+  height: 9vw;
+  transform: rotate(30deg);
+}
+
 .icon-top{
   left: 3vw;
   top: 3vw;
+  width: 6vw;
 }
