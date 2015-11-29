@@ -167,7 +167,7 @@ export default class GameGui{
 
   endGame(text){
     this.clearControls();
-    this.gameGui.style.visibility = 'visible';
+    this.gameGui.classList.remove('menu-hidden');
     this.endGameText.textContent = text;
   }
 
@@ -181,7 +181,7 @@ export default class GameGui{
     document.removeEventListener('gestureend', this.gestureendListener);
     document.removeEventListener('mosewheel', this.mousewheelListener);
     this.clickListenerHandler.dispose();
-    this.gameGui.style.visibility = '';
+    this.gameGui.classList.add('menu-hidden');
     this.endGameText.textContent = '';
     this.mouseControls.remove();
   }

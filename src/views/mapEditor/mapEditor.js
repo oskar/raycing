@@ -53,7 +53,7 @@ export default class MapEditor{
       this.clickListenerHandler.add(tool.element, () => this.selectedTool = tool.name));
 
     this.mapEditor = document.querySelector('#mapEditor');
-    this.mapEditor.style.visibility = 'visible';
+    this.mapEditor.classList.remove('menu-hidden');
 
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDown = e => {
@@ -174,6 +174,6 @@ export default class MapEditor{
     document.removeEventListener('mosewheel', this.mousewheelListener);
     this.mouseControls.remove();
     this.clickListenerHandler.dispose();
-    this.mapEditor.style.visibility = '';
+    this.mapEditor.classList.add('menu-hidden');
   }
 }

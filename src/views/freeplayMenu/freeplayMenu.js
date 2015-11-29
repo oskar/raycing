@@ -37,7 +37,7 @@ export default class FreeplayMenu{
     this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
 
     this.freeplayMenu = document.querySelector('#freeplayMenu');
-    this.freeplayMenu.style.visibility = 'initial';
+    this.freeplayMenu.classList.remove('menu-hidden');
 
     var createMapButton = document.querySelector('#createMapButton');
     this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -134,7 +134,7 @@ export default class FreeplayMenu{
   }
 
   dispose(){
-    this.freeplayMenu.style.visibility = '';
+    this.freeplayMenu.classList.add('menu-hidden');
     this.clearMapsList();
     this.clickListenerHandler.dispose();
   }

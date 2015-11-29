@@ -66,7 +66,7 @@
     </svg>
   </div>
 
-  <div id="mainMenu" class="mainMenu menu">
+  <div id="mainMenu" class="mainMenu menu menu-hidden">
     <div class="titleText">Raycing</div>
 
     <span id="puzzleModeButton" class="mainMenuButton mainMenuButton-puzzle">
@@ -152,7 +152,7 @@
       <span>Free<br>mode</span>
     </span>
   </div>
-  <div id="freeplayMenu" class="menu">
+  <div id="freeplayMenu" class="menu menu-hidden">
     <div class="infoText">
       <span id="fewerPlayersButton" class="button minusButton">&nbsp;</span>
       <span id="nbrOfPlayers"></span>
@@ -176,13 +176,13 @@
       </div>
     </div>
   </div>
-  <div id="gameGui" class="menu infoText">
+  <div id="gameGui" class="menu menu-hidden infoText">
     <div class="endGameMessage">
       <div id="endGameText" class="endGameText"></div>
       <span id="endGameButton" class="button">Ok</span>
     </div>
   </div>
-  <div id="mapEditor">
+  <div id="mapEditor" class="menu-hidden">
     <div>
       Brushsize
       <div>
@@ -203,6 +203,9 @@
     <div>
       <span id="exitMapEditorButton" class="button">Back</span>
     </div>
+  </div>
+  <div id="settingsMenu" class="menu-hidden">
+    Success
   </div>
 
   <script type="text/javascript" src="app.js" charset="utf-8"></script>

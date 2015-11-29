@@ -29,11 +29,14 @@ body:before{
 }
 
 .menu {
-  visibility: hidden;
   position: absolute;
   left: 0;
   right: 0;
   color: white;
+}
+
+.menu-hidden {
+  display: none;
 }
 
 .infoText {
@@ -152,10 +155,10 @@ body:before{
   width: 6vw;
 }
 
-.svgMenu {
+svgMenu {
   pointer-events: none;
 }
 
-.svgMenu svg > * {
+svgMenu svg > * {
   pointer-events: auto;
 }
