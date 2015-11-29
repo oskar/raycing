@@ -8,7 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
 <body style="background-color: black;">
-  <div class="menuBottom">
+  <canvas id="canvas"></canvas>
+
+  <div class="svgMenu menuBottom">
     <svg class="menuBottomArea" viewbox="0 0 400 400">
       <path class="menuElement" d="
         M0 400
@@ -19,106 +21,35 @@
         C350 375 375 400 400 400 Z
         " />
     </svg>
+  </div>
 
-    <svg class="icon icon-puzzle" viewbox="0 0 450 450">
-      <path
-            d="
-               M425 425 m-71 -1
-               q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
-               h-60 q-10 0 -10 -10 v-60
-               q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
-               v-60 q0 -10 10 -10 h60
-               q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
-               h60 q10 0 10 10 v60
-               q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
-               v60 q0 10 -10 10 h-60
-
-               M200 425 m-71 -1
-               q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
-               h-60 q-10 0 -10 -10 v-60
-               q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
-               v-60 q0 -10 10 -10 h60
-               q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
-               h60 q10 0 10 10 v60
-               q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
-               v60 q0 10 -10 10 h-60
-
-               M425 200 m-71 -1
-               q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
-               h-60 q-10 0 -10 -10 v-60
-               q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
-               v-60 q0 -10 10 -10 h60
-               q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
-               h60 q10 0 10 10 v60
-               q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
-               v60 q0 10 -10 10 h-60
-               "/>
+  <div class="svgMenu menuClickZone menuClickZone-topLeft">
+    <svg viewbox="0 0 400 400">
+      <path class="menuElement" d="
+        M0 0
+        L300 0
+        C320 0 320 50 250 75
+        C180 100 140 140 140 140
+        C100 180 100 180 75 250
+        C50 320 0 320 0 300 Z
+        " />
     </svg>
-
-    <svg class="icon icon-free" viewbox="0 0 112 400">
+    <svg class="icon icon-top" viewbox="0 0 200 300">
       <path d="
-               M15 1
-               h-14
-               v398
-               h14
-               v-398
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -150
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -210
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -150
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -210
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -150
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -210
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -150
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               h30 v30 h-30 v-30 m0 60
-               m30 -210
+               M60 0
+               l-60 150 l60 150 h20
+               l-60 -150 l60 -150 h-20
+               m60 0
+               l-60 150 l40 100 h20
+               l-40 -100 l60 -150 h-20
+               m60 0
+               l-60 150 l20 50 h20
+               l-20 -50 l60 -150 h-20
                "/>
     </svg>
   </div>
 
-  <div class="menuClickZone menuClickZone-topLeft">
-      <svg viewbox="0 0 400 400">
-        <path class="menuElement" d="
-          M0 0
-          L300 0
-          C320 0 320 50 250 75
-          C180 100 140 140 140 140
-          C100 180 100 180 75 250
-          C50 320 0 320 0 300 Z
-          " />
-      </svg>
-
-      <svg class="icon icon-top" viewbox="0 0 400 400">
-        <path d="
-          M125 0 l-80 200 l80 200 l-30 0 l-80 -200 l80 -200 Z
-          M275 0 l-80 200 l80 200 l-30 0 l-80 -200 l80 -200 Z
-          " />
-      </svg>
-  </div>
-
-  <div class="menuClickZone menuClickZone-topRight menuClickZone-enabled">
+  <div class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
     <svg viewbox="0 0 400 400">
       <path class="menuElement" d="
         M0 0
@@ -137,8 +68,89 @@
 
   <div id="mainMenu" class="mainMenu menu">
     <div class="titleText">Raycing</div>
-    <span id="puzzleModeButton" class="button mainMenuButton"><span>Puzzle mode</span></span>
-    <span id="freeModeButton" class="button mainMenuButton"><span>Free mode</span></span>
+
+    <span id="puzzleModeButton" class="mainMenuButton mainMenuButton-puzzle">
+      <svg class="icon" viewbox="0 0 450 450">
+        <path
+              d="
+                 M425 425 m-71 -1
+                 q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
+                 h-60 q-10 0 -10 -10 v-60
+                 q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
+                 v-60 q0 -10 10 -10 h60
+                 q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
+                 h60 q10 0 10 10 v60
+                 q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
+                 v60 q0 10 -10 10 h-60
+
+                 M200 425 m-71 -1
+                 q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
+                 h-60 q-10 0 -10 -10 v-60
+                 q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
+                 v-60 q0 -10 10 -10 h60
+                 q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
+                 h60 q10 0 10 10 v60
+                 q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
+                 v60 q0 10 -10 10 h-60
+
+                 M425 200 m-71 -1
+                 q-5 -5 0 -10 a20 10 0 1 0 -30 0 q5 5 0 10
+                 h-60 q-10 0 -10 -10 v-60
+                 q-5 -5 -10 0 a10 20 0 1 1 0 -30 q5 5 10 0
+                 v-60 q0 -10 10 -10 h60
+                 q5 -5 0 -10 a20 10 0 1 1 30 0 q-5 5 0 10
+                 h60 q10 0 10 10 v60
+                 q-5 5 -10 0 a10 20 0 1 0 0 30 q5 -5 10 0
+                 v60 q0 10 -10 10 h-60
+                 "/>
+      </svg>
+      <span>Puzzle<br>mode</span>
+    </span>
+
+    <span id="freeModeButton" class="mainMenuButton mainMenuButton-free">
+      <svg class="icon" viewbox="0 0 112 400">
+        <path d="
+                 M15 1
+                 h-14
+                 v398
+                 h14
+                 v-398
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -150
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -210
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -150
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -210
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -150
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -210
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -150
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 h30 v30 h-30 v-30 m0 60
+                 m30 -210
+                 "/>
+      </svg>
+      <span>Free<br>mode</span>
+    </span>
   </div>
   <div id="freeplayMenu" class="menu">
     <div class="infoText">

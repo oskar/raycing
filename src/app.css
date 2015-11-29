@@ -113,7 +113,7 @@ body:before{
 }
 
 .menuClickZone-enabled .icon{
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .menuBottom{
@@ -137,8 +137,7 @@ body:before{
 }
 
 .icon{
-  position: absolute;
-  opacity: 0.5;
+  opacity: 0.1;
 }
 
 .icon path{
@@ -146,23 +145,17 @@ body:before{
   fill: white;
 }
 
-.icon-puzzle{
-  bottom: 5vw;
-  left: 27vw;
-  width: 9vw;
-  height: 9vw;
-}
-
-.icon-free{
-  bottom: 5vw;
-  left: 47vw;
-  width: 9vw;
-  height: 9vw;
-  transform: rotate(30deg);
-}
-
 .icon-top{
+  position: absolute;
   left: 3vw;
   top: 3vw;
   width: 6vw;
+}
+
+.svgMenu {
+  pointer-events: none;
+}
+
+.svgMenu svg > * {
+  pointer-events: auto;
 }
