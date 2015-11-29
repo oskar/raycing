@@ -9,6 +9,7 @@
   font-size: 1.2vw;
   background-color: rgba(0, 128, 128, 0.2);
   border: 1px solid white;
+  top: 30vw;
 }
 
 #mapEditor > * {

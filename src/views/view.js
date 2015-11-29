@@ -3,7 +3,7 @@ var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
 var animation = require('./animation');
 
-var canvas = document.createElement('canvas');
+var canvas = document.getElementById('canvas');
 canvas.setAttribute('keepalive', true);
 
 var width = document.body.clientWidth;
@@ -49,7 +49,6 @@ export function addCourse(element){
 function initPaper(canvas, width, height){
   canvas.setAttribute('width', width);
   canvas.setAttribute('height', height);
-  document.body.appendChild(canvas);
   Paper.setup(canvas);
   animation.init();
 }
