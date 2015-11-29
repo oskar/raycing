@@ -13,8 +13,9 @@ var SettingsMenu = require('./views/settingsMenu/settingsMenu');
 [].forEach.call(document.querySelectorAll('.menuClickZone-topRight svg'),
   svg => svg.addEventListener('click', () => onDone({ view: 'Settings' })));
 
-  [].forEach.call(document.querySelectorAll('.menuClickZone-topLeft svg'),
-    svg => svg.addEventListener('click', () => goBack()));
+var topLeftZone = document.querySelector('.menuClickZone-topLeft');
+[].forEach.call(document.querySelectorAll('.menuClickZone-topLeft svg'),
+  svg => svg.addEventListener('click', () => goBack()));
 
 var currentView = new MainMenu(data => onDone(data));
 var visitedViews = [currentView];
@@ -48,6 +49,11 @@ function onDone(data){
       currentView = new MainMenu(data => onDone(data), data.params);
       break;
   }
+  if(visitedViews.length === 1) {
+    topLeftZone.classList.remove('menuClickZone-enabled');
+  } else {
+    topLeftZone.classList.add('menuClickZone-enabled');
+  }
 }
 
 function goBack(){
@@ -55,6 +61,11 @@ function goBack(){
   view.reset();
   currentView = visitedViews.pop();
   currentView.show();
+  if(visitedViews.length === 1) {
+    topLeftZone.classList.remove('menuClickZone-enabled');
+  } else {
+    topLeftZone.classList.add('menuClickZone-enabled');
+  }
 }
 
 window.addEventListener('load', () => {
