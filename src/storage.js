@@ -14,7 +14,7 @@ function SetUserConfig(config) {
 function GetUserConfigValue(key, defaultValue) {
   var config = GetUserConfig();
 
-  if(!config[key]) {
+  if(config[key] === undefined) {
     config[key] = defaultValue;
     SetUserConfig(config);
   }
@@ -62,4 +62,12 @@ export function GetIsMuted() {
 
 export function SetIsMuted(isMuted) {
   SetUserConfigValue('isMuted', isMuted);
+}
+
+export function GetEnableStars() {
+  return GetUserConfigValue('enableStars', true);
+}
+
+export function SetEnableStars(enableStars) {
+  SetUserConfigValue('enableStars', enableStars);
 }
