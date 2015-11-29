@@ -2,8 +2,9 @@ var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
 var animation = require('./animation');
+var storage = require('../storage');
 
-var canvas = document.createElement('canvas');
+var canvas = document.getElementById('canvas');
 canvas.setAttribute('keepalive', true);
 
 var width = document.body.clientWidth;
@@ -49,7 +50,6 @@ export function addCourse(element){
 function initPaper(canvas, width, height){
   canvas.setAttribute('width', width);
   canvas.setAttribute('height', height);
-  document.body.appendChild(canvas);
   Paper.setup(canvas);
   animation.init();
 }
@@ -104,31 +104,73 @@ function animateView(center, zoom){
   });
 }
 
-var stars = new Paper.Group();
+var stars = [];
 
-export function setStarsVisibility(visible){
-  stars.visible = visible;
+createStars();
+if(storage.GetEnableStars()) {
+  enableStars();
+} else {
+  disableStars();
 }
 
-function animateStar(start){
-  var velocity = new Paper.Point(100,1);
-  var distance = 4 + Math.random() * 11;
-  var star = new Paper.Path.Circle(start, 5 / distance);
-  star.fillColor = 'white';
-  animation.add(elapsedTime => {
-    star.position = start.add(velocity.multiply(elapsedTime / distance));
-    if(!outerBounds.contains(star.position)){
-      star.remove();
-      var newStart = new Paper.Point.random().multiply(outerBounds.bottomLeft);
-      animateStar(newStart);
-      return false;
+function createStars() {
+  for(var i = 0; i < 100; i++){
+    var star = createStar();
+    stars.push(star);
+  }
+}
+
+function enableStars() {
+  stars.forEach(star => {
+    star.circle.visible = true;
+    star.animationRemover = animation.add(star.animation);
+  });
+}
+
+function disableStars() {
+  stars.forEach(star => {
+    star.circle.visible = false;
+    if(star.animationRemover) {
+      star.animationRemover.remove();
     }
   });
-
-  stars.addChild(star);
 }
 
-for(var i = 0; i < 100; i++){
+export function toggleStarsVisibility(){
+  var starsEnabled = !storage.GetEnableStars();
+  storage.SetEnableStars(starsEnabled);
+
+  if(starsEnabled) {
+    enableStars();
+  } else {
+    disableStars();
+  }
+
+  return starsEnabled;
+}
+
+function createStar() {
+  // a random position anywhere in space
   var start = new Paper.Point.random().multiply(outerBounds.bottomRight);
-  animateStar(start);
+
+  // distance from earth in pixels
+  var distance = 4 + Math.random() * 11;
+
+  var circle = new Paper.Path.Circle(start, 5 / distance);
+  circle.fillColor = 'white';
+  circle.position = start;
+
+  // the speed of a star is lower if its far away. this is known science fact.
+  var velocity = new Paper.Point(10 / distance, 0);
+
+  return {
+    circle: circle,
+    velocity: velocity,
+    animation: elapsedTime => {
+      circle.position = circle.position.add(velocity);
+      if(!outerBounds.contains(circle.position)){
+        circle.position.x = 0;
+      }
+    }
+  };
 }

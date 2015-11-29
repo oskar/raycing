@@ -1,9 +1,10 @@
-require('./mapEditor.css')
+require('./mapEditor.css');
 var Paper = require('paper');
 var view = require('../view');
 var animation = require('../animation');
 var audio = require('../../audio');
 var ClickListenerHandler = require('../clickListenerHandler');
+var storage = require('../../storage');
 
 export default class MapEditor{
   constructor(onDone, params){
@@ -29,7 +30,7 @@ export default class MapEditor{
       },
       {
         name: 'start',
-        color: 'teal',
+        color: 'green',
         path: this.start,
         element: document.querySelector('#createStartButton'),
         init: newCircle => this.getTool('track').path.intersect(newCircle)
@@ -65,7 +66,7 @@ export default class MapEditor{
     this.saveMapButton.classList.add('disabled');
     this.clickListenerHandler.add(this.saveMapButton, () => this.done());
     this.exitMapEditorButton = document.querySelector('#exitMapEditorButton');
-    this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Menu' }));
+    this.clickListenerHandler.add(this.exitMapEditorButton, () => this.onDone({ view: 'Main menu' }));
 
     this.brushButtons = ['#brushSize1', '#brushSize2', '#brushSize3']
       .map(buttonSelector => document.querySelector(buttonSelector));
@@ -115,7 +116,8 @@ export default class MapEditor{
 
   onMouseDown(event) {
     var tool = this.getTool(this.selectedTool);
-    if(tool.path.isEmpty()){
+    if(tool.path.area < 50){
+      this.removePath(tool.path);
       var path = new Paper.Path.Circle(event.point, this.brushsize);
       tool.path = path;
       tool.path.fillColor = tool.color;
@@ -162,9 +164,8 @@ export default class MapEditor{
 
     var dataURL = document.querySelector('canvas').toDataURL("image/png");
     var key = this.key ? this.key : 'map-' + (new Date()).toISOString();
-    var value = { dataURL, map, key };
-    localStorage.setItem(key, JSON.stringify(value));
-    this.onDone({ view: 'Menu' });
+    storage.AddMap({ dataURL, map, key });
+    this.onDone({ view: 'Main menu' });
   }
 
   dispose(){

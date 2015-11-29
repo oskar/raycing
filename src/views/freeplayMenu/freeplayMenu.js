@@ -1,10 +1,11 @@
-require('./menu.css');
+require('./freeplayMenu.css');
 var view = require('../view');
 var audio = require('../../audio');
+var storage = require('../../storage');
 var prepop = require('../../prepop/mapPrepopulator');
 var ClickListenerHandler = require('../clickListenerHandler');
 
-export default class Menu{
+export default class FreeplayMenu{
   constructor(onDone, params){
     this.clickListenerHandler = new ClickListenerHandler();
     this.selectedMapImage = document.querySelector('#selectedMapImage');
@@ -13,7 +14,7 @@ export default class Menu{
     view.reset();
     this.onDone = onDone;
 
-    var maps = this.getMapsFromLocalStorage();
+    var maps = storage.GetMaps();
     if(!maps.length) {
       prepop.prepopulateMaps(maps => this.setMaps(maps));
     } else {
@@ -21,10 +22,22 @@ export default class Menu{
     }
 
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
-    this.nbrOfPlayers = 2;
+    this.nbrOfPlayersElement.innerText = this.nbrOfPlayers;
 
-    this.menu = document.querySelector('#menu');
-    this.menu.style.visibility = 'initial';
+    this.muteButton = document.querySelector('#muteButton');
+    if(storage.GetIsMuted()) {
+      this.muteButton.classList.add('selected');
+    }
+    this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
+
+    this.starsButton = document.querySelector('#starsButton');
+    if(storage.GetEnableStars()) {
+      this.starsButton.classList.add('selected');
+    }
+    this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
+
+    this.freeplayMenu = document.querySelector('#freeplayMenu');
+    this.freeplayMenu.style.visibility = 'initial';
 
     var createMapButton = document.querySelector('#createMapButton');
     this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -59,12 +72,13 @@ export default class Menu{
   }
 
   get nbrOfPlayers(){
-    return this.nbrOfPlayers_;
+    return storage.GetNbrOfPlayers();
   }
 
   set nbrOfPlayers(value){
-    this.nbrOfPlayers_ = Math.max(1, Math.min(value, 4));
-    this.nbrOfPlayersElement.innerText = this.nbrOfPlayers_;
+    var nbrOfPlayers = Math.max(1, Math.min(value, 4));
+    storage.SetNbrOfPlayers(nbrOfPlayers);
+    this.nbrOfPlayersElement.innerText = nbrOfPlayers;
   }
 
   get selectedMap() {
@@ -76,21 +90,28 @@ export default class Menu{
     this.selectedMapImage.setAttribute('src', this.selectedMap_.dataURL);
   }
 
-  getMapsFromLocalStorage(){
-    var maps = [];
-    for (var i = 0; i < localStorage.length; i++){
-      var key = localStorage.key(i);
-      if(key.indexOf('map') === 0){
-        maps.push(JSON.parse(localStorage.getItem(key)));
-      }
+  toggleIsMuted(){
+    var isMuted = audio.ToggleIsMuted();
+    if(isMuted) {
+      this.muteButton.classList.add('selected');
+    } else {
+      this.muteButton.classList.remove('selected');
     }
+  }
 
-    return maps;
+  toggleStarsVisibility() {
+    var newStarsVisibility = view.toggleStarsVisibility();
+    if(newStarsVisibility) {
+      this.starsButton.classList.add('selected');
+    } else {
+      this.starsButton.classList.remove('selected');
+    }
   }
 
   removeCurrentMap(){
-    if(this.selectedMap) localStorage.removeItem(this.selectedMap.key);
-    this.savedMaps = this.getMapsFromLocalStorage();
+    if(this.selectedMap) storage.RemoveMap(this.selectedMap);
+
+    this.savedMaps = storage.GetMaps();
     if(this.savedMaps.length > 0) this.selectedMap = this.savedMaps[0];
     this.clearMapsList();
     this.renderMapsList();
@@ -113,7 +134,7 @@ export default class Menu{
   }
 
   dispose(){
-    this.menu.style.visibility = '';
+    this.freeplayMenu.style.visibility = '';
     this.clearMapsList();
     this.clickListenerHandler.dispose();
   }

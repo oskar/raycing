@@ -1,5 +1,17 @@
+var storage = require('./storage');
+
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
+var masterGain = context.createGain();
+masterGain.connect(context.destination);
+masterGain.gain.value = storage.GetIsMuted() ? 0 : 0.5;
+
+export function ToggleIsMuted() {
+  var isMuted = !storage.GetIsMuted();
+  storage.SetIsMuted(isMuted);
+  masterGain.gain.value = isMuted ? 0 : 0.5;
+  return isMuted;
+}
 
 var click;
 loadArrayBuffer('sounds/click2.wav', context, buffer => click = buffer);
@@ -22,25 +34,27 @@ ambientSoundUrls.forEach(
   (url, index) => loadArrayBuffer(url, context,
     buffer => {
       ambientSounds.push(buffer);
-      if(index === 0) playAmbientSound();
+      if(index === 0) scheduleAmbientSound();
     }));
 
-function playAmbientSound(){
+function scheduleAmbientSound(){
+  var buffer = ambientSounds[Math.floor(Math.random() * ambientSounds.length)];
+  var duration = buffer.duration;
   var fadeTime = randomInt(5, 15);
   var silence = randomInt(5, 25);
+
   var gain = random(0.2, 0.5);
-  var buffer = ambientSounds[Math.floor(Math.random() * ambientSounds.length)];
   var sound = createSourceAndGain(buffer);
   var source = sound.source;
   var gainNode = sound.gainNode;
-  var duration = buffer.duration;
   var currTime = context.currentTime;
   gainNode.gain.linearRampToValueAtTime(0, currTime);
   gainNode.gain.linearRampToValueAtTime(gain, currTime + fadeTime);
   source.start(0);
   gainNode.gain.linearRampToValueAtTime(gain, currTime + duration - fadeTime);
   gainNode.gain.linearRampToValueAtTime(0, currTime + duration);
-  setTimeout(() => playAmbientSound(), (duration - fadeTime + silence) * 1000);
+
+  setTimeout(() => scheduleAmbientSound(), (duration - fadeTime + silence) * 1000);
 }
 
 function loadArrayBuffer(url, context, callback) {
@@ -55,12 +69,12 @@ function loadArrayBuffer(url, context, callback) {
 
 function createSourceAndGain(buffer){
   var gainNode = context.createGain();
-  gainNode.connect(context.destination);
+  gainNode.connect(masterGain);
 
   var source = context.createBufferSource();
   source.buffer = buffer;
   source.connect(gainNode);
-  source.connect(context.destination);
+  source.connect(masterGain);
   return { source, gainNode};
 }
 

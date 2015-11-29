@@ -1,0 +1,49 @@
+.mainMenu {
+  text-align: center;
+  padding-top: 23vw;
+  top: 0;
+  bottom: 0;
+}
+
+.titleText {
+  font-size: 10vw;
+  margin-bottom: 5vw;
+}
+
+.mainMenuButton {
+  font-size: 2vw;
+  display: flex;
+  align-items: center;
+}
+
+.mainMenuButton .icon{
+  display: inline;
+  opacity: 1;
+  fill: currentColor;
+}
+
+.mainMenuButton-puzzle{
+  position: absolute;
+  bottom: 5vw;
+  left: 30vw;
+}
+
+.mainMenuButton-puzzle .icon{
+  margin-right: 1vw;
+}
+
+.mainMenuButton-free{
+  position: absolute;
+  bottom: 5vw;
+  left: 54vw;
+}
+
+.mainMenuButton-free svg {
+  margin-right: 2.5vw;
+  transform: rotate(30deg);
+}
+
+.mainMenuButton svg{
+  width: 7vw;
+  height: 7vw;
+}

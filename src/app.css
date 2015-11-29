@@ -53,7 +53,8 @@ body:before{
   display: inline-block;
 }
 
-.button:after {
+.button:after,
+.button > * {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -91,4 +92,70 @@ body:before{
 .button.disabled {
   color: gray;
   border-color: gray;
+}
+
+
+
+.menuClickZone {
+  position: absolute;
+  width: 30vw;
+}
+
+.menuClickZone-topLeft{
+  top: -10px;
+  left: -10px;
+}
+
+.menuClickZone-topRight{
+  top: -10px;
+  right: -10px;
+  transform: rotate(0.25turn);
+}
+
+.menuClickZone-enabled .icon{
+  opacity: 1;
+}
+
+.menuBottom{
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  height: 70vw;
+}
+
+.menuBottomArea{
+  height: 100%;
+  width: 100%;
+}
+
+.menuElement{
+  position: absolute;
+  fill: rgba(0, 128, 128, 0.2);
+  stroke: white;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.icon{
+  opacity: 0.1;
+}
+
+.icon path{
+  vector-effect: non-scaling-stroke;
+  fill: white;
+}
+
+.icon-top{
+  position: absolute;
+  left: 3vw;
+  top: 3vw;
+  width: 6vw;
+}
+
+.svgMenu {
+  pointer-events: none;
+}
+
+.svgMenu svg > * {
+  pointer-events: auto;
 }
