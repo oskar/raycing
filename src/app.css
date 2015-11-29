@@ -95,19 +95,25 @@ body:before{
 }
 
 
-.topLeft{
+
+.menuClickZone {
   position: absolute;
-  top: -10px;
-  left: -10px;
   width: 30vw;
 }
 
-.topRight{
-  position: absolute;
+.menuClickZone-topLeft{
+  top: -10px;
+  left: -10px;
+}
+
+.menuClickZone-topRight{
   top: -10px;
   right: -10px;
-  width: 30vw;
   transform: rotate(0.25turn);
+}
+
+.menuClickZone-enabled .icon{
+  opacity: 0.8;
 }
 
 .bottomMiddle{
@@ -126,22 +132,17 @@ body:before{
 }
 
 .icon{
+  position: absolute;
+  width: 6vw;
+  opacity: 0.5;
+}
+
+.icon path{
   vector-effect: non-scaling-stroke;
   fill: white;
 }
 
-.topLeftIcon{
-  position: absolute;
-  width: 6vw;
-  opacity: 0.5;
-  left: 2vw;
-  top: 2vw;
-}
-
-.topRightIcon{
-  position: absolute;
-  width: 6vw;
-  opacity: 0.5;
-  right: 2vw;
-  top: 2vw;
+.icon-top{
+  left: 3vw;
+  top: 3vw;
 }
