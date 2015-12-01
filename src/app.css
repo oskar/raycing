@@ -97,11 +97,14 @@ body:before{
   border-color: gray;
 }
 
-
-
 .menuClickZone {
   position: absolute;
   width: 30vw;
+}
+
+.menuClickZone .icon {
+  opacity: 0.1;
+  color: white;
 }
 
 .menuClickZone-topLeft{
@@ -117,6 +120,11 @@ body:before{
 
 .menuClickZone-enabled .icon{
   opacity: 1;
+}
+
+.menuClickZone-enabled .icon:hover{
+  cursor: pointer;
+  color: gray;
 }
 
 .menuBottom{
@@ -139,13 +147,9 @@ body:before{
   vector-effect: non-scaling-stroke;
 }
 
-.icon{
-  opacity: 0.1;
-}
-
 .icon path{
   vector-effect: non-scaling-stroke;
-  fill: white;
+  fill: currentColor;
 }
 
 .icon-top{

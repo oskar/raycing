@@ -15,10 +15,14 @@
   align-items: center;
 }
 
+.mainMenuButton:hover {
+  cursor: pointer;
+  color: gray;
+}
+
 .mainMenuButton .icon{
   display: inline;
   opacity: 1;
-  fill: currentColor;
 }
 
 .mainMenuButton-puzzle{
