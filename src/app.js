@@ -57,6 +57,8 @@ function onDone(data){
 }
 
 function goBack(){
+  if(visitedViews.length < 2) return;
+
   currentView.dispose();
   view.reset();
   currentView = visitedViews.pop();
