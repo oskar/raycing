@@ -159,10 +159,10 @@ body:before{
   width: 6vw;
 }
 
-svgMenu {
+.svgMenu {
   pointer-events: none;
 }
 
-svgMenu svg > * {
+.svgMenu svg > * {
   pointer-events: auto;
 }

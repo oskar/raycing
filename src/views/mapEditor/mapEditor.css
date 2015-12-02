@@ -1,9 +1,7 @@
 #mapEditor {
-  visibility: hidden;
   position: absolute;
   margin: 1vw;
   border-radius: 3px;
-  display: inline-block;
   color: white;
   text-align: center;
   font-size: 1.2vw;
