@@ -8,11 +8,19 @@ var ClickListenerHandler = require('../clickListenerHandler');
 export default class FreeplayMenu{
   constructor(onDone, params){
     this.clickListenerHandler = new ClickListenerHandler();
+    this.onDone = onDone;
     this.selectedMapImage = document.querySelector('#selectedMapImage');
+    this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
+    this.muteButton = document.querySelector('#muteButton');
+    this.starsButton = document.querySelector('#starsButton');
+    this.freeplayMenu = document.querySelector('#freeplayMenu');
     this.maps = document.querySelector('#maps');
 
-    view.reset();
-    this.onDone = onDone;
+    this.show();
+  }
+
+  show(){
+    this.freeplayMenu.classList.remove('menu-hidden');
 
     var maps = storage.GetMaps();
     if(!maps.length) {
@@ -21,23 +29,17 @@ export default class FreeplayMenu{
       this.setMaps(maps);
     }
 
-    this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
     this.nbrOfPlayersElement.innerText = this.nbrOfPlayers;
 
-    this.muteButton = document.querySelector('#muteButton');
     if(storage.GetIsMuted()) {
       this.muteButton.classList.add('selected');
     }
     this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
 
-    this.starsButton = document.querySelector('#starsButton');
     if(storage.GetEnableStars()) {
       this.starsButton.classList.add('selected');
     }
     this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
-
-    this.freeplayMenu = document.querySelector('#freeplayMenu');
-    this.freeplayMenu.classList.remove('menu-hidden');
 
     var createMapButton = document.querySelector('#createMapButton');
     this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -63,6 +65,18 @@ export default class FreeplayMenu{
         }
       })
     });
+  }
+
+  dispose(){
+    this.freeplayMenu.classList.add('menu-hidden');
+    this.clearMapsList();
+    this.clickListenerHandler.dispose();
+  }
+
+  clearMapsList(){
+    while (this.maps.children.length > 1) {
+      this.maps.removeChild(this.maps.lastChild);
+    }
   }
 
   setMaps(maps) {
@@ -125,17 +139,5 @@ export default class FreeplayMenu{
       this.clickListenerHandler.add(img, () => this.selectedMap = map);
       this.maps.appendChild(img);
     });
-  }
-
-  clearMapsList(){
-    while (this.maps.children.length > 1) {
-      this.maps.removeChild(this.maps.lastChild);
-    }
-  }
-
-  dispose(){
-    this.freeplayMenu.classList.add('menu-hidden');
-    this.clearMapsList();
-    this.clickListenerHandler.dispose();
   }
 }
