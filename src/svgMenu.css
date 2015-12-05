@@ -1,0 +1,69 @@
+.menuClickZone {
+  position: absolute;
+  width: 30vw;
+}
+
+.menuClickZone .icon {
+  opacity: 0.1;
+  color: white;
+}
+
+.menuClickZone-topLeft{
+  top: -10px;
+  left: -10px;
+}
+
+.menuClickZone-topRight{
+  top: -10px;
+  right: -10px;
+  transform: rotate(0.25turn);
+}
+
+.menuClickZone-enabled .icon{
+  opacity: 1;
+}
+
+.menuClickZone-enabled .icon:hover{
+  cursor: pointer;
+  color: gray;
+}
+
+.menuBottom{
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  height: 70vw;
+}
+
+.menuBottomArea{
+  height: 100%;
+  width: 100%;
+}
+
+.menuElement{
+  position: absolute;
+  fill: rgba(0, 128, 128, 0.2);
+  stroke: white;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.icon path{
+  vector-effect: non-scaling-stroke;
+  fill: currentColor;
+}
+
+.icon-top{
+  position: absolute;
+  left: 3vw;
+  top: 3vw;
+  width: 6vw;
+}
+
+.svgMenu {
+  pointer-events: none;
+}
+
+.svgMenu svg > * {
+  pointer-events: auto;
+}

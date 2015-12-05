@@ -1,6 +1,5 @@
 require('./freeplayMenu.css');
 var view = require('../view');
-var audio = require('../../audio');
 var storage = require('../../storage');
 var prepop = require('../../prepop/mapPrepopulator');
 var ClickListenerHandler = require('../clickListenerHandler');
@@ -11,8 +10,6 @@ export default class FreeplayMenu{
     this.onDone = onDone;
     this.selectedMapImage = document.querySelector('#selectedMapImage');
     this.nbrOfPlayersElement = document.querySelector('#nbrOfPlayers');
-    this.muteButton = document.querySelector('#muteButton');
-    this.starsButton = document.querySelector('#starsButton');
     this.freeplayMenu = document.querySelector('#freeplayMenu');
     this.maps = document.querySelector('#maps');
 
@@ -30,16 +27,6 @@ export default class FreeplayMenu{
     }
 
     this.nbrOfPlayersElement.innerText = this.nbrOfPlayers;
-
-    if(storage.GetIsMuted()) {
-      this.muteButton.classList.add('selected');
-    }
-    this.clickListenerHandler.add(this.muteButton, () => this.toggleIsMuted());
-
-    if(storage.GetEnableStars()) {
-      this.starsButton.classList.add('selected');
-    }
-    this.clickListenerHandler.add(this.starsButton, () => this.toggleStarsVisibility());
 
     var createMapButton = document.querySelector('#createMapButton');
     this.clickListenerHandler.add(createMapButton, () => this.onDone({ view: 'Create map' }));
@@ -102,24 +89,6 @@ export default class FreeplayMenu{
   set selectedMap(value) {
     this.selectedMap_ = value;
     this.selectedMapImage.setAttribute('src', this.selectedMap_.dataURL);
-  }
-
-  toggleIsMuted(){
-    var isMuted = audio.ToggleIsMuted();
-    if(isMuted) {
-      this.muteButton.classList.add('selected');
-    } else {
-      this.muteButton.classList.remove('selected');
-    }
-  }
-
-  toggleStarsVisibility() {
-    var newStarsVisibility = view.toggleStarsVisibility();
-    if(newStarsVisibility) {
-      this.starsButton.classList.add('selected');
-    } else {
-      this.starsButton.classList.remove('selected');
-    }
   }
 
   removeCurrentMap(){

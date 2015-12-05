@@ -158,8 +158,6 @@
       <span id="nbrOfPlayers"></span>
       Players
       <span id="morePlayersButton" class="button plusButton">&nbsp;</span>
-      <span id="muteButton" class="button">Mute</span>
-      <span id="starsButton" class="button">Stars</span>
     </div>
     <div class="mapsMenu">
       <div id="maps">
@@ -204,8 +202,20 @@
       <span id="exitMapEditorButton" class="button">Back</span>
     </div>
   </div>
-  <div id="settingsMenu" class="menu-hidden">
-    Success
+  <div id="settingsMenu" class="settingsMenu menu-hidden">
+    <div>
+      <span id="muteButton" class="mainMenuButton mainMenuButton-mute">
+        <svg class="icon" viewbox="0 0 250 225">
+          <path d="M10 85 v50 l10 5 l50 25 l50 50 l5 -5 v-200 l-5 -5 l-50 50 l-50 25 -10 5"/>
+          <path class="soundOn" d="M140 92.5 a10 10 0 1 1 0 40 v10 a10 10 0 1 0 0 -60 v10 m0 -30 a10 10 0 1 1 0 100 v10 a10 10 0 1 0 0 -120 v10 "/>
+          <path class="soundOff" d=" M180 112.5 l-40 50 l10 10 l40 -50 l40 50 l10 -10 l-40 -50 l40 -50 l-10 -10 l-40 50 l-40 -50 l-10 10 l40 50 "/>
+        </svg>
+        <span>Sounds</span>
+      </span>
+    </div>
+    <div>
+      <span id="starsButton" class="button">Stars</span>
+    </div>
   </div>
 
   <script type="text/javascript" src="app.js" charset="utf-8"></script>

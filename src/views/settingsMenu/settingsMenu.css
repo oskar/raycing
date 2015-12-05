@@ -1,0 +1,25 @@
+.settingsMenu {
+  position: absolute;
+  text-align: center;
+  bottom: 1vw;
+  left: 30vw;
+  right: 30vw;
+  font-size: 2vw;
+  color: white;
+}
+
+.mainMenuButton-mute .icon {
+  margin-right: 1vw;
+}
+
+.mainMenuButton-mute .soundOff {
+  display: none;
+}
+
+.mainMenuButton-mute.selected .soundOff {
+  display: initial;
+}
+
+.mainMenuButton-mute.selected .soundOn {
+  display: none;
+}

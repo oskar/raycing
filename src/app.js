@@ -1,4 +1,5 @@
 require('./app.css');
+require('./svgMenu.css');
 
 var view = require('./views/view');
 var attachFastClick = require('fastclick');
