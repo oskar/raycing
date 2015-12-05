@@ -26,7 +26,8 @@ export default class GameGui{
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
-    this.game = new Game(params.map);
+    this.game = new Game(params.map, params.nrbOfPlayers);
+    this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
 
     var track = this.game.track;
     track.fillColor = 'purple';
@@ -79,7 +80,6 @@ export default class GameGui{
     this.players.forEach(p => this.foreGround.appendBottom(p.elements));
     this.mouseControls.onMouseDown = e => this.onMouseDown(e);
     this.game.startGame();
-    this.drawControls();
   }
 
   onMouseDown(event){
@@ -120,19 +120,17 @@ export default class GameGui{
 
   nextTurn(){
     this.game.nextTurn();
-    this.clearControls();
 
     if(this.game.gameOver()) {
       this.endGame('Everybody crashed, you all lost!');
     } else if(!this.game.currentPlayer.isAlive){
       this.nextTurn();
-    } else {
-      this.drawControls();
     }
   }
 
-  drawControls(){
-    var circles = this.game.vectorsForControls.map(controlObject => this.createControl(controlObject));
+  drawControls(controls){
+    this.clearControls();
+    var circles = controls.map(controlObject => this.createControl(controlObject));
     this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
       circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
     }));

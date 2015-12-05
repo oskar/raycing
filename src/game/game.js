@@ -1,15 +1,16 @@
 var Car = require('./car');
 var Paper = require('paper');
+var Bacon = require('baconjs');
 
 export default class Game{
-  constructor(map){
+  constructor(map, nbrOfPlayers){
+    this.vectorsForControlsStream = new Bacon.Bus();
     this.scale = 20;
     this.players = [];
     this.track = Paper.project.importJSON(map.track);
     this.start = Paper.project.importJSON(map.start);
     this.end = Paper.project.importJSON(map.end);
     this.currentPlayerIndex = 0;
-    this.vectorsForControls = [];
   }
 
   get currentPlayer(){
@@ -40,7 +41,7 @@ export default class Game{
       player.isAlive = false;
     }
 
-    this.vectorsForControls = vectorsForControls;
+    this.vectorsForControlsStream.push(vectorsForControls);
   }
 
   addPlayer(point, direction){
