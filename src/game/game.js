@@ -5,6 +5,7 @@ var Bacon = require('baconjs');
 export default class Game{
   constructor(map, nbrOfPlayers){
     this.vectorsForControlsStream = new Bacon.Bus();
+    this.gameEndedStream = new Bacon.Bus();
     this.scale = 20;
     this.players = [];
     this.track = Paper.project.importJSON(map.track);
@@ -39,9 +40,9 @@ export default class Game{
 
     if(vectorsForControls.length === 0) {
       player.isAlive = false;
+    } else {
+      this.vectorsForControlsStream.push(vectorsForControls);
     }
-
-    this.vectorsForControlsStream.push(vectorsForControls);
   }
 
   addPlayer(point, direction){
@@ -51,13 +52,25 @@ export default class Game{
   movePlayer(vector){
     this.currentPlayer.move(vector);
     var player = this.currentPlayer;
-    player.isInEndZone = this.isInZone(this.end, player.position);
+
+    if(this.isInZone(this.end, player.position)){
+      var moves = player.positions.length - 1;
+      this.gameEndedStream.push('Game over,  player ' + this.currentPlayerIndex + ' won in ' + moves + ' moves!');
+    } else {
+      this.nextTurn();
+    }
+
     return player;
   }
 
   nextTurn(){
     this.setNextPlayer();
     this.setVectorsForControls();
+    if(this.players.filter(p => p.isAlive).length === 0) {
+      this.gameEndedStream.push('Everybody crashed, you all lost!');
+    } else if(!this.currentPlayer.isAlive) {
+      this.nextTurn();
+    }
   }
 
   setNextPlayer(){
@@ -76,9 +89,5 @@ export default class Game{
 
   isInZone(zone, position){
     return zone.contains(position);
-  }
-
-  gameOver() {
-    return this.players.filter(p => p.isAlive).length === 0;
   }
 }

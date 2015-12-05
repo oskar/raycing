@@ -28,6 +28,7 @@ export default class GameGui{
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
+    this.game.gameEndedStream.onValue(endGameText => this.endGame(endGameText));
 
     var track = this.game.track;
     track.fillColor = 'purple';
@@ -110,22 +111,6 @@ export default class GameGui{
     var guiPlayer = this.players[this.game.currentPlayerIndex];
     var player = this.game.movePlayer(relativeVector);
     guiPlayer.addPosition(player.position);
-    if(player.isInEndZone){
-      var moves = player.positions.length - 1;
-      this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won in ' + moves + ' moves!');
-    } else {
-      this.nextTurn();
-    }
-  }
-
-  nextTurn(){
-    this.game.nextTurn();
-
-    if(this.game.gameOver()) {
-      this.endGame('Everybody crashed, you all lost!');
-    } else if(!this.game.currentPlayer.isAlive){
-      this.nextTurn();
-    }
   }
 
   drawControls(controls){
