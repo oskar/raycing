@@ -6,6 +6,7 @@ export default class Game{
   constructor(map, nbrOfPlayers){
     this.vectorsForControlsStream = new Bacon.Bus();
     this.gameEndedStream = new Bacon.Bus();
+    this.playerPositionStream = new Bacon.Bus();
     this.scale = 20;
     this.players = [];
     this.track = Paper.project.importJSON(map.track);
@@ -51,6 +52,7 @@ export default class Game{
 
   movePlayer(vector){
     this.currentPlayer.move(vector);
+    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: this.currentPlayer.position});
     var player = this.currentPlayer;
 
     if(this.isInZone(this.end, player.position)){
@@ -59,8 +61,6 @@ export default class Game{
     } else {
       this.nextTurn();
     }
-
-    return player;
   }
 
   nextTurn(){

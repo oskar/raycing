@@ -28,6 +28,7 @@ export default class GameGui{
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
+    this.game.playerPositionStream.onValue(playerAndPosition => this.addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
     this.game.gameEndedStream.onValue(endGameText => this.endGame(endGameText));
 
     var track = this.game.track;
@@ -69,12 +70,16 @@ export default class GameGui{
     var y = Math.round(event.point.y / 20) * 20;
     var point = new Paper.Point(x, y);
     if(this.game.start.contains(point)){
-      this.game.addPlayer(point, new Paper.Point(0, 0));
-      this.players.push(new Player(this.playerConfigs.pop(), point));
+      this.addPlayer(point);
       if(this.players.length === this.nbrOfPlayers){
         this.startGame();
       }
     }
+  }
+
+  addPlayer(point){
+    this.game.addPlayer(point, new Paper.Point(0, 0));
+    this.players.push(new Player(this.playerConfigs.pop(), point));
   }
 
   startGame(){
@@ -91,7 +96,7 @@ export default class GameGui{
     }
     var itemClicked = item.hitTest(event.point).item;
     if(itemClicked && itemClicked.movePlayerData){
-      this.movePlayer(itemClicked.movePlayerData);
+      this.game.movePlayer(itemClicked.movePlayerData);
     }
   }
 
@@ -107,27 +112,6 @@ export default class GameGui{
     }
   }
 
-  movePlayer(relativeVector){
-    var guiPlayer = this.players[this.game.currentPlayerIndex];
-    var player = this.game.movePlayer(relativeVector);
-    guiPlayer.addPosition(player.position);
-  }
-
-  drawControls(controls){
-    this.clearControls();
-    var circles = controls.map(controlObject => this.createControl(controlObject));
-    this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
-      circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
-    }));
-    circles.forEach(circle => this.controls.addChild(circle));
-    this.setViewToControls();
-  }
-
-  clearControls(){
-    this.controls.removeChildren();
-    this.controlAnimations.forEach(animation => animation.remove());
-  }
-
   setViewToStart() {
     view.setView(this.game.start.bounds.expand(200));
   }
@@ -141,11 +125,30 @@ export default class GameGui{
     view.setView(this.game.track.bounds);
   }
 
+  drawControls(controls){
+    this.clearControls();
+    var circles = controls.map(controlObject => this.createControl(controlObject));
+    this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
+      circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
+    }));
+    circles.forEach(circle => this.controls.addChild(circle));
+    this.setViewToControls();
+  }
+
   createControl(controlObject){
     var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
     circle.movePlayerData = controlObject.relative;
     circle.opacity = 0.5;
     return circle;
+  }
+
+  clearControls(){
+    this.controls.removeChildren();
+    this.controlAnimations.forEach(animation => animation.remove());
+  }
+
+  addPlayerPosition(playerIndex, position){
+    this.players[playerIndex].addPosition(position);
   }
 
   endGame(text){
