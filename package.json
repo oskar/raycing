@@ -44,8 +44,7 @@
     "which": "1.2.0"
   },
   "dependencies": {
-    "baconjs": "^0.7.82",
-    "debounce": "1.0.0",
+    "baconjs": "0.7.82",
     "fastclick": "1.0.6"
   }
 }
