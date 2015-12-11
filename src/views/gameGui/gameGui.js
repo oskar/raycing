@@ -3,6 +3,7 @@ var Paper = require('paper');
 var Player = require('./player');
 var Game = require('../../game/game');
 var view = require('../view');
+var menus = require('../menus');
 var animation = require('../animation');
 var audio = require('../../audio');
 var ClickListenerHandler = require('../clickListenerHandler');
@@ -58,6 +59,8 @@ export default class GameGui{
 
     this.clickListenerHandler = new ClickListenerHandler();
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
+
+    menus.hideBottom();
   }
 
   get currentPlayer(){
@@ -170,5 +173,6 @@ export default class GameGui{
     this.gameGui.classList.add('menu-hidden');
     this.endGameText.textContent = '';
     this.mouseControls.remove();
+    menus.showBottom();
   }
 }
