@@ -61,6 +61,7 @@ export default class GameGui{
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
 
     menus.hideBottom();
+    menus.smallClickzones();
   }
 
   get currentPlayer(){
@@ -174,5 +175,6 @@ export default class GameGui{
     this.endGameText.textContent = '';
     this.mouseControls.remove();
     menus.showBottom();
+    menus.bigClickzones();
   }
 }
