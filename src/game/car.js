@@ -1,12 +1,14 @@
+var Paper = require('paper');
+
 export default class Car {
-  constructor(startPosition, startDirection){
+  constructor(startPosition){
     this.positions = [startPosition];
-    this.direction = startDirection;
+    this.direction = new Paper.Point(0, 0);
     this.isAlive = true;
     this.isInEndZone = false;
   }
 
-  get position(){
+  get position() {
     return this.positions[this.positions.length - 1];
   }
 
