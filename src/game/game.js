@@ -57,7 +57,7 @@ export default class Game{
     var player = this.currentPlayer;
 
     if(this.isInZone(this.end, player.position)){
-      var moves = player.positions.length - 1;
+      var moves = player.moves;
       this.gameEndedStream.push({ winningPlayerIndex: this.currentPlayerIndex, moves: moves });
     } else {
       this.nextTurn();

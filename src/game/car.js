@@ -16,6 +16,10 @@ export default class Car {
     this.currentPositionIndex++;
   }
 
+  get moves() {
+    return this.positions.length - 1;
+  }
+
   move(vector) {
     this.position = this.position.clone().add(vector);
     this.direction = vector;
