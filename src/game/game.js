@@ -1,15 +1,18 @@
 var Car = require('./car');
 var Paper = require('paper');
+var Bacon = require('baconjs');
 
 export default class Game{
-  constructor(map){
+  constructor(map, nbrOfPlayers){
+    this.vectorsForControlsStream = new Bacon.Bus();
+    this.gameEndedStream = new Bacon.Bus();
+    this.playerPositionStream = new Bacon.Bus();
     this.scale = 20;
     this.players = [];
     this.track = Paper.project.importJSON(map.track);
     this.start = Paper.project.importJSON(map.start);
     this.end = Paper.project.importJSON(map.end);
     this.currentPlayerIndex = 0;
-    this.vectorsForControls = [];
   }
 
   get currentPlayer(){
@@ -38,9 +41,9 @@ export default class Game{
 
     if(vectorsForControls.length === 0) {
       player.isAlive = false;
+    } else {
+      this.vectorsForControlsStream.push(vectorsForControls);
     }
-
-    this.vectorsForControls = vectorsForControls;
   }
 
   addPlayer(point, direction){
@@ -49,14 +52,25 @@ export default class Game{
 
   movePlayer(vector){
     this.currentPlayer.move(vector);
+    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: this.currentPlayer.position});
     var player = this.currentPlayer;
-    player.isInEndZone = this.isInZone(this.end, player.position);
-    return player;
+
+    if(this.isInZone(this.end, player.position)){
+      var moves = player.positions.length - 1;
+      this.gameEndedStream.push({ winningPlayerIndex: this.currentPlayerIndex, moves: moves });
+    } else {
+      this.nextTurn();
+    }
   }
 
   nextTurn(){
     this.setNextPlayer();
     this.setVectorsForControls();
+    if(this.players.filter(p => p.isAlive).length === 0) {
+      this.gameEndedStream.push({ winningPlayerIndex: -1 });
+    } else if(!this.currentPlayer.isAlive) {
+      this.nextTurn();
+    }
   }
 
   setNextPlayer(){
@@ -75,9 +89,5 @@ export default class Game{
 
   isInZone(zone, position){
     return zone.contains(position);
-  }
-
-  gameOver() {
-    return this.players.filter(p => p.isAlive).length === 0;
   }
 }

@@ -26,7 +26,10 @@ export default class GameGui{
     this.mouseControls = new Paper.Tool();
     this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
-    this.game = new Game(params.map);
+    this.game = new Game(params.map, params.nrbOfPlayers);
+    this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
+    this.game.playerPositionStream.onValue(playerAndPosition => this.addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
+    this.game.gameEndedStream.onValue(endState => this.endGame(endState));
 
     var track = this.game.track;
     track.fillColor = 'purple';
@@ -67,19 +70,22 @@ export default class GameGui{
     var y = Math.round(event.point.y / 20) * 20;
     var point = new Paper.Point(x, y);
     if(this.game.start.contains(point)){
-      this.game.addPlayer(point, new Paper.Point(0, 0));
-      this.players.push(new Player(this.playerConfigs.pop(), point));
+      this.addPlayer(point);
       if(this.players.length === this.nbrOfPlayers){
         this.startGame();
       }
     }
   }
 
+  addPlayer(point){
+    this.game.addPlayer(point, new Paper.Point(0, 0));
+    this.players.push(new Player(this.playerConfigs.pop(), point));
+  }
+
   startGame(){
     this.players.forEach(p => this.foreGround.appendBottom(p.elements));
     this.mouseControls.onMouseDown = e => this.onMouseDown(e);
     this.game.startGame();
-    this.drawControls();
   }
 
   onMouseDown(event){
@@ -90,7 +96,7 @@ export default class GameGui{
     }
     var itemClicked = item.hitTest(event.point).item;
     if(itemClicked && itemClicked.movePlayerData){
-      this.movePlayer(itemClicked.movePlayerData);
+      this.game.movePlayer(itemClicked.movePlayerData);
     }
   }
 
@@ -106,45 +112,6 @@ export default class GameGui{
     }
   }
 
-  movePlayer(relativeVector){
-    var guiPlayer = this.players[this.game.currentPlayerIndex];
-    var player = this.game.movePlayer(relativeVector);
-    guiPlayer.addPosition(player.position);
-    if(player.isInEndZone){
-      var moves = player.positions.length - 1;
-      this.endGame('Game over, ' + guiPlayer.name.toLowerCase() + ' player won in ' + moves + ' moves!');
-    } else {
-      this.nextTurn();
-    }
-  }
-
-  nextTurn(){
-    this.game.nextTurn();
-    this.clearControls();
-
-    if(this.game.gameOver()) {
-      this.endGame('Everybody crashed, you all lost!');
-    } else if(!this.game.currentPlayer.isAlive){
-      this.nextTurn();
-    } else {
-      this.drawControls();
-    }
-  }
-
-  drawControls(){
-    var circles = this.game.vectorsForControls.map(controlObject => this.createControl(controlObject));
-    this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
-      circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
-    }));
-    circles.forEach(circle => this.controls.addChild(circle));
-    this.setViewToControls();
-  }
-
-  clearControls(){
-    this.controls.removeChildren();
-    this.controlAnimations.forEach(animation => animation.remove());
-  }
-
   setViewToStart() {
     view.setView(this.game.start.bounds.expand(200));
   }
@@ -158,6 +125,16 @@ export default class GameGui{
     view.setView(this.game.track.bounds);
   }
 
+  drawControls(controls){
+    this.clearControls();
+    var circles = controls.map(controlObject => this.createControl(controlObject));
+    this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
+      circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
+    }));
+    circles.forEach(circle => this.controls.addChild(circle));
+    this.setViewToControls();
+  }
+
   createControl(controlObject){
     var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
     circle.movePlayerData = controlObject.relative;
@@ -165,9 +142,29 @@ export default class GameGui{
     return circle;
   }
 
-  endGame(text){
+  clearControls(){
+    this.controls.removeChildren();
+    this.controlAnimations.forEach(animation => animation.remove());
+  }
+
+  addPlayerPosition(playerIndex, position){
+    this.players[playerIndex].addPosition(position);
+  }
+
+  endGame(endState){
     this.clearControls();
     this.gameGui.classList.remove('menu-hidden');
+
+    var text = '';
+
+    if(endState.winningPlayerIndex < 0) {
+      text = 'Everybody crashed, you all lost!';
+    }
+    else {
+      var winner = 'Player ' + (endState.winningPlayerIndex + 1);
+      text = 'Game over, ' + winner + ' won in ' + endState.moves + ' moves!';
+    }
+
     this.endGameText.textContent = text;
   }
 
