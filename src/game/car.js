@@ -10,16 +10,12 @@ export default class Car {
     return this.positions[this.positions.length - 1];
   }
 
-  set position(value){
-    this.positions.push(value);
-  }
-
   get moves() {
     return this.positions.length - 1;
   }
 
   move(vector) {
-    this.position = this.position.clone().add(vector);
+    this.positions.push(this.position.clone().add(vector));
     this.direction = vector;
   }
 }
