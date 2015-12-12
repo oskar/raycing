@@ -78,7 +78,7 @@ export default class GameGui{
   }
 
   addPlayer(point){
-    this.game.addPlayer(point, new Paper.Point(0, 0));
+    this.game.addPlayer(point);
     this.players.push(new Player(this.playerConfigs.pop(), point));
   }
 

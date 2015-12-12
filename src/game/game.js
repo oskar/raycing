@@ -46,7 +46,8 @@ export default class Game{
     }
   }
 
-  addPlayer(point, direction){
+  addPlayer(point){
+    var direction = new Paper.Point(0, 0);
     this.players.push(new Car(point, direction));
   }
 
