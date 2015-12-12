@@ -1,19 +1,17 @@
 export default class Car {
-  constructor(position, direction){
-    this.positions = [position];
-    this.currentPositionIndex = 0;
-    this.direction = direction;
+  constructor(startPosition, startDirection){
+    this.positions = [startPosition];
+    this.direction = startDirection;
     this.isAlive = true;
     this.isInEndZone = false;
   }
 
   get position(){
-    return this.positions[this.currentPositionIndex];
+    return this.positions[this.positions.length - 1];
   }
 
   set position(value){
     this.positions.push(value);
-    this.currentPositionIndex++;
   }
 
   get moves() {

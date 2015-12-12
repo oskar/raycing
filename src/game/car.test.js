@@ -26,23 +26,6 @@ describe('Car', function() {
     expect(car.moves).toEqual(0);
   });
 
-  it('has correct number of moves', function() {
-    // Arrange
-    var car = new Car(new Paper.Point(0, 0), new Paper.Point(0, 0));
-
-    // Act
-    car.move(new Paper.Point(1, 1));
-
-    // Assert
-    expect(car.moves).toEqual(1);
-
-    // Act
-    car.move(new Paper.Point(2, 2));
-
-    // Assert
-    expect(car.moves).toEqual(2);
-  });
-
   it('can move', function() {
     // Arrange
     var car = new Car(new Paper.Point(1, 1), new Paper.Point(0, 0));
@@ -53,5 +36,14 @@ describe('Car', function() {
     // Assert
     expect(car.position).toEqual(new Paper.Point(3, 3));
     expect(car.direction).toEqual(new Paper.Point(2, 2));
+    expect(car.moves).toEqual(1);
+
+    // Act
+    car.move(new Paper.Point(1, 1));
+
+    // Assert
+    expect(car.position).toEqual(new Paper.Point(4, 4));
+    expect(car.direction).toEqual(new Paper.Point(1, 1));
+    expect(car.moves).toEqual(2);
   });
 });
