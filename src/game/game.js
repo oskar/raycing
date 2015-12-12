@@ -57,7 +57,7 @@ export default class Game{
 
     if(this.isInZone(this.end, player.position)){
       var moves = player.positions.length - 1;
-      this.gameEndedStream.push('Game over,  player ' + this.currentPlayerIndex + ' won in ' + moves + ' moves!');
+      this.gameEndedStream.push({ winningPlayerIndex: this.currentPlayerIndex, moves: moves });
     } else {
       this.nextTurn();
     }
@@ -67,7 +67,7 @@ export default class Game{
     this.setNextPlayer();
     this.setVectorsForControls();
     if(this.players.filter(p => p.isAlive).length === 0) {
-      this.gameEndedStream.push('Everybody crashed, you all lost!');
+      this.gameEndedStream.push({ winningPlayerIndex: -1 });
     } else if(!this.currentPlayer.isAlive) {
       this.nextTurn();
     }

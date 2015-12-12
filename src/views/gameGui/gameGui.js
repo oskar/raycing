@@ -29,7 +29,7 @@ export default class GameGui{
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
     this.game.playerPositionStream.onValue(playerAndPosition => this.addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
-    this.game.gameEndedStream.onValue(endGameText => this.endGame(endGameText));
+    this.game.gameEndedStream.onValue(endState => this.endGame(endState));
 
     var track = this.game.track;
     track.fillColor = 'purple';
@@ -151,9 +151,20 @@ export default class GameGui{
     this.players[playerIndex].addPosition(position);
   }
 
-  endGame(text){
+  endGame(endState){
     this.clearControls();
     this.gameGui.classList.remove('menu-hidden');
+
+    var text = '';
+
+    if(endState.winningPlayerIndex < 0) {
+      text = 'Everybody crashed, you all lost!';
+    }
+    else {
+      var winner = 'Player ' + (endState.winningPlayerIndex + 1);
+      text = 'Game over, ' + winner + ' won in ' + endState.moves + ' moves!';
+    }
+
     this.endGameText.textContent = text;
   }
 
