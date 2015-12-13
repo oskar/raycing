@@ -45,9 +45,9 @@ export default class Game{
   }
 
   movePlayer(vector){
-    this.currentPlayer.move(vector);
-    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: this.currentPlayer.position});
     var player = this.currentPlayer;
+    player.move(vector);
+    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: player.position});
 
     if(this.isInZone(this.end, player.position)){
       var moves = player.moves;
