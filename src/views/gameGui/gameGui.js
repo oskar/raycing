@@ -66,9 +66,12 @@ export default class GameGui{
 
   addPlayerClickEvent(event){
     audio.playClick();
-    var x = Math.round(event.point.x / 20) * 20;
-    var y = Math.round(event.point.y / 20) * 20;
+    
+    var scale = this.game.scale;
+    var x = Math.round(event.point.x / scale) * scale;
+    var y = Math.round(event.point.y / scale) * scale;
     var point = new Paper.Point(x, y);
+
     if(this.game.start.contains(point)){
       this.addPlayer(point);
       if(this.players.length === this.nbrOfPlayers){
