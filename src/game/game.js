@@ -74,10 +74,10 @@ export default class Game{
     }
   }
 
-  isAllowedPosition(v) {
-    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length === 0);
+  isAllowedPosition(position) {
+    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(position).length === 0);
     var noOtherCars = carsOnThisPosition.length === 0;
-    var isOnTrack = this.track.contains(v);
+    var isOnTrack = this.track.contains(position);
     return noOtherCars && isOnTrack;
   }
 
