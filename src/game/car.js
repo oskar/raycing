@@ -4,13 +4,23 @@ export default class Car {
   constructor(scale, startPosition){
     this.scale = scale;
     this.positions = [startPosition];
-    this.direction = new Paper.Point(0, 0);
     this.isAlive = true;
     this.isInEndZone = false;
   }
 
   get position() {
     return this.positions[this.positions.length - 1];
+  }
+
+  get direction() {
+    if(this.positions.length < 2) {
+      return new Paper.Point(0, 0);
+    }
+
+    var currentPosition = this.positions[this.positions.length - 1];
+    var previousPosition = this.positions[this.positions.length - 2];
+    
+    return currentPosition.clone().subtract(previousPosition);
   }
 
   get moves() {
@@ -37,6 +47,5 @@ export default class Car {
 
   move(vector) {
     this.positions.push(this.position.clone().add(vector));
-    this.direction = vector;
   }
 }
