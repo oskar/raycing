@@ -19,7 +19,7 @@ export default class Car {
 
     var currentPosition = this.positions[this.positions.length - 1];
     var previousPosition = this.positions[this.positions.length - 2];
-    
+
     return currentPosition.clone().subtract(previousPosition);
   }
 
@@ -45,7 +45,7 @@ export default class Car {
     return possibleMoves;
   }
 
-  move(vector) {
-    this.positions.push(this.position.clone().add(vector));
+  move(position) {
+    this.positions.push(position);
   }
 }

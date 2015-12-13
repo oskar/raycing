@@ -44,9 +44,9 @@ export default class Game{
     this.players.push(new Car(this.scale, point));
   }
 
-  movePlayer(vector){
+  movePlayer(position){
     var player = this.currentPlayer;
-    player.move(vector);
+    player.move(position);
     this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: player.position});
 
     if(this.isInZone(this.end, player.position)){

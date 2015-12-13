@@ -66,7 +66,7 @@ export default class GameGui{
 
   addPlayerClickEvent(event){
     audio.playClick();
-    
+
     var scale = this.game.scale;
     var x = Math.round(event.point.x / scale) * scale;
     var y = Math.round(event.point.y / scale) * scale;
@@ -140,7 +140,7 @@ export default class GameGui{
 
   createControl(controlObject){
     var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
-    circle.movePlayerData = controlObject.relative;
+    circle.movePlayerData = controlObject.absolute;
     circle.opacity = 0.5;
     return circle;
   }

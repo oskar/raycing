@@ -31,7 +31,7 @@ describe('Car', function() {
     var car = new Car(1, new Paper.Point(1, 1));
 
     // Act
-    car.move(new Paper.Point(2, 2));
+    car.move(new Paper.Point(3, 3));
 
     // Assert
     expect(car.position).toEqual(new Paper.Point(3, 3));
@@ -39,7 +39,7 @@ describe('Car', function() {
     expect(car.moves).toEqual(1);
 
     // Act
-    car.move(new Paper.Point(1, 1));
+    car.move(new Paper.Point(4, 4));
 
     // Assert
     expect(car.position).toEqual(new Paper.Point(4, 4));
