@@ -80,6 +80,30 @@ export default class GameGui{
     }
   }
 
+  getAllowedStartPositions() {
+    var scale = this.game.scale;
+    var bounds = this.game.start.bounds;
+
+    var x_start = Math.ceil(bounds.left / scale) * scale;
+    var x_end = Math.floor(bounds.right / scale) * scale;
+
+    var y_start = Math.ceil(bounds.top / scale) * scale;
+    var y_end = Math.floor(bounds.bottom / scale) * scale;
+
+    var startingPoints = [];
+
+    for (var x = x_start; x <= x_end; x += scale) {
+      for (var y = y_start; y <= y_end; y += scale) {
+        var point = new Paper.Point(x, y);
+        if(this.game.start.contains(point)) {
+          startingPoints.push(point);
+        }
+      }
+    }
+
+    return startingPoints;
+  }
+
   addPlayer(point){
     this.game.addPlayer(point);
     this.players.push(new Player(this.playerConfigs.pop(), point));
