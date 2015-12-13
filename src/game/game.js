@@ -26,18 +26,12 @@ export default class Game{
   setVectorsForControls(){
     var player = this.currentPlayer;
     var vectorsForControls = [];
-    for(var y = 1; y >= -1; y--){
-      for(var x = -1; x <= 1; x++){
-        var playerRelativeVector = new Paper.Point(this.scale * x, this.scale * y).clone().add(player.direction);
-        var absoluteVector = playerRelativeVector.clone().add(player.position);
-        if(this.isPossiblePosition(absoluteVector)) {
-          vectorsForControls.push({
-            relative: playerRelativeVector,
-            absolute: absoluteVector
-          });
-        }
+
+    player.getPossibleMoves().forEach(move => {
+      if(this.isAllowedPosition(move.absolute)) {
+        vectorsForControls.push(move);
       }
-    }
+    });
 
     if(vectorsForControls.length === 0) {
       player.isAlive = false;
@@ -47,7 +41,7 @@ export default class Game{
   }
 
   addPlayer(point){
-    this.players.push(new Car(point));
+    this.players.push(new Car(this.scale, point));
   }
 
   movePlayer(vector){
@@ -80,7 +74,7 @@ export default class Game{
     }
   }
 
-  isPossiblePosition(v) {
+  isAllowedPosition(v) {
     var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length === 0);
     var noOtherCars = carsOnThisPosition.length === 0;
     var isOnTrack = this.track.contains(v);
