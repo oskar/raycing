@@ -35,10 +35,7 @@ export default class Car {
         var direction = new Paper.Point(this.scale * x, this.scale * y).add(this.direction);
         var position = direction.clone().add(this.position);
 
-        possibleMoves.push({
-          relative: direction,
-          absolute: position
-        });
+        possibleMoves.push(position);
       }
     }
 

@@ -25,18 +25,18 @@ export default class Game{
 
   setVectorsForControls(){
     var player = this.currentPlayer;
-    var vectorsForControls = [];
+    var allowedMoves = [];
 
     player.getPossibleMoves().forEach(move => {
-      if(this.isAllowedPosition(move.absolute)) {
-        vectorsForControls.push(move);
+      if(this.isAllowedPosition(move)) {
+        allowedMoves.push(move);
       }
     });
 
-    if(vectorsForControls.length === 0) {
+    if(allowedMoves.length === 0) {
       player.isAlive = false;
     } else {
-      this.vectorsForControlsStream.push(vectorsForControls);
+      this.vectorsForControlsStream.push(allowedMoves);
     }
   }
 
