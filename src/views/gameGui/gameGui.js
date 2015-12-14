@@ -133,7 +133,7 @@ export default class GameGui{
       bounds = bounds.include(this.game.currentPlayer.position);
     }
 
-    view.setView(playerBounds.expand(200));
+    view.setView(bounds.expand(200));
   }
 
   setViewToTrack(){
