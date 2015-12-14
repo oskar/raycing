@@ -24,7 +24,6 @@ export default class GameGui{
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
-    //this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
@@ -60,42 +59,16 @@ export default class GameGui{
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
 
     for (var i = 0; i < this.nbrOfPlayers; i++) {
-      this.game.addPlayer();
       this.players.push(new Player(this.playerConfigs.pop()));
     }
 
-    this.startGame();
+    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
+    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
+    this.game.startGame();
   }
 
   get currentPlayer(){
     return this.players[this.game.currentPlayerIndex];
-  }
-
-  addPlayerClickEvent(event){
-    audio.playClick();
-
-    var scale = this.game.scale;
-    var x = Math.round(event.point.x / scale) * scale;
-    var y = Math.round(event.point.y / scale) * scale;
-    var point = new Paper.Point(x, y);
-
-    if(this.game.start.contains(point)){
-      this.addPlayer(point);
-      if(this.players.length === this.nbrOfPlayers){
-        this.startGame();
-      }
-    }
-  }
-
-  addPlayer(point){
-    this.game.addPlayer(point);
-    this.players.push(new Player(this.playerConfigs.pop(), point));
-  }
-
-  startGame(){
-    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
-    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
-    this.game.startGame();
   }
 
   onMouseDown(event){

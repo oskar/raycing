@@ -13,6 +13,10 @@ export default class Game{
     this.start = Paper.project.importJSON(map.start);
     this.end = Paper.project.importJSON(map.end);
     this.currentPlayerIndex = 0;
+
+    for (var i = 0; i < nbrOfPlayers; i++) {
+      this.players.push(new Car(this.scale));
+    }
   }
 
   get currentPlayer(){
@@ -66,10 +70,6 @@ export default class Game{
     }
 
     return startingPoints;
-  }
-
-  addPlayer(point){
-    this.players.push(new Car(this.scale, point));
   }
 
   movePlayer(position){
