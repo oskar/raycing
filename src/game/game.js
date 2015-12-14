@@ -28,20 +28,15 @@ export default class Game{
     var vectorsForControls = [];
 
     if(player.position) {
-      console.log('Player has start position, calculating possible moves');
       player.getPossibleMoves().forEach(move => {
         if(this.isAllowedPosition(move)) {
           vectorsForControls.push(move);
         }
       });
     } else {
-      console.log('Player doesnt have start position, calculating possible start positions');
       this.getAllowedStartPositions().forEach(move => {
         vectorsForControls.push(move);
       });
-
-      console.log('Found ' + vectorsForControls.length + ' possible start positions');
-      console.log(vectorsForControls);
     }
 
     if(vectorsForControls.length === 0) {
