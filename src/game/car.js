@@ -1,15 +1,11 @@
 var Paper = require('paper');
 
 export default class Car {
-  constructor(scale, startPosition){
+  constructor(scale){
     this.scale = scale;
     this.positions = [];
     this.isAlive = true;
     this.isInEndZone = false;
-
-    if(startPosition) {
-      this.positions.push(startPosition);
-    }
   }
 
   get position() {
@@ -32,7 +28,7 @@ export default class Car {
   }
 
   get moves() {
-    return this.positions.length - 1;
+    return Math.max(this.positions.length - 1, 0);
   }
 
   getPossibleMoves() {
@@ -51,6 +47,18 @@ export default class Car {
   }
 
   move(position) {
+    if(!this.position) {
+      throw 'Cannot move, has no start position';
+    }
+
+    this.positions.push(position);
+  }
+
+  setStartPosition(position) {
+    if(this.position) {
+      throw 'Cannot set start position, already has position';
+    }
+
     this.positions.push(position);
   }
 }

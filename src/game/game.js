@@ -74,7 +74,13 @@ export default class Game{
 
   movePlayer(position){
     var player = this.currentPlayer;
-    player.move(position);
+    if(player.position) {
+      player.move(position);
+    }
+    else {
+      player.setStartPosition(position);
+    }
+
     this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: player.position});
 
     if(this.isInZone(this.end, player.position)){
