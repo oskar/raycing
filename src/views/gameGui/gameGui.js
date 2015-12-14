@@ -127,7 +127,12 @@ export default class GameGui{
   }
 
   setViewToControls(){
-    var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
+    var bounds = this.controls.bounds;
+
+    if(this.game.currentPlayer.position) {
+      bounds = bounds.include(this.game.currentPlayer.position);
+    }
+
     view.setView(playerBounds.expand(200));
   }
 
