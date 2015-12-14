@@ -28,17 +28,13 @@ export default class Game{
     var vectorsForControls = [];
 
     if(player.position) {
-      player.getPossibleMoves().forEach(move => {
-        if(this.isAllowedPosition(move)) {
-          vectorsForControls.push(move);
+      player.getPossibleMoves().forEach(position => {
+        if(!this.isPositionOccupied(position) && this.track.contains(position)) {
+          vectorsForControls.push(position);
         }
       });
     } else {
-      this.getAllowedStartPositions().forEach(move => {
-        if(!this.isPositionOccupied(move)) {
-          vectorsForControls.push(move);
-        }
-      });
+      vectorsForControls = this.getAllowedStartPositions();
     }
 
     if(vectorsForControls.length === 0) {
@@ -63,7 +59,7 @@ export default class Game{
     for (var x = x_start; x <= x_end; x += scale) {
       for (var y = y_start; y <= y_end; y += scale) {
         var point = new Paper.Point(x, y);
-        if(this.start.contains(point)) {
+        if(this.start.contains(point) && !this.isPositionOccupied(point)) {
           startingPoints.push(point);
         }
       }
@@ -104,12 +100,6 @@ export default class Game{
     if(this.currentPlayerIndex === this.players.length) {
       this.currentPlayerIndex = 0;
     }
-  }
-
-  isAllowedPosition(position) {
-    var positionOccupied = this.isPositionOccupied(position);
-    var isOnTrack = this.track.contains(position);
-    return !positionOccupied && isOnTrack;
   }
 
   isPositionOccupied(position) {
