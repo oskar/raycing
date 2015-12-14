@@ -135,9 +135,9 @@ export default class GameGui{
     view.setView(this.game.track.bounds);
   }
 
-  drawControls(controls){
+  drawControls(positions){
     this.clearControls();
-    var circles = controls.map(controlObject => this.createControl(controlObject));
+    var circles = positions.map(position => this.createControl(position));
     this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
       circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
     }));
@@ -145,9 +145,9 @@ export default class GameGui{
     this.setViewToControls();
   }
 
-  createControl(controlObject){
-    var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
-    circle.movePlayerData = controlObject.relative;
+  createControl(position){
+    var circle = this.currentPlayer.createPositionElement(position, this.currentPlayer.radius);
+    circle.movePlayerData = position;
     circle.opacity = 0.5;
     return circle;
   }

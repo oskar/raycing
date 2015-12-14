@@ -25,7 +25,7 @@ export default class Game{
 
   setVectorsForControls(){
     var player = this.currentPlayer;
-    var vectorsForControls = [];
+    var allowedMoves = [];
 
     if(player.position) {
       console.log('Player has start position, calculating possible moves');
@@ -44,10 +44,10 @@ export default class Game{
       console.log(vectorsForControls);
     }
 
-    if(vectorsForControls.length === 0) {
+    if(allowedMoves.length === 0) {
       player.isAlive = false;
     } else {
-      this.vectorsForControlsStream.push(vectorsForControls);
+      this.vectorsForControlsStream.push(allowedMoves);
     }
   }
 
@@ -79,9 +79,9 @@ export default class Game{
     this.players.push(new Car(this.scale, point));
   }
 
-  movePlayer(vector){
+  movePlayer(position){
     var player = this.currentPlayer;
-    player.move(vector);
+    player.move(position);
     this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: player.position});
 
     if(this.isInZone(this.end, player.position)){

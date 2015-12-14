@@ -20,6 +20,17 @@ export default class Car {
     return null;
   }
 
+  get direction() {
+    if(this.positions.length < 2) {
+      return new Paper.Point(0, 0);
+    }
+
+    var currentPosition = this.positions[this.positions.length - 1];
+    var previousPosition = this.positions[this.positions.length - 2];
+
+    return currentPosition.clone().subtract(previousPosition);
+  }
+
   get moves() {
     return this.positions.length - 1;
   }
@@ -32,18 +43,14 @@ export default class Car {
         var direction = new Paper.Point(this.scale * x, this.scale * y).add(this.direction);
         var position = direction.clone().add(this.position);
 
-        possibleMoves.push({
-          relative: direction,
-          absolute: position
-        });
+        possibleMoves.push(position);
       }
     }
 
     return possibleMoves;
   }
 
-  move(vector) {
-    this.positions.push(this.position.clone().add(vector));
-    this.direction = vector;
+  move(position) {
+    this.positions.push(position);
   }
 }
