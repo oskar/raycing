@@ -12,8 +12,6 @@ export default class Player{
     });
     this.circles = new Paper.Group();
     this.elements = new Paper.Group([this.path, this.circles]);
-
-    //this.addPosition(position);
   }
 
   addPosition(position){
