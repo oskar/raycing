@@ -35,7 +35,9 @@ export default class Game{
       });
     } else {
       this.getAllowedStartPositions().forEach(move => {
-        vectorsForControls.push(move);
+        if(!this.isPositionOccupied(move)) {
+          vectorsForControls.push(move);
+        }
       });
     }
 
@@ -105,10 +107,14 @@ export default class Game{
   }
 
   isAllowedPosition(position) {
-    var carsOnThisPosition = this.players.filter(p => p.position && p.position.clone().subtract(position).length === 0);
-    var noOtherCars = carsOnThisPosition.length === 0;
+    var positionOccupied = this.isPositionOccupied(position);
     var isOnTrack = this.track.contains(position);
-    return noOtherCars && isOnTrack;
+    return !positionOccupied && isOnTrack;
+  }
+
+  isPositionOccupied(position) {
+    var carsOnThisPosition = this.players.filter(p => p.position && p.position.clone().subtract(position).length === 0);
+    return carsOnThisPosition.length !== 0;
   }
 
   isInZone(zone, position){
