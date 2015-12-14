@@ -1,7 +1,7 @@
 var Paper = require('paper');
 
 export default class Player{
-  constructor(config, position){
+  constructor(config){
     this.color = config.color;
     this.name = config.name;
     this.radius = 5;
@@ -13,7 +13,7 @@ export default class Player{
     this.circles = new Paper.Group();
     this.elements = new Paper.Group([this.path, this.circles]);
 
-    this.addPosition(position);
+    //this.addPosition(position);
   }
 
   addPosition(position){

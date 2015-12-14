@@ -3,14 +3,21 @@ var Paper = require('paper');
 export default class Car {
   constructor(scale, startPosition){
     this.scale = scale;
-    this.positions = [startPosition];
-    this.direction = new Paper.Point(0, 0);
+    this.positions = [];
     this.isAlive = true;
     this.isInEndZone = false;
+
+    if(startPosition) {
+      this.positions.push(startPosition);
+    }
   }
 
   get position() {
-    return this.positions[this.positions.length - 1];
+    if(this.positions.length > 0) {
+      return this.positions[this.positions.length - 1];
+    }
+
+    return null;
   }
 
   get moves() {

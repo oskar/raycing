@@ -27,17 +27,52 @@ export default class Game{
     var player = this.currentPlayer;
     var vectorsForControls = [];
 
-    player.getPossibleMoves().forEach(move => {
-      if(this.isAllowedPosition(move.absolute)) {
+    if(player.position) {
+      console.log('Player has start position, calculating possible moves');
+      player.getPossibleMoves().forEach(move => {
+        if(this.isAllowedPosition(move)) {
+          vectorsForControls.push(move);
+        }
+      });
+    } else {
+      console.log('Player doesnt have start position, calculating possible start positions');
+      this.getAllowedStartPositions().forEach(move => {
         vectorsForControls.push(move);
-      }
-    });
+      });
+
+      console.log('Found ' + vectorsForControls.length + ' possible start positions');
+      console.log(vectorsForControls);
+    }
 
     if(vectorsForControls.length === 0) {
       player.isAlive = false;
     } else {
       this.vectorsForControlsStream.push(vectorsForControls);
     }
+  }
+
+  getAllowedStartPositions() {
+    var scale = this.scale;
+    var bounds = this.start.bounds;
+
+    var x_start = Math.ceil(bounds.left / scale) * scale;
+    var x_end = Math.floor(bounds.right / scale) * scale;
+
+    var y_start = Math.ceil(bounds.top / scale) * scale;
+    var y_end = Math.floor(bounds.bottom / scale) * scale;
+
+    var startingPoints = [];
+
+    for (var x = x_start; x <= x_end; x += scale) {
+      for (var y = y_start; y <= y_end; y += scale) {
+        var point = new Paper.Point(x, y);
+        if(this.start.contains(point)) {
+          startingPoints.push(point);
+        }
+      }
+    }
+
+    return startingPoints;
   }
 
   addPlayer(point){
@@ -75,7 +110,7 @@ export default class Game{
   }
 
   isAllowedPosition(position) {
-    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(position).length === 0);
+    var carsOnThisPosition = this.players.filter(p => p.position && p.position.clone().subtract(position).length === 0);
     var noOtherCars = carsOnThisPosition.length === 0;
     var isOnTrack = this.track.contains(position);
     return noOtherCars && isOnTrack;

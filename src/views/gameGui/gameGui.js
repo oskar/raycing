@@ -24,7 +24,7 @@ export default class GameGui{
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
-    this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
+    //this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
@@ -58,6 +58,13 @@ export default class GameGui{
 
     this.clickListenerHandler = new ClickListenerHandler();
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
+
+    for (var i = 0; i < this.nbrOfPlayers; i++) {
+      this.game.addPlayer();
+      this.players.push(new Player(this.playerConfigs.pop()));
+    }
+
+    this.startGame();
   }
 
   get currentPlayer(){
@@ -66,7 +73,7 @@ export default class GameGui{
 
   addPlayerClickEvent(event){
     audio.playClick();
-    
+
     var scale = this.game.scale;
     var x = Math.round(event.point.x / scale) * scale;
     var y = Math.round(event.point.y / scale) * scale;
@@ -78,30 +85,6 @@ export default class GameGui{
         this.startGame();
       }
     }
-  }
-
-  getAllowedStartPositions() {
-    var scale = this.game.scale;
-    var bounds = this.game.start.bounds;
-
-    var x_start = Math.ceil(bounds.left / scale) * scale;
-    var x_end = Math.floor(bounds.right / scale) * scale;
-
-    var y_start = Math.ceil(bounds.top / scale) * scale;
-    var y_end = Math.floor(bounds.bottom / scale) * scale;
-
-    var startingPoints = [];
-
-    for (var x = x_start; x <= x_end; x += scale) {
-      for (var y = y_start; y <= y_end; y += scale) {
-        var point = new Paper.Point(x, y);
-        if(this.game.start.contains(point)) {
-          startingPoints.push(point);
-        }
-      }
-    }
-
-    return startingPoints;
   }
 
   addPlayer(point){
