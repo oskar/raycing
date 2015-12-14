@@ -25,7 +25,7 @@ export default class Game{
 
   setVectorsForControls(){
     var player = this.currentPlayer;
-    var allowedMoves = [];
+    var vectorsForControls = [];
 
     if(player.position) {
       console.log('Player has start position, calculating possible moves');
@@ -44,10 +44,10 @@ export default class Game{
       console.log(vectorsForControls);
     }
 
-    if(allowedMoves.length === 0) {
+    if(vectorsForControls.length === 0) {
       player.isAlive = false;
     } else {
-      this.vectorsForControlsStream.push(allowedMoves);
+      this.vectorsForControlsStream.push(vectorsForControls);
     }
   }
 
