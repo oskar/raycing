@@ -1,12 +1,11 @@
 .mainMenu {
   text-align: center;
-  top: 23vw;
+  top: 17vw;
   bottom: 0;
 }
 
 .titleText {
   font-size: 10vw;
-  margin-bottom: 5vw;
 }
 
 .mainMenuButton {
