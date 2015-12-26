@@ -13,7 +13,7 @@
     <slot name="menuBottom"></slot>
   </div>
 
-  <div class="svgMenu menuClickZone menuClickZone-topLeft">
+  <div v-on:click="back" class="svgMenu menuClickZone menuClickZone-topLeft">
     <svg viewbox="0 0 400 400">
       <path class="menuElement" d="
         M0 0
@@ -40,7 +40,7 @@
   </div>
 
   <div class="svgMenu menuClickZone menuClickZone-topRight">
-    <svg viewbox="0 0 400 400">
+    <svg v-link="{ path: '/settings' }" viewbox="0 0 400 400">
       <path class="menuElement" d="
         M0 0
         L300 0
@@ -59,9 +59,8 @@
 
 <script lang="babel">
   export default {
-    data() {
-      return {
-      }
+    methods: {
+      back: () => window.history.back()
     }
   }
 </script>

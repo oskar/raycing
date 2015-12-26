@@ -2,7 +2,7 @@
   <div class="titleText">Raycing</div>
   <svg-menu>
     <div class="mainMenuBottom" slot="menuBottom">
-      <span class="mainMenuButton mainMenuButton-puzzle">
+      <span v-link="{ path: '/puzzle' }" class="mainMenuButton mainMenuButton-puzzle">
         <svg class="icon" viewbox="0 0 450 450">
           <path
                 d="
@@ -40,7 +40,7 @@
         <span>Puzzle<br>mode</span>
       </span>
 
-      <span class="mainMenuButton mainMenuButton-free">
+      <span v-link="{ path: '/free' }" class="mainMenuButton mainMenuButton-free">
         <svg class="icon" viewbox="0 0 112 400">
           <path d="
                    M15 1
@@ -89,11 +89,9 @@
 </template>
 
 <script lang="babel">
-  var svgMenu = require('./svgMenu.vue');
-
   export default {
     components: {
-      svgMenu
+      svgMenu: require('./svgMenu.vue')
     }
   }
 </script>
