@@ -153,7 +153,7 @@
     pointer-events: none;
   }
 
-  .svgMenu svg > * {
+  .svgMenu > * {
     pointer-events: auto;
   }
 </style>
