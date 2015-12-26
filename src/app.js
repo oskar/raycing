@@ -17,6 +17,7 @@ router.map({
   '/': { component: require('./vues/main.vue') },
   '/free': { component: require('./vues/free.vue') },
   '/puzzle': { component: require('./vues/free.vue') },
+  '/editor': { component: require('./vues/editor.vue') },
 });
 
 router.start(App, 'body');
