@@ -27,8 +27,17 @@ module.exports = {
               test: /\.jsx?$/,
               exclude: /(node_modules|bower_components)/,
               loader: 'babel'
+            },
+            {
+              test: /\.vue$/,
+              loader: 'vue'
             }
         ]
+    },
+    vue: {
+      loaders: {
+        js: 'babel!eslint'
+      }
     },
     postcss: function () {
         return [autoprefixer, precss];
