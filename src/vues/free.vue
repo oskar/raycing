@@ -3,7 +3,7 @@
     <svg-menu :big-menu="true">
       <div class="freeMenuBottom" slot="menuBottom">
         <div>
-          Number of players
+          Number of players (1-{{maxPlayerCount}})
         </div>
         <div class="nbrOfPlayers">
           <span v-on:click="decrementPlayerCount" class="freeButton">-</span>
@@ -18,13 +18,10 @@
 </template>
 
 <script lang="babel">
-  function normalizePlayerCount(playerCount) {
-    var maxPlayerCount = 4;
-    return Math.max(1, Math.min(playerCount, maxPlayerCount));
-  }
   export default {
     data() {
       return {
+        maxPlayerCount: 4,
         playerCount: 1
       }
     },
@@ -33,10 +30,13 @@
     },
     methods: {
       decrementPlayerCount(){
-        this.playerCount = normalizePlayerCount(this.playerCount - 1);
+        this.playerCount = this.normalizePlayerCount(this.playerCount - 1);
       },
       incrementPlayerCount(){
-        this.playerCount = normalizePlayerCount(this.playerCount + 1);
+        this.playerCount = this.normalizePlayerCount(this.playerCount + 1);
+      },
+      normalizePlayerCount(playerCount) {
+        return Math.max(1, Math.min(playerCount, this.maxPlayerCount));
       }
     }
   }

@@ -14,9 +14,9 @@ var App = Vue.extend({});
 var router = new VueRouter();
 
 router.map({
-  '/': { component: require('./views/main.vue') },
-  '/free': { component: require('./views/free.vue') },
-  '/puzzle': { component: require('./views/free.vue') },
+  '/': { component: require('./vues/main.vue') },
+  '/free': { component: require('./vues/free.vue') },
+  '/puzzle': { component: require('./vues/free.vue') },
 });
 
 router.start(App, 'body');
