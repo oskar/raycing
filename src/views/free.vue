@@ -1,10 +1,11 @@
 <template>
-  <div class="titleText">Raycing</div>
-  <svg-menu>
-    <div slot="menuBottom">
-      Success
-    </div>
-  </svg-menu>
+  <div>
+    <svg-menu :big-menu="true">
+      <div slot="menuBottom">
+        Success
+      </div>
+    </svg-menu>
+  </div>
 </template>
 
 <script lang="babel">
