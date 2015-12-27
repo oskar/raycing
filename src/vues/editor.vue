@@ -17,32 +17,91 @@
 </template>
 
 <script lang="babel">
+  var Paper = require('paper');
+  var view = require('./services/view.js');
+  var audio = require('./services/audio.js');
+
+  var isAdding = true;
+  var brushsize = 40;
+
+  var track = new Paper.Path();
+  var start = new Paper.Path();
+  var end = new Paper.Path();
+  var tools = [
+    {
+      name: 'track',
+      color: 'purple',
+      path: track,
+      element: document.querySelector('#createTrackButton'),
+      init: newCircle => newCircle
+    },
+    {
+      name: 'start',
+      color: 'green',
+      path: start,
+      element: document.querySelector('#createStartButton'),
+      init: newCircle => getTool('track').path.intersect(newCircle)
+    },
+    {
+      name: 'end',
+      color: 'yellow',
+      path: end,
+      element: document.querySelector('#createEndButton'),
+      init: newCircle => getTool('track').path.intersect(newCircle)
+    }
+  ];
+  var selectedTool = getTool('track');
+  tools.forEach(tool => tool.path.fillColor = tool.color);
+
+  var course = new Paper.Group(track, start, end);
+  view.addCourse(course);
+
+  var mouseControls = new Paper.Tool();
+  mouseControls.onMouseDown = event => {
+    audio.playClick();
+    if(selectedTool.path.area < 50){
+      removePath(selectedTool.path);
+      var path = new Paper.Path.Circle(event.point, brushsize);
+      path.fillColor = selectedTool.color;
+      path.simplify();
+      selectedTool.path = path;
+      course.addChild(selectedTool.path);
+    }
+    isAdding = selectedTool.path.contains(event.point);
+    setButtonStates();
+  }
+  mouseControls.onMouseDrag = event => {
+    var editCircle = new Paper.Path.Circle(event.point, brushsize);
+
+    var newPath = isAdding ? selectedTool.path.unite(editCircle) : selectedTool.path.subtract(editCircle);
+    removePath(editCircle);
+    removePath(selectedTool.path);
+    newPath.fillColor = selectedTool.color;
+    selectedTool.path = newPath;
+    setButtonStates();
+  };
+
+  function getTool(name){
+    return tools.filter(tool => tool.name === name)[0]
+  }
+
+  function removePath(path){
+    path.remove();
+    if(path.removeSegments){
+      path.removeSegments();
+    } else {
+      path.children.forEach(c => c.removeSegments());
+      path.removeChildren();
+    };
+  }
+
+  function setButtonStates(){
+
+  }
+
   export default {
     data() {
       return {
-        tools: [
-          {
-            name: 'track',
-            color: 'purple',
-            path: this.track,
-            element: document.querySelector('#createTrackButton'),
-            init: newCircle => newCircle
-          },
-          {
-            name: 'start',
-            color: 'green',
-            path: this.start,
-            element: document.querySelector('#createStartButton'),
-            init: newCircle => this.getTool('track').path.intersect(newCircle)
-          },
-          {
-            name: 'end',
-            color: 'yellow',
-            path: this.end,
-            element: document.querySelector('#createEndButton'),
-            init: newCircle => this.getTool('track').path.intersect(newCircle)
-          }
-        ]
       }
     },
     components: {

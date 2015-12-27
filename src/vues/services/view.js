@@ -1,3 +1,5 @@
+require('./view.css');
+
 var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
