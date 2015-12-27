@@ -7,9 +7,11 @@
           <span class="cursor-pointer">+</span>
         </div>
         <div class="mapEditorSteps">
-          <span class="cursor-pointer purple currentTool">Track</span>
-          <span class="cursor-pointer green">Startzone</span>
-          <span class="cursor-pointer yellow">Endzone</span>
+          <span
+            v-for="tool in model.tools" class="cursor-pointer"
+            :class="{ 'currentTool' : tool === model.selectedTool }"
+            :style="{ color: tool.color }"
+            v-on:click="selectTool(tool)">{{tool.name}}</span>
           <span class="cursor-pointer">Save map</span>
         </div>
       </div>
@@ -24,61 +26,43 @@
   var isAdding = true;
   var brushsize = 40;
 
-  var track = new Paper.Path();
-  var start = new Paper.Path();
-  var end = new Paper.Path();
   var tools = [
-    {
-      name: 'track',
-      color: 'purple',
-      path: track,
-      element: document.querySelector('#createTrackButton'),
-      init: newCircle => newCircle
-    },
-    {
-      name: 'start',
-      color: 'green',
-      path: start,
-      element: document.querySelector('#createStartButton'),
-      init: newCircle => getTool('track').path.intersect(newCircle)
-    },
-    {
-      name: 'end',
-      color: 'yellow',
-      path: end,
-      element: document.querySelector('#createEndButton'),
-      init: newCircle => getTool('track').path.intersect(newCircle)
-    }
+    { name: 'Track', color: 'purple', path: new Paper.Path() },
+    { name: 'Startzone', color: 'green', path: new Paper.Path() },
+    { name: 'Endzone', color: 'yellow', path: new Paper.Path() }
   ];
-  var selectedTool = getTool('track');
-  tools.forEach(tool => tool.path.fillColor = tool.color);
 
-  var course = new Paper.Group(track, start, end);
+  var model = {
+    selectedTool: getTool('Track'),
+    tools
+  };
+
+  var course = new Paper.Group(...tools.map(t => t.path));
   view.addCourse(course);
 
   var mouseControls = new Paper.Tool();
   mouseControls.onMouseDown = event => {
     audio.playClick();
-    if(selectedTool.path.area < 50){
-      removePath(selectedTool.path);
+    if(model.selectedTool.path.area < 50){
+      removePath(model.selectedTool.path);
       var path = new Paper.Path.Circle(event.point, brushsize);
-      path.fillColor = selectedTool.color;
+      path.fillColor = model.selectedTool.color;
       path.simplify();
-      selectedTool.path = path;
-      course.addChild(selectedTool.path);
+      model.selectedTool.path = path;
+      course.addChild(model.selectedTool.path);
     }
-    isAdding = selectedTool.path.contains(event.point);
-    setButtonStates();
-  }
+    isAdding = model.selectedTool.path.contains(event.point);
+  };
+
   mouseControls.onMouseDrag = event => {
+    console.log(model.selectedTool, model.selectedTool.color);
     var editCircle = new Paper.Path.Circle(event.point, brushsize);
 
-    var newPath = isAdding ? selectedTool.path.unite(editCircle) : selectedTool.path.subtract(editCircle);
+    var newPath = isAdding ? model.selectedTool.path.unite(editCircle) : model.selectedTool.path.subtract(editCircle);
     removePath(editCircle);
-    removePath(selectedTool.path);
-    newPath.fillColor = selectedTool.color;
-    selectedTool.path = newPath;
-    setButtonStates();
+    removePath(model.selectedTool.path);
+    newPath.fillColor = model.selectedTool.color;
+    model.selectedTool.path = newPath;
   };
 
   function getTool(name){
@@ -95,19 +79,17 @@
     };
   }
 
-  function setButtonStates(){
-
-  }
-
   export default {
     data() {
-      return {
-      }
+      return { model }
     },
     components: {
       svgMenu: require('./svgMenu.vue')
     },
     methods: {
+      selectTool(tool){
+        this.model.selectedTool = tool;
+      }
     }
   }
 </script>
@@ -121,23 +103,15 @@
     margin-top: 2vh;
   }
 
-  .text-medium{
+  .text-medium {
     font-size: 2vw;
-  }
-
-  .purple {
-    color: purple;
-  }
-
-  .green {
-    color: green;
-  }
-
-  .yellow {
-    color: yellow;
   }
 
   .currentTool {
     text-decoration: underline;
+  }
+
+  .mapEditorSteps > * + * {
+    margin-left: 1vw;
   }
 </style>
