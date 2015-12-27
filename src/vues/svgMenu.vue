@@ -68,7 +68,7 @@
       },
       back() {
         if(this.backIsEnabled()) {
-          window.history.back();
+          history.back();
         }
       }
     }

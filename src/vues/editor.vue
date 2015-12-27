@@ -12,7 +12,7 @@
             :class="{ 'currentTool' : tool === model.selectedTool }"
             :style="{ color: tool.color }"
             v-on:click="selectTool(tool)">{{tool.name}}</span>
-          <span class="cursor-pointer">Save map</span>
+          <span v-on:click="done()" class="cursor-pointer">Save map</span>
         </div>
       </div>
     </svg-menu>
@@ -22,14 +22,16 @@
   var Paper = require('paper');
   var view = require('./services/view.js');
   var audio = require('./services/audio.js');
+  var storage = require('./services/storage.js');
 
-  var isAdding = true;
-  var brushsize = 40;
+  var isAdding;
+  var brushsize;
+  var course;
 
   var tools = [
-    { name: 'Track', color: 'purple', path: new Paper.Path() },
-    { name: 'Startzone', color: 'green', path: new Paper.Path() },
-    { name: 'Endzone', color: 'yellow', path: new Paper.Path() }
+    { name: 'Track', color: 'purple', path: null },
+    { name: 'Startzone', color: 'green', path: null },
+    { name: 'Endzone', color: 'yellow', path: null }
   ];
 
   var model = {
@@ -37,8 +39,15 @@
     tools
   };
 
-  var course = new Paper.Group(...tools.map(t => t.path));
-  view.addCourse(course);
+  function created(){
+    isAdding = true;
+    brushsize = 40;
+    model.selectTool = getTool('Track');
+    tools.forEach(t => t.path = new Paper.Path());
+
+    course = new Paper.Group(...tools.map(t => t.path));
+    view.addCourse(course);
+  }
 
   var mouseControls = new Paper.Tool();
   mouseControls.onMouseDown = event => {
@@ -79,18 +88,39 @@
     };
   }
 
+  function selectTool(tool){
+    model.selectedTool = tool;
+  }
+
+  function done(){
+    var track = getTool('Track');
+    tools
+      .filter(tool => tool.name != 'Track')
+      .forEach(tool => {
+        var newPath = track.path.unite(tool.path);
+        track.path.remove();
+        track.path = newPath;
+      });
+    var map = {};
+    tools.forEach(tool => map[tool.name] = tool.path.toJSON());
+
+    var key = key ? key : 'map-' + (new Date()).toISOString();
+    storage.AddMap({ map, key });
+
+    course.remove();
+    mouseControls.remove();
+    history.back();
+  }
+
   export default {
+    created,
     data() {
       return { model }
     },
     components: {
       svgMenu: require('./svgMenu.vue')
     },
-    methods: {
-      selectTool(tool){
-        this.model.selectedTool = tool;
-      }
-    }
+    methods: { selectTool, done }
   }
 </script>
 
