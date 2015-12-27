@@ -7,9 +7,7 @@
         </div>
         <div class="text-large">
           <span v-on:click="decrementPlayerCount" class="cursor-pointer">-</span>
-          <span>
-            {{playerCount}}
-          </span>
+          <span>{{playerCount}}</span>
           <span v-on:click="incrementPlayerCount" class="cursor-pointer">+</span>
         </div>
         <span v-link="'/editor'" class="text-large cursor-pointer">Create new map</span>
@@ -57,7 +55,7 @@
   }
 
   .freeMenuBottom {
-    margin-top: 2vh;
+    padding-top: 2vh;
   }
 
   .nbrOfPlayers > * + * {

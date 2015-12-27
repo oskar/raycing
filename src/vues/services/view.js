@@ -2,7 +2,7 @@ var Paper = require('paper');
 var changeCenter = require('./utils').changeCenter;
 var changeZoom = require('./utils').changeZoom;
 var animation = require('./animation');
-var storage = require('../storage');
+var storage = require('./storage');
 
 var canvas = document.getElementById('canvas');
 canvas.setAttribute('keepalive', true);

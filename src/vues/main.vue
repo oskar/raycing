@@ -97,19 +97,10 @@
 </script>
 
 <style>
-  * {
-    font-family: monospace;
-  }
-
-  body {
-    overflow: hidden;
-  }
-
   .titleText {
     position: absolute;
     top: 30%;
     width: 100%;
-    color: white;
     text-align: center;
     font-size: 10vh;
   }

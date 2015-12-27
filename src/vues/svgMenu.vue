@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="svgMenu menuBottom" v-bind:class="{ 'menuBottom-big': bigMenu }">
+    <div class="svgMenu menuBottom" v-bind:class="{ 'menuBottom-big': bigMenu, 'menuBottom-small': smallMenu }">
       <svg viewbox="0 0 400 400">
         <path class="menuElement" d="
           M0 800
@@ -14,7 +14,7 @@
       <slot name="menuBottom"></slot>
     </div>
 
-    <div v-on:click="back" v-bind:class="{ 'menuClickZone-enabled': backIsEnabled() }" class="svgMenu menuClickZone menuClickZone-topLeft">
+    <div v-on:click="back" v-bind:class="{ 'menuClickZone-enabled': backIsEnabled(), 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topLeft">
       <svg viewbox="0 0 400 400">
         <path class="menuElement" d="
           M0 0
@@ -40,7 +40,7 @@
       </svg>
     </div>
 
-    <div class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
+    <div v-bind:class="{ 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
       <svg v-link="{ path: '/settings' }" viewbox="0 0 400 400">
         <path class="menuElement" d="
           M0 0
@@ -61,7 +61,7 @@
 
 <script lang="babel">
   export default {
-    props: ['bigMenu', 'smallButtons'],
+    props: ['smallMenu', 'bigMenu', 'smallButtons'],
     methods: {
       backIsEnabled() {
         return this.$route.path !== '/'
@@ -120,6 +120,10 @@
 
   .menuBottom-big {
     top: 20vh;
+  }
+
+  .menuBottom-small {
+    top: 85vh;
   }
 
   .menuBottom > * {

@@ -1,3 +1,5 @@
+require('./vues/services/view.js');
+
 var Vue = require('vue');
 Vue.config.debug = true;
 var VueRouter = require('vue-router');
