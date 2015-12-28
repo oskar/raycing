@@ -24,7 +24,7 @@ export default class GameGui{
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
-    this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
+    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
@@ -43,8 +43,6 @@ export default class GameGui{
     this.course.addChild(endArea);
     view.addCourse(this.course);
 
-    this.setViewToStart();
-
     this.mousewheelListener = document.addEventListener('mousewheel', event => {
       if(event.wheelDelta === 0) return;
       this.mousewheel(event.wheelDelta < 0);
@@ -58,37 +56,17 @@ export default class GameGui{
 
     this.clickListenerHandler = new ClickListenerHandler();
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
+
+    for (var i = 0; i < this.nbrOfPlayers; i++) {
+      this.players.push(new Player(this.playerConfigs.pop()));
+    }
+
+    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
+    this.game.startGame();
   }
 
   get currentPlayer(){
     return this.players[this.game.currentPlayerIndex];
-  }
-
-  addPlayerClickEvent(event){
-    audio.playClick();
-
-    var scale = this.game.scale;
-    var x = Math.round(event.point.x / scale) * scale;
-    var y = Math.round(event.point.y / scale) * scale;
-    var point = new Paper.Point(x, y);
-
-    if(this.game.start.contains(point)){
-      this.addPlayer(point);
-      if(this.players.length === this.nbrOfPlayers){
-        this.startGame();
-      }
-    }
-  }
-
-  addPlayer(point){
-    this.game.addPlayer(point);
-    this.players.push(new Player(this.playerConfigs.pop(), point));
-  }
-
-  startGame(){
-    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
-    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
-    this.game.startGame();
   }
 
   onMouseDown(event){
@@ -107,21 +85,18 @@ export default class GameGui{
     if(shouldZoomOut) {
       this.setViewToTrack();
     } else {
-      if(!this.game.currentPlayer) {
-        this.setViewToStart();
-      } else {
-        this.setViewToControls();
-      }
+      this.setViewToControls();
     }
   }
 
-  setViewToStart() {
-    view.setView(this.game.start.bounds.expand(200));
-  }
-
   setViewToControls(){
-    var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
-    view.setView(playerBounds.expand(200));
+    var bounds = this.controls.bounds;
+
+    if(this.game.currentPlayer.position) {
+      bounds = bounds.include(this.game.currentPlayer.position);
+    }
+
+    view.setView(bounds.expand(200));
   }
 
   setViewToTrack(){
