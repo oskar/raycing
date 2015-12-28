@@ -16,10 +16,13 @@
           <div
             v-for="map in maps"
             class="cursor-pointer text-medium"
-            :class="{ 'selectedMap' : map.map === selectedMap }"
-            v-on:click="selectMap(map.map)">
+            :class="{ 'selectedMap' : map === selectedMap }"
+            v-on:click="selectMap(map)">
             {{map.key}}
           </div>
+        </div>
+        <div>
+          <span v-on:click="deleteMap()" class="text-medium cursor-pointer">Delete map</span>
         </div>
         <div>
           <span v-link="'/editor'" class="text-large cursor-pointer">Create new map</span>
@@ -64,12 +67,19 @@
       selectMap(map){
         this.selectedMap = map;
         if(this.course) this.course.remove();
-        var track = Paper.project.importJSON(map.Track);
-        var start = Paper.project.importJSON(map.Startzone);
-        var end = Paper.project.importJSON(map.Endzone);
+        var track = Paper.project.importJSON(map.map.Track);
+        var start = Paper.project.importJSON(map.map.Startzone);
+        var end = Paper.project.importJSON(map.map.Endzone);
         this.course = new Paper.Group(track, start, end);
 
         view.addCourse(this.course);
+      },
+      deleteMap(){
+        if(this.selectedMap) {
+          storage.RemoveMap(this.selectedMap);
+          if(this.course) this.course.remove();
+          this.maps = storage.GetMaps();
+        }
       }
     }
   }
