@@ -69,7 +69,6 @@
   };
 
   mouseControls.onMouseDrag = event => {
-    console.log(model.selectedTool, model.selectedTool.color);
     var editCircle = new Paper.Path.Circle(event.point, brushsize);
 
     var newPath = isAdding ? model.selectedTool.path.unite(editCircle) : model.selectedTool.path.subtract(editCircle);
