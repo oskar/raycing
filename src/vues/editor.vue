@@ -49,6 +49,11 @@
     view.addCourse(course);
   }
 
+  function destroyed(){
+    course.remove();
+    mouseControls.remove();
+  }
+
   var mouseControls = new Paper.Tool();
   mouseControls.onMouseDown = event => {
     audio.playClick();
@@ -107,13 +112,14 @@
     var key = key ? key : 'map-' + (new Date()).toISOString();
     storage.AddMap({ map, key });
 
-    course.remove();
-    mouseControls.remove();
+    destroyed();
+
     history.back();
   }
 
   export default {
     created,
+    destroyed,
     data() {
       return { model }
     },
