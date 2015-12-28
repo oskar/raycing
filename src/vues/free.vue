@@ -15,10 +15,10 @@
         <div>
           <div
             v-for="map in maps"
-            class="cursor-pointer"
+            class="cursor-pointer text-medium"
+            :class="{ 'selectedMap' : map.map === selectedMap }"
             v-on:click="selectMap(map.map)">
-            {{$index + 1}}
-            X
+            {{map.key}}
           </div>
         </div>
         <div>
@@ -84,6 +84,10 @@
     font-size: 1vw;
   }
 
+  .text-medium {
+    font-size: 2vw;
+  }
+
   .text-large {
     font-size: 3vw;
   }
@@ -98,5 +102,9 @@
 
   .nbrOfPlayers > * + * {
     margin-left: 4vw;
+  }
+
+  .selectedMap {
+    text-decoration: underline;
   }
 </style>
