@@ -22,6 +22,9 @@
           </div>
         </div>
         <div>
+          <span v-on:click="editMap()" class="text-medium cursor-pointer">Edit map</span>
+        </div>
+        <div>
           <span v-on:click="deleteMap()" class="text-medium cursor-pointer">Delete map</span>
         </div>
         <div>
@@ -34,6 +37,7 @@
 
 <script lang="babel">
   var Paper = require('paper');
+  var VueRouter = require('vue-router');
   var storage = require('./services/storage.js');
   var view = require('./services/view.js');
   export default {
@@ -73,6 +77,11 @@
         this.course = new Paper.Group(track, start, end);
 
         view.addCourse(this.course);
+      },
+      editMap(){
+        if(this.selectedMap) {
+          this.$route.router.go('/editor/' + this.selectedMap.key);
+        }
       },
       deleteMap(){
         if(this.selectedMap) {

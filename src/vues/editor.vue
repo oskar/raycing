@@ -42,8 +42,14 @@
   function created(){
     isAdding = true;
     brushsize = 40;
-    model.selectTool = getTool('Track');
-    tools.forEach(t => t.path = new Paper.Path());
+    model.selectedTool = getTool('Track');
+
+    if(this.$route.params.key){
+      var map = storage.Get(this.$route.params.key).map;
+      tools.forEach(t => t.path = Paper.project.importJSON(map[t.name]));
+    } else {
+      tools.forEach(t => t.path = new Paper.Path());
+    }
 
     course = new Paper.Group(...tools.map(t => t.path));
     view.addCourse(course);
@@ -108,7 +114,7 @@
     var map = {};
     tools.forEach(tool => map[tool.name] = tool.path.toJSON());
 
-    var key = key ? key : 'map-' + (new Date()).toISOString();
+    var key = this.$route.params.key ? this.$route.params.key : 'map-' + (new Date()).toISOString();
     storage.AddMap({ map, key });
 
     destroyed();
