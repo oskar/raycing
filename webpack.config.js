@@ -1,5 +1,3 @@
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
 var webpack = require("webpack");
 var path = require("path");
 
@@ -38,9 +36,6 @@ module.exports = {
       loaders: {
         js: 'babel!eslint'
       }
-    },
-    postcss: function () {
-        return [autoprefixer, precss];
     },
     devtool: "#inline-source-map"
 };
