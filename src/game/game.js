@@ -13,6 +13,10 @@ export default class Game{
     this.start = Paper.project.importJSON(map.start);
     this.end = Paper.project.importJSON(map.end);
     this.currentPlayerIndex = 0;
+
+    for (var i = 0; i < nbrOfPlayers; i++) {
+      this.players.push(new Car(this.scale));
+    }
   }
 
   get currentPlayer(){
@@ -26,17 +30,15 @@ export default class Game{
   setVectorsForControls(){
     var player = this.currentPlayer;
     var vectorsForControls = [];
-    for(var y = 1; y >= -1; y--){
-      for(var x = -1; x <= 1; x++){
-        var playerRelativeVector = new Paper.Point(this.scale * x, this.scale * y).clone().add(player.direction);
-        var absoluteVector = playerRelativeVector.clone().add(player.position);
-        if(this.isPossiblePosition(absoluteVector)) {
-          vectorsForControls.push({
-            relative: playerRelativeVector,
-            absolute: absoluteVector
-          });
+
+    if(player.position) {
+      player.getPossibleMoves().forEach(position => {
+        if(!this.isPositionOccupied(position) && this.track.contains(position)) {
+          vectorsForControls.push(position);
         }
-      }
+      });
+    } else {
+      vectorsForControls = this.getAllowedStartPositions();
     }
 
     if(vectorsForControls.length === 0) {
@@ -46,18 +48,44 @@ export default class Game{
     }
   }
 
-  addPlayer(point, direction){
-    this.players.push(new Car(point, direction));
+  getAllowedStartPositions() {
+    var scale = this.scale;
+    var bounds = this.start.bounds;
+
+    var x_start = Math.ceil(bounds.left / scale) * scale;
+    var x_end = Math.floor(bounds.right / scale) * scale;
+
+    var y_start = Math.ceil(bounds.top / scale) * scale;
+    var y_end = Math.floor(bounds.bottom / scale) * scale;
+
+    var startingPoints = [];
+
+    for (var x = x_start; x <= x_end; x += scale) {
+      for (var y = y_start; y <= y_end; y += scale) {
+        var point = new Paper.Point(x, y);
+        if(this.start.contains(point) && !this.isPositionOccupied(point)) {
+          startingPoints.push(point);
+        }
+      }
+    }
+
+    return startingPoints;
   }
 
-  movePlayer(vector){
-    this.currentPlayer.move(vector);
-    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: this.currentPlayer.position});
+  movePlayer(position){
     var player = this.currentPlayer;
+    if(player.position) {
+      player.move(position);
+    }
+    else {
+      player.setStartPosition(position);
+    }
+
+    this.playerPositionStream.push({playerIndex: this.currentPlayerIndex, position: player.position});
 
     if(this.isInZone(this.end, player.position)){
-      var moves = player.positions.length - 1;
-      this.gameEndedStream.push('Game over,  player ' + this.currentPlayerIndex + ' won in ' + moves + ' moves!');
+      var moves = player.moves;
+      this.gameEndedStream.push({ winningPlayerIndex: this.currentPlayerIndex, moves: moves });
     } else {
       this.nextTurn();
     }
@@ -67,7 +95,7 @@ export default class Game{
     this.setNextPlayer();
     this.setVectorsForControls();
     if(this.players.filter(p => p.isAlive).length === 0) {
-      this.gameEndedStream.push('Everybody crashed, you all lost!');
+      this.gameEndedStream.push({ winningPlayerIndex: -1 });
     } else if(!this.currentPlayer.isAlive) {
       this.nextTurn();
     }
@@ -80,11 +108,9 @@ export default class Game{
     }
   }
 
-  isPossiblePosition(v) {
-    var carsOnThisPosition = this.players.filter(p => p.position.clone().subtract(v).length === 0);
-    var noOtherCars = carsOnThisPosition.length === 0;
-    var isOnTrack = this.track.contains(v);
-    return noOtherCars && isOnTrack;
+  isPositionOccupied(position) {
+    var carsOnThisPosition = this.players.filter(p => p.position && p.position.clone().subtract(position).length === 0);
+    return carsOnThisPosition.length !== 0;
   }
 
   isInZone(zone, position){

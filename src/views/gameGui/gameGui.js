@@ -3,7 +3,6 @@ var Paper = require('paper');
 var Player = require('./player');
 var Game = require('../../game/game');
 var view = require('../view');
-var menus = require('../menus');
 var animation = require('../animation');
 var audio = require('../../audio');
 var ClickListenerHandler = require('../clickListenerHandler');
@@ -25,12 +24,12 @@ export default class GameGui{
     this.foreGround = new Paper.Group([this.controls]);
     this.course = new Paper.Group();
     this.mouseControls = new Paper.Tool();
-    this.mouseControls.onMouseDown = e => this.addPlayerClickEvent(e);
+    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
 
     this.game = new Game(params.map, params.nrbOfPlayers);
     this.game.vectorsForControlsStream.onValue(controls => this.drawControls(controls));
     this.game.playerPositionStream.onValue(playerAndPosition => this.addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
-    this.game.gameEndedStream.onValue(endGameText => this.endGame(endGameText));
+    this.game.gameEndedStream.onValue(endState => this.endGame(endState));
 
     var track = this.game.track;
     track.fillColor = 'purple';
@@ -43,8 +42,6 @@ export default class GameGui{
     this.course.addChild(startArea);
     this.course.addChild(endArea);
     view.addCourse(this.course);
-
-    this.setViewToStart();
 
     this.mousewheelListener = document.addEventListener('mousewheel', event => {
       if(event.wheelDelta === 0) return;
@@ -60,36 +57,16 @@ export default class GameGui{
     this.clickListenerHandler = new ClickListenerHandler();
     this.clickListenerHandler.add(endGameButton, () => this.endGameButtonListener());
 
-    menus.hideBottom();
-    menus.smallClickzones();
+    for (var i = 0; i < this.nbrOfPlayers; i++) {
+      this.players.push(new Player(this.playerConfigs.pop()));
+    }
+
+    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
+    this.game.startGame();
   }
 
   get currentPlayer(){
     return this.players[this.game.currentPlayerIndex];
-  }
-
-  addPlayerClickEvent(event){
-    audio.playClick();
-    var x = Math.round(event.point.x / 20) * 20;
-    var y = Math.round(event.point.y / 20) * 20;
-    var point = new Paper.Point(x, y);
-    if(this.game.start.contains(point)){
-      this.addPlayer(point);
-      if(this.players.length === this.nbrOfPlayers){
-        this.startGame();
-      }
-    }
-  }
-
-  addPlayer(point){
-    this.game.addPlayer(point, new Paper.Point(0, 0));
-    this.players.push(new Player(this.playerConfigs.pop(), point));
-  }
-
-  startGame(){
-    this.players.forEach(p => this.foreGround.appendBottom(p.elements));
-    this.mouseControls.onMouseDown = e => this.onMouseDown(e);
-    this.game.startGame();
   }
 
   onMouseDown(event){
@@ -108,30 +85,27 @@ export default class GameGui{
     if(shouldZoomOut) {
       this.setViewToTrack();
     } else {
-      if(!this.game.currentPlayer) {
-        this.setViewToStart();
-      } else {
-        this.setViewToControls();
-      }
+      this.setViewToControls();
     }
   }
 
-  setViewToStart() {
-    view.setView(this.game.start.bounds.expand(200));
-  }
-
   setViewToControls(){
-    var playerBounds = this.controls.bounds.include(this.game.currentPlayer.position);
-    view.setView(playerBounds.expand(200));
+    var bounds = this.controls.bounds;
+
+    if(this.game.currentPlayer.position) {
+      bounds = bounds.include(this.game.currentPlayer.position);
+    }
+
+    view.setView(bounds.expand(200));
   }
 
   setViewToTrack(){
     view.setView(this.game.track.bounds);
   }
 
-  drawControls(controls){
+  drawControls(positions){
     this.clearControls();
-    var circles = controls.map(controlObject => this.createControl(controlObject));
+    var circles = positions.map(position => this.createControl(position));
     this.controlAnimations = circles.map(circle => animation.add(elapsedTime => {
       circle.scale(1 + (Math.sin(elapsedTime * 10) / 100));
     }));
@@ -139,9 +113,9 @@ export default class GameGui{
     this.setViewToControls();
   }
 
-  createControl(controlObject){
-    var circle = this.currentPlayer.createPositionElement(controlObject.absolute, this.currentPlayer.radius);
-    circle.movePlayerData = controlObject.relative;
+  createControl(position){
+    var circle = this.currentPlayer.createPositionElement(position, this.currentPlayer.radius);
+    circle.movePlayerData = position;
     circle.opacity = 0.5;
     return circle;
   }
@@ -155,9 +129,20 @@ export default class GameGui{
     this.players[playerIndex].addPosition(position);
   }
 
-  endGame(text){
+  endGame(endState){
     this.clearControls();
     this.gameGui.classList.remove('menu-hidden');
+
+    var text = '';
+
+    if(endState.winningPlayerIndex < 0) {
+      text = 'Everybody crashed, you all lost!';
+    }
+    else {
+      var winner = 'Player ' + (endState.winningPlayerIndex + 1);
+      text = 'Game over, ' + winner + ' won in ' + endState.moves + ' moves!';
+    }
+
     this.endGameText.textContent = text;
   }
 
@@ -174,7 +159,5 @@ export default class GameGui{
     this.gameGui.classList.add('menu-hidden');
     this.endGameText.textContent = '';
     this.mouseControls.remove();
-    menus.showBottom();
-    menus.bigClickzones();
   }
 }
