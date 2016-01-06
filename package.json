@@ -4,9 +4,10 @@
   "description": "routenetsracing",
   "main": "main.js",
   "scripts": {
-    "postinstall": "bower install && webpack-dev-server",
+    "postinstall": "bower install",
     "test": "karma start karma.conf.js",
-    "gh": "webpack",
+    "dev": "webpack-dev-server",
+    "build": "webpack",
     "local": "webpack && http-server"
   },
   "repository": {
@@ -30,7 +31,7 @@
     "bower": "1.7.2",
     "css-loader": "0.23.1",
     "jasmine-core": "2.4.1",
-    "karma": "0.13.18",
+    "karma": "0.13.19",
     "karma-jasmine": "0.3.6",
     "karma-phantomjs-launcher": "0.2.3",
     "karma-webpack": "1.7.0",
