@@ -19,10 +19,10 @@
 </template>
 
 <script lang="babel">
-  var Paper = require('paper');
-  var view = require('./services/view.js');
-  var audio = require('./services/audio.js');
-  var storage = require('./services/storage.js');
+  import Paper from 'paper';
+  import * as view from './services/view';
+  import * as audio from './services/audio';
+  import * as storage from './services/storage';
 
   var isAdding;
   var brushsize;
@@ -39,6 +39,8 @@
     tools
   };
 
+  var mouseControls = new Paper.Tool();
+
   function created(){
     isAdding = true;
     brushsize = 40;
@@ -53,36 +55,35 @@
 
     course = new Paper.Group(...tools.map(t => t.path));
     view.addCourse(course);
+
+    mouseControls.onMouseDown = event => {
+      audio.playClick();
+      if(model.selectedTool.path.area < 50){
+        removePath(model.selectedTool.path);
+        var path = new Paper.Path.Circle(event.point, brushsize);
+        path.fillColor = model.selectedTool.color;
+        path.simplify();
+        model.selectedTool.path = path;
+        course.addChild(model.selectedTool.path);
+      }
+      isAdding = model.selectedTool.path.contains(event.point);
+    };
+
+    mouseControls.onMouseDrag = event => {
+      var editCircle = new Paper.Path.Circle(event.point, brushsize);
+
+      var newPath = isAdding ? model.selectedTool.path.unite(editCircle) : model.selectedTool.path.subtract(editCircle);
+      removePath(editCircle);
+      removePath(model.selectedTool.path);
+      newPath.fillColor = model.selectedTool.color;
+      model.selectedTool.path = newPath;
+    };
   }
 
   function destroyed(){
     course.remove();
     mouseControls.remove();
   }
-
-  var mouseControls = new Paper.Tool();
-  mouseControls.onMouseDown = event => {
-    audio.playClick();
-    if(model.selectedTool.path.area < 50){
-      removePath(model.selectedTool.path);
-      var path = new Paper.Path.Circle(event.point, brushsize);
-      path.fillColor = model.selectedTool.color;
-      path.simplify();
-      model.selectedTool.path = path;
-      course.addChild(model.selectedTool.path);
-    }
-    isAdding = model.selectedTool.path.contains(event.point);
-  };
-
-  mouseControls.onMouseDrag = event => {
-    var editCircle = new Paper.Path.Circle(event.point, brushsize);
-
-    var newPath = isAdding ? model.selectedTool.path.unite(editCircle) : model.selectedTool.path.subtract(editCircle);
-    removePath(editCircle);
-    removePath(model.selectedTool.path);
-    newPath.fillColor = model.selectedTool.color;
-    model.selectedTool.path = newPath;
-  };
 
   function getTool(name){
     return tools.filter(tool => tool.name === name)[0]
