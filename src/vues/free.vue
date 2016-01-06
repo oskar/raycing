@@ -28,6 +28,9 @@
           <span v-on:click="deleteMap()" class="text-medium cursor-pointer">Delete map</span>
         </div>
         <div>
+          <span v-on:click="playMap()" class="text-medium cursor-pointer">Play map</span>
+        </div>
+        <div>
           <span v-link="'/editor'" class="text-large cursor-pointer">Create new map</span>
         </div>
       </div>
@@ -88,6 +91,11 @@
           storage.RemoveMap(this.selectedMap);
           if(this.course) this.course.remove();
           this.maps = storage.GetMaps();
+        }
+      },
+      playMap(){
+        if(this.selectedMap) {
+          this.$route.router.go('/play/' + this.selectedMap.key);
         }
       }
     }
