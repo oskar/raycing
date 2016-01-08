@@ -10,7 +10,7 @@
   import Paper from 'paper';
   import Game from '../game/game';
   import Player from '../views/gameGui/player'; // todo move this file to vues
-  
+
   var course;
   var game;
   var controls;
@@ -18,6 +18,7 @@
   var players;
   var playerConfigs;
   var foreGround;
+  var mouseControls;
 
   function created() {
     var jsonMap = storage.Get(this.$route.params.key).map;
@@ -44,13 +45,18 @@
 
     foreGround = new Paper.Group([controls]);
 
+    mouseControls = new Paper.Tool();
+    mouseControls.onMouseDown = e => onMouseDown(e);
+
+    var numberOfPlayers = 4;
+
     // start game
-    game = new Game(track, start, end, 4);
+    game = new Game(track, start, end, numberOfPlayers);
     game.vectorsForControlsStream.onValue(controls => drawControls(controls));
     game.playerPositionStream.onValue(playerAndPosition => addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
     game.gameEndedStream.onValue(endState => endGame(endState));
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < numberOfPlayers; i++) {
       players.push(new Player(playerConfigs.pop()));
     }
 
@@ -62,6 +68,7 @@
   function destroyed() {
     course.remove();
     foreGround.remove();
+    mouseControls.remove();
   }
 
   function drawControls(positions) {
@@ -102,7 +109,7 @@
     players[playerIndex].addPosition(position);
   }
 
-  function endGame(endState){
+  function endGame(endState) {
     clearControls();
 
     var text = '';
@@ -116,6 +123,18 @@
 
     // yeah..
     alert(text);
+  }
+
+  function onMouseDown(event) {
+    audio.playClick();
+    var item = event.getItem();
+    if(!item){
+      return;
+    }
+    var itemClicked = item.hitTest(event.point).item;
+    if(itemClicked && itemClicked.movePlayerData){
+      game.movePlayer(itemClicked.movePlayerData);
+    }
   }
 
   export default {
