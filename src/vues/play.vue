@@ -7,6 +7,7 @@
   import * as view from './services/view';
   import * as storage from './services/storage';
   import * as animation from './services/animation';
+  import * as audio from './services/audio';
   import Paper from 'paper';
   import Game from '../game/game';
   import Player from '../views/gameGui/player'; // todo move this file to vues
@@ -19,6 +20,8 @@
   var playerConfigs;
   var foreGround;
   var mouseControls;
+  var mousewheelListener;
+  var gestureendListener;
 
   function created() {
     var jsonMap = storage.Get(this.$route.params.key).map;
@@ -47,8 +50,16 @@
 
     mouseControls = new Paper.Tool();
     mouseControls.onMouseDown = e => onMouseDown(e);
+    mouseControls.activate();
 
-    var numberOfPlayers = 4;
+    mousewheelListener = document.addEventListener('mousewheel', event => {
+      if(event.wheelDelta === 0) return;
+      mousewheel(event.wheelDelta < 0);
+    });
+
+    gestureendListener = document.addEventListener('gestureend', e => mousewheel(e.scale < 1), false);
+
+    var numberOfPlayers = 1;
 
     // start game
     game = new Game(track, start, end, numberOfPlayers);
@@ -69,6 +80,9 @@
     course.remove();
     foreGround.remove();
     mouseControls.remove();
+
+    document.removeEventListener('gestureend', gestureendListener);
+    document.removeEventListener('mosewheel', mousewheelListener);
   }
 
   function drawControls(positions) {
@@ -105,6 +119,10 @@
     view.setView(bounds.expand(200));
   }
 
+  function setViewToTrack() {
+    view.setView(game.track.bounds);
+  }
+
   function addPlayerPosition(playerIndex, position) {
     players[playerIndex].addPosition(position);
   }
@@ -134,6 +152,14 @@
     var itemClicked = item.hitTest(event.point).item;
     if(itemClicked && itemClicked.movePlayerData){
       game.movePlayer(itemClicked.movePlayerData);
+    }
+  }
+
+  function mousewheel(shouldZoomOut){
+    if(shouldZoomOut) {
+      setViewToTrack();
+    } else {
+      setViewToControls();
     }
   }
 
