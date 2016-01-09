@@ -21,7 +21,7 @@ router.map({
   '/puzzle': { component: require('./vues/free.vue') },
   '/editor': { component: require('./vues/editor.vue') },
   '/editor/:key': { component: require('./vues/editor.vue') },
-  '/play/:key': { component: require('./vues/play.vue') },
+  '/play/:key/:playerCount': { component: require('./vues/play.vue') },
   '/settings': { component: require('./vues/settings.vue') },
 });
 

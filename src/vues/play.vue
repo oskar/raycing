@@ -24,6 +24,7 @@
   var gestureendListener;
 
   function created() {
+    var numberOfPlayers = parseInt(this.$route.params.playerCount);
     var jsonMap = storage.Get(this.$route.params.key).map;
     var track = Paper.project.importJSON(jsonMap.Track);
     var start = Paper.project.importJSON(jsonMap.Startzone);
@@ -58,8 +59,6 @@
     });
 
     gestureendListener = document.addEventListener('gestureend', e => mousewheel(e.scale < 1), false);
-
-    var numberOfPlayers = 1;
 
     // start game
     game = new Game(track, start, end, numberOfPlayers);

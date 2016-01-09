@@ -95,7 +95,7 @@
       },
       playMap(){
         if(this.selectedMap) {
-          this.$route.router.go('/play/' + this.selectedMap.key);
+          this.$route.router.go('/play/' + this.selectedMap.key + '/' + this.playerCount);
         }
       }
     }
