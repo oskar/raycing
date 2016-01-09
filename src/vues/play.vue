@@ -10,7 +10,7 @@
   import * as audio from './services/audio';
   import Paper from 'paper';
   import Game from '../game/game';
-  import Player from '../views/gameGui/player'; // todo move this file to vues
+  import Player from './player';
 
   var course;
   var game;
