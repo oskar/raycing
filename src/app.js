@@ -22,6 +22,7 @@ router.map({
   '/editor': { component: require('./vues/editor.vue') },
   '/editor/:key': { component: require('./vues/editor.vue') },
   '/play/:key': { component: require('./vues/play.vue') },
+  '/settings': { component: require('./vues/settings.vue') },
 });
 
 router.start(App, 'body');
