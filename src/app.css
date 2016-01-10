@@ -1,9 +1,9 @@
 * {
-  box-sizing: border-box;
+  font-family: monospace;
+  color: white;
 }
 
 body {
-  font-family: monospace;
   background-color: black;
   -webkit-user-select: none;
   touch-action: none;
@@ -16,83 +16,4 @@ body {
   left: 0;
   right: 0;
   overflow: hidden;
-}
-
-body:before{
-  display: block;
-  content: " ";
-  height: 20px;
-  top: 0;
-  background:rgba(0,0,0,0.8);
-  position:-webkit-sticky;
-  position:sticky;
-}
-
-.menu {
-  position: absolute;
-  left: 0;
-  right: 0;
-  color: white;
-}
-
-.menu-hidden {
-  display: none;
-}
-
-.infoText {
-  text-align: center;
-  font-size: 1.2vw;
-}
-
-.button {
-  background-color: black;
-  color: teal;
-  padding: 0.3em 0.5em;
-  border-radius: 3px;
-  border: 1px solid white;
-  cursor: pointer;
-  position: relative;
-  text-align: center;
-  display: inline-block;
-}
-
-.button:after,
-.button > * {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-}
-
-.minusButton:after {
-  content: "-";
-}
-
-.plusButton:after {
-    content: "+";
-}
-.button.purple {
-  color: purple;
-  border-color: purple;
-}
-
-.button.green {
-  color: green;
-  border-color: green;
-}
-
-.button.yellow {
-  color: yellow;
-  border-color: yellow;
-}
-
-.button.selected {
-  color: white;
-}
-
-.button.disabled {
-  color: gray;
-  border-color: gray;
 }

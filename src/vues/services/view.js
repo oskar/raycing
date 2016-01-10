@@ -1,5 +1,3 @@
-require('./view.css');
-
 import Paper from 'paper';
 import changeCenter from './utils';
 import changeZoom from './utils';

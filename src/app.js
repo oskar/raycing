@@ -1,3 +1,4 @@
+require('./app.css');
 require('./vues/services/view.js');
 
 var Vue = require('vue');
