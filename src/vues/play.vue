@@ -1,6 +1,5 @@
 <template>
-    <svg-menu :small-menu="true" :small-buttons="true">
-    </svg-menu>
+    <svg-menu :no-menu="true" :small-menu="false" :small-buttons="true"></svg-menu>
 </template>
 
 <script lang="babel">
