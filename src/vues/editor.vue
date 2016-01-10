@@ -1,5 +1,5 @@
 <template>
-    <svg-menu :small-menu="true" :small-buttons="true">
+    <svg-menu :menu="'small'" :small-buttons="true">
       <div class="text-medium editorMenuBottom" slot="menuBottom">
         <div>
           <span v-on:click="changeBrushSize(-1)" class="cursor-pointer">-</span>

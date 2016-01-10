@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg-menu :big-menu="true">
+    <svg-menu :menu="'big'">
       <div class="freeMenuBottom" slot="menuBottom">
         <div>
           <div class="text-small">

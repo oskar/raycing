@@ -1,5 +1,5 @@
 <template>
-    <svg-menu :no-menu="true" :small-menu="false" :small-buttons="true"></svg-menu>
+    <svg-menu :menu="'none'" :small-buttons="true"></svg-menu>
 </template>
 
 <script lang="babel">

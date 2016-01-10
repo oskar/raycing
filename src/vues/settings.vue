@@ -1,5 +1,5 @@
 <template>
-  <svg-menu :small-menu="true">
+  <svg-menu :menu="'small'">
     <div class="settingsMenuBottom text-medium" slot="menuBottom">
       <div>
         <span v-on:click="toggleIsMuted" :class="{ 'selected': model.isMuted }" class="mainMenuButton mainMenuButton-mute">

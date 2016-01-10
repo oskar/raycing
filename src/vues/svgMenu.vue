@@ -2,9 +2,9 @@
   <div>
     <div class="svgMenu menuBottom"
         :class="{
-          'menuBottom-big': bigMenu,
-          'menuBottom-small': smallMenu,
-          'menuBottom-hidden': noMenu
+          'menuBottom-big': menu === 'big',
+          'menuBottom-small': menu === 'small',
+          'menuBottom-hidden': menu === 'none'
         }">
       <svg viewbox="0 0 400 400">
         <path class="menuElement" d="
@@ -66,7 +66,7 @@
 
 <script lang="babel">
   export default {
-    props: ['noMenu', 'smallMenu', 'bigMenu', 'smallButtons'],
+    props: [ 'menu', 'buttons', 'smallButtons'],
     methods: {
       backIsEnabled() {
         return this.$route.path !== '/'
