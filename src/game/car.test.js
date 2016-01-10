@@ -1,5 +1,5 @@
-var Car = require('./car');
-var Paper = require('paper');
+import Car from './car';
+import Paper from 'paper';
 
 describe('Car', function() {
   it('has no initial position', function() {

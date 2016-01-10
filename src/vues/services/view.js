@@ -1,8 +1,10 @@
-var Paper = require('paper');
-var changeCenter = require('./utils').changeCenter;
-var changeZoom = require('./utils').changeZoom;
-var animation = require('./animation');
-var storage = require('../storage');
+require('./view.css');
+
+import Paper from 'paper';
+import changeCenter from './utils';
+import changeZoom from './utils';
+import * as animation from './animation';
+import * as storage from './storage';
 
 var canvas = document.getElementById('canvas');
 canvas.setAttribute('keepalive', true);

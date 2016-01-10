@@ -1,17 +1,17 @@
-var Car = require('./car');
-var Paper = require('paper');
-var Bacon = require('baconjs');
+import Car from './car';
+import Paper from 'paper';
+import Bacon from 'baconjs';
 
 export default class Game{
-  constructor(map, nbrOfPlayers){
+  constructor(track, start, end, nbrOfPlayers){
     this.vectorsForControlsStream = new Bacon.Bus();
     this.gameEndedStream = new Bacon.Bus();
     this.playerPositionStream = new Bacon.Bus();
     this.scale = 20;
     this.players = [];
-    this.track = Paper.project.importJSON(map.track);
-    this.start = Paper.project.importJSON(map.start);
-    this.end = Paper.project.importJSON(map.end);
+    this.track = track;
+    this.start = start;
+    this.end = end;
     this.currentPlayerIndex = 0;
 
     for (var i = 0; i < nbrOfPlayers; i++) {

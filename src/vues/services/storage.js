@@ -40,6 +40,10 @@ export function GetMaps() {
   return maps;
 }
 
+export function Get(key){
+  return JSON.parse(localStorage.getItem(key));
+}
+
 export function AddMap(map) {
   localStorage.setItem(map.key, JSON.stringify(map));
 }

@@ -1,4 +1,4 @@
-var storage = require('./storage');
+import * as storage from './storage';
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var context = new AudioContext();
