@@ -2,9 +2,9 @@
     <svg-menu :small-menu="true" :small-buttons="true">
       <div class="text-medium editorMenuBottom" slot="menuBottom">
         <div>
-          <span class="cursor-pointer">-</span>
-          <span>Brushsize</span>
-          <span class="cursor-pointer">+</span>
+          <span v-on:click="changeBrushSize(-1)" class="cursor-pointer">-</span>
+          <span>Brushsize ({{model.brushSize}})</span>
+          <span v-on:click="changeBrushSize(1)" class="cursor-pointer">+</span>
         </div>
         <div class="mapEditorSteps">
           <span
@@ -25,7 +25,7 @@
   import * as storage from './services/storage';
 
   var isAdding;
-  var brushsize;
+  var brushSize;
   var course;
 
   var tools = [
@@ -36,14 +36,15 @@
 
   var model = {
     selectedTool: getTool('Track'),
-    tools
+    tools,
+    brushSize
   };
 
   var mouseControls = new Paper.Tool();
 
   function created(){
     isAdding = true;
-    brushsize = 40;
+    model.brushSize = 40;
     model.selectedTool = getTool('Track');
 
     if(this.$route.params.key){
@@ -60,7 +61,7 @@
       audio.playClick();
       if(model.selectedTool.path.area < 50){
         removePath(model.selectedTool.path);
-        var path = new Paper.Path.Circle(event.point, brushsize);
+        var path = new Paper.Path.Circle(event.point, model.brushSize);
         path.fillColor = model.selectedTool.color;
         path.simplify();
         model.selectedTool.path = path;
@@ -70,7 +71,7 @@
     };
 
     mouseControls.onMouseDrag = event => {
-      var editCircle = new Paper.Path.Circle(event.point, brushsize);
+      var editCircle = new Paper.Path.Circle(event.point, model.brushSize);
 
       var newPath = isAdding ? model.selectedTool.path.unite(editCircle) : model.selectedTool.path.subtract(editCircle);
       removePath(editCircle);
@@ -103,6 +104,12 @@
     model.selectedTool = tool;
   }
 
+  function changeBrushSize(direction){
+    var brushInterval = 10;
+    var delta = brushInterval * direction;
+    this.model.brushSize = Math.min(Math.max(10, this.model.brushSize + delta), 70);
+  }
+
   function done(){
     var track = getTool('Track');
     tools
@@ -132,7 +139,7 @@
     components: {
       svgMenu: require('./svgMenu.vue')
     },
-    methods: { selectTool, done }
+    methods: { selectTool, changeBrushSize, done }
   }
 </script>
 
