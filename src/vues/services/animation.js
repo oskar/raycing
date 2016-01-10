@@ -1,4 +1,4 @@
-var Paper = require('paper');
+import Paper from 'paper';
 
 var animations = [];
 

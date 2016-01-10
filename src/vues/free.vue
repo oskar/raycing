@@ -39,10 +39,11 @@
 </template>
 
 <script lang="babel">
-  var Paper = require('paper');
-  var VueRouter = require('vue-router');
-  var storage = require('./services/storage.js');
-  var view = require('./services/view.js');
+  import Paper from 'paper';
+  import * as storage from './services/storage.js';
+  import * as view from './services/view';
+  import svgMenu from './svgMenu.vue';
+
   export default {
     destroyed(){
       if(this.course) this.course.remove();
@@ -60,7 +61,7 @@
       }
     },
     components: {
-      svgMenu: require('./svgMenu.vue')
+      svgMenu
     },
     methods: {
       decrementPlayerCount(){

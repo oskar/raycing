@@ -22,6 +22,7 @@
   import * as storage from './services/storage';
   import * as audio from './services/audio';
   import * as view from './services/view';
+  import svgMenu from './svgMenu.vue';
 
   var model = {
     isMuted: false,
@@ -47,7 +48,7 @@
       return { model }
     },
     components: {
-      svgMenu: require('./svgMenu.vue')
+      svgMenu
     },
     methods: { toggleIsMuted, toggleStarsVisibility }
   }

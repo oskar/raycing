@@ -23,6 +23,7 @@
   import * as view from './services/view';
   import * as audio from './services/audio';
   import * as storage from './services/storage';
+  import svgMenu from './svgMenu.vue'
 
   var isAdding;
   var brushSize;
@@ -137,7 +138,7 @@
       return { model }
     },
     components: {
-      svgMenu: require('./svgMenu.vue')
+      svgMenu
     },
     methods: { selectTool, changeBrushSize, done }
   }

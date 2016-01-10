@@ -10,6 +10,7 @@
   import Paper from 'paper';
   import Game from '../game/game';
   import Player from './player';
+  import svgMenu from './svgMenu.vue'
 
   var course;
   var game;
@@ -170,7 +171,7 @@
       }
     },
     components: {
-      svgMenu: require('./svgMenu.vue')
+      svgMenu
     },
     methods: {
 

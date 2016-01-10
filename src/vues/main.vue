@@ -89,9 +89,11 @@
 </template>
 
 <script lang="babel">
+  import svgMenu from './svgMenu.vue'
+
   export default {
     components: {
-      svgMenu: require('./svgMenu.vue')
+      svgMenu
     }
   }
 </script>

@@ -1,4 +1,4 @@
-var Paper = require('paper');
+import Paper from 'paper';
 
 export function changeCenter(oldCenter, offset, factor) {
   offset = offset.multiply(factor);

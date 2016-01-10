@@ -1,4 +1,4 @@
-var Paper = require('paper');
+import Paper from 'paper';
 
 export default class Car {
   constructor(scale){

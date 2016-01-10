@@ -1,12 +1,12 @@
 require('./app.css');
 require('./vues/services/view.js');
 
-var Vue = require('vue');
-Vue.config.debug = true;
-var VueRouter = require('vue-router');
-Vue.use(VueRouter);
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import attachFastClick from 'fastclick';
 
-var attachFastClick = require('fastclick');
+Vue.config.debug = true;
+Vue.use(VueRouter);
 
 window.addEventListener('load', () => {
   attachFastClick.attach(document.body);

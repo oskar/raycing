@@ -1,4 +1,4 @@
-var storage = require('../storage');
+import * as storage from '../storage';
 
 export function prepopulateMaps(cb) {
   var request = new XMLHttpRequest();
