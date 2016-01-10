@@ -48,6 +48,7 @@
       if(this.course) this.course.remove();
     },
     created(){
+      view.reset();
       this.maps = storage.GetMaps();
     },
     data() {
@@ -80,6 +81,7 @@
         this.course = new Paper.Group(track, start, end);
 
         view.addCourse(this.course);
+        view.setView(track.bounds);
       },
       editMap(){
         if(this.selectedMap) {
