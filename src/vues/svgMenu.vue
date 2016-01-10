@@ -40,8 +40,8 @@
       </svg>
     </div>
 
-    <div v-bind:class="{ 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
-      <svg v-link="{ path: '/settings' }" viewbox="0 0 400 400">
+    <div v-link="{ path: '/settings' }" v-bind:class="{ 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
+      <svg viewbox="0 0 400 400">
         <path class="menuElement" d="
           M0 0
           L300 0
