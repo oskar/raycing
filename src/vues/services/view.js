@@ -10,14 +10,22 @@ canvas.setAttribute('keepalive', true);
 var width = document.body.clientWidth;
 var height = document.body.clientHeight;
 
-initPaper(canvas, width, height);
+canvas.setAttribute('width', width);
+canvas.setAttribute('height', height);
+Paper.setup(canvas);
+animation.init();
 
-var outerBounds = new Paper.Rectangle(0, 0, width, height);
+var maxWidth = 4000;
+var maxHeight = maxWidth * height/width;
+
+var outerBounds = new Paper.Rectangle(0, 0, maxWidth, maxHeight);
+var initialBounds = new Paper.Rectangle(maxWidth/2 - width/2, maxHeight/2 - height/2, width, height);
+console.log(outerBounds, initialBounds);
+
+setView(initialBounds);
 
 var course = new Paper.Group(createGrid(outerBounds));
 course.clipped = true;
-
-var initialBounds = Paper.view.bounds.clone();
 
 Paper.view.draw();
 
@@ -34,7 +42,6 @@ export function setView(bounds){
     }
   }
   var newZoom = Paper.view.viewSize.width/size.width;
-  newZoom = newZoom > 1 ? newZoom : 1;
   animateView(bounds.center, newZoom);
   Paper.view.draw();
 }
@@ -43,15 +50,12 @@ export function reset(){
   setView(initialBounds);
 }
 
-export function addCourse(element){
-  course.appendBottom(element);
+export function setViewToOuterBounds(){
+  setView(outerBounds);
 }
 
-function initPaper(canvas, width, height){
-  canvas.setAttribute('width', width);
-  canvas.setAttribute('height', height);
-  Paper.setup(canvas);
-  animation.init();
+export function addCourse(element){
+  course.appendBottom(element);
 }
 
 function createGrid(viewBounds){
@@ -59,7 +63,7 @@ function createGrid(viewBounds){
   for(var x = viewBounds.left; x < viewBounds.right; x += 20){
     var line = new Paper.Path.Rectangle(
       new Paper.Point(x - 0.5, viewBounds.top),
-      new Paper.Point(x + 0.5, Paper.view.bounds.bottom)
+      new Paper.Point(x + 0.5, viewBounds.bottom)
     );
     line.fillColor = 'white';
 
@@ -68,7 +72,7 @@ function createGrid(viewBounds){
   for(var y = viewBounds.top; y < viewBounds.bottom; y += 20){
     var line = new Paper.Path.Rectangle(
       new Paper.Point(viewBounds.left, y),
-      new Paper.Point(Paper.view.bounds.right, y + 1)
+      new Paper.Point(viewBounds.right, y + 1)
     );
     line.fillColor = 'white';
 

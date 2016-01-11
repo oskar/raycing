@@ -43,7 +43,7 @@
   var mouseControls = new Paper.Tool();
 
   function created(){
-    view.reset();
+    view.setViewToOuterBounds();
     isAdding = true;
     model.brushSize = 40;
     model.selectedTool = getTool('Track');
