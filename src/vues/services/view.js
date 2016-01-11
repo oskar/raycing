@@ -20,7 +20,6 @@ var maxHeight = maxWidth * height/width;
 
 var outerBounds = new Paper.Rectangle(0, 0, maxWidth, maxHeight);
 var initialBounds = new Paper.Rectangle(maxWidth/2 - width/2, maxHeight/2 - height/2, width, height);
-console.log(outerBounds, initialBounds);
 
 setView(initialBounds);
 
@@ -83,8 +82,7 @@ function createGrid(viewBounds){
 }
 
 function isSameBounds(view1, view2){
-  var diff = view1.center.subtract(view2.center).length
-  return diff < 1;
+  return Math.abs(view1.area - view2.area) < 1;
 }
 
 function animateView(center, zoom){

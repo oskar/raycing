@@ -40,24 +40,35 @@
     brushSize
   };
 
-  var mouseControls = new Paper.Tool();
+  var mouseControls;
 
   function created(){
-    view.setViewToOuterBounds();
     isAdding = true;
     model.brushSize = 40;
     model.selectedTool = getTool('Track');
 
+    this.size = '';
     if(this.$route.params.key){
-      var map = storage.Get(this.$route.params.key).map;
-      tools.forEach(t => t.path = Paper.project.importJSON(map[t.name]));
+      var map = storage.Get(this.$route.params.key);
+      tools.forEach(t => t.path = Paper.project.importJSON(map.map[t.name]));
+      this.size = map.size;
     } else {
+      this.size = this.$route.params.size;
       tools.forEach(t => t.path = new Paper.Path());
     }
+
+    if(this.size === 's'){
+      view.reset();
+    } else {
+      view.setViewToOuterBounds();
+    }
+
+    console.log(this.size);
 
     course = new Paper.Group(...tools.map(t => t.path));
     view.addCourse(course);
 
+    mouseControls = new Paper.Tool();
     mouseControls.onMouseDown = event => {
       audio.playClick();
       if(model.selectedTool.path.area < 50){
@@ -124,7 +135,7 @@
     tools.forEach(tool => map[tool.name] = tool.path.toJSON());
 
     var key = this.$route.params.key ? this.$route.params.key : 'map-' + (new Date()).toISOString();
-    storage.AddMap({ map, key });
+    storage.AddMap({ map, key, size: this.size });
 
     destroyed();
 
