@@ -31,10 +31,10 @@
           <span v-on:click="playMap()" class="text-medium cursor-pointer">Play map</span>
         </div>
         <div>
-          <span v-link="'/editor/s'" class="text-large cursor-pointer">Create small map</span>
+          <span v-link="'/editor/size/s'" class="text-large cursor-pointer">Create small map</span>
         </div>
         <div>
-          <span v-link="'/editor/l'" class="text-large cursor-pointer">Create large map</span>
+          <span v-link="'/editor/size/l'" class="text-large cursor-pointer">Create large map</span>
         </div>
       </div>
     </svg-menu>
@@ -88,7 +88,7 @@
       },
       editMap(){
         if(this.selectedMap) {
-          this.$route.router.go('/editor/' + this.selectedMap.key);
+          this.$route.router.go('/editor/key/' + this.selectedMap.key);
         }
       },
       deleteMap(){

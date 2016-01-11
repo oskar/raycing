@@ -63,8 +63,6 @@
       view.setViewToOuterBounds();
     }
 
-    console.log(this.size);
-
     course = new Paper.Group(...tools.map(t => t.path));
     view.addCourse(course);
 
