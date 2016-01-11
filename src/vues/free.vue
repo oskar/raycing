@@ -81,7 +81,7 @@
         this.course = new Paper.Group(track, start, end);
 
         view.addCourse(this.course);
-        view.setView(track.bounds);
+        view.setView(track.bounds.expand(200));
       },
       editMap(){
         if(this.selectedMap) {
