@@ -22,6 +22,19 @@ export function playClick(){
   sound.source.start(0);
 }
 
+var intro;
+loadArrayBuffer('sounds/TimeGrid03.ogg', context, buffer => {
+  var sound = createSourceAndGain(buffer);
+  sound.gainNode.gain.value = 0.5;
+  sound.source.start(0);
+});
+
+export function playIntro(){
+  var sound = createSourceAndGain(intro);
+  sound.gainNode.gain.value = 0.5;
+  sound.source.start(0);
+}
+
 var ambientSounds = [];
 var ambientSoundUrls = [
   'sounds/sirens-of-amygdala.wav', //http://freesound.org/people/ERH/sounds/31041/
@@ -38,6 +51,7 @@ ambientSoundUrls.forEach(
     }));
 
 function scheduleAmbientSound(){
+  return;
   var buffer = ambientSounds[Math.floor(Math.random() * ambientSounds.length)];
   var duration = buffer.duration;
   var fadeTime = randomInt(5, 15);
