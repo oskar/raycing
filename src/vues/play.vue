@@ -1,5 +1,7 @@
 <template>
-    <svg-menu :no-menu="true" :small-menu="false" :small-buttons="true"></svg-menu>
+    <svg-menu :menu="model.menu" :small-buttons="model.smallButtons">
+      <div class="text-medium playMenuBottom" slot="menuBottom">{{model.text}}</div>
+    </svg-menu>
 </template>
 
 <script lang="babel">
@@ -12,6 +14,11 @@
   import Player from './player';
   import svgMenu from './svgMenu.vue'
 
+  var model = {
+    text: '',
+    menu: 'none',
+    smallButtons: true
+  };
   var course;
   var game;
   var controls;
@@ -24,6 +31,9 @@
   var gestureendListener;
 
   function created() {
+    model.text = '';
+    model.menu = 'none';
+    model.smallButtons = true;
     var numberOfPlayers = parseInt(this.$route.params.playerCount);
     var jsonMap = storage.Get(this.$route.params.key).map;
     var track = Paper.project.importJSON(jsonMap.Track);
@@ -128,18 +138,11 @@
 
   function endGame(endState) {
     clearControls();
-
-    var text = '';
-    if(endState.winningPlayerIndex < 0) {
-      text = 'Everybody crashed, you all lost!';
-    }
-    else {
-      var winner = 'Player ' + (endState.winningPlayerIndex + 1);
-      text = 'Game over, ' + winner + ' won in ' + endState.moves + ' moves!';
-    }
-
-    // yeah..
-    alert(text);
+    model.menu = '';
+    model.smallButtons = false;
+    model.text = endState.winningPlayerIndex < 0 ?
+      'Everybody crashed, you all lost!' :
+      `Game over, player ${endState.winningPlayerIndex + 1} won in ${endState.moves} moves!`;
   }
 
   function onMouseDown(event) {
@@ -166,9 +169,7 @@
     created,
     destroyed,
     data() {
-      return {
-
-      }
+      return { model }
     },
     components: {
       svgMenu
@@ -178,3 +179,11 @@
     }
   }
 </script>
+
+<style>
+  .playMenuBottom {
+    width: 40%;
+    left: 30%;
+    padding-top: 7vh;
+  }
+</style>

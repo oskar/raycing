@@ -1,6 +1,6 @@
 <template>
   <div>
-    <svg-menu :big-menu="true">
+    <svg-menu :menu="'big'">
       <div class="freeMenuBottom" slot="menuBottom">
         <div>
           <div class="text-small">
@@ -31,7 +31,10 @@
           <span v-on:click="playMap()" class="text-medium cursor-pointer">Play map</span>
         </div>
         <div>
-          <span v-link="'/editor'" class="text-large cursor-pointer">Create new map</span>
+          <span v-link="'/editor/size/s'" class="text-large cursor-pointer">Create small map</span>
+        </div>
+        <div>
+          <span v-link="'/editor/size/l'" class="text-large cursor-pointer">Create large map</span>
         </div>
       </div>
     </svg-menu>
@@ -82,11 +85,11 @@
         this.course = new Paper.Group(track, start, end);
 
         view.addCourse(this.course);
-        view.setView(track.bounds);
+        view.setView(track.bounds.expand(200));
       },
       editMap(){
         if(this.selectedMap) {
-          this.$route.router.go('/editor/' + this.selectedMap.key);
+          this.$route.router.go('/editor/key/' + this.selectedMap.key);
         }
       },
       deleteMap(){

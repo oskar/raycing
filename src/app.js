@@ -20,9 +20,9 @@ router.map({
   '/': { component: require('./vues/main.vue') },
   '/free': { component: require('./vues/free.vue') },
   '/puzzle': { component: require('./vues/free.vue') },
-  '/editor': { component: require('./vues/editor.vue') },
-  '/editor/:key': { component: require('./vues/editor.vue') },
-  '/play/:key/:playerCount': { component: require('./vues/play.vue') },
+  '/editor/:size': { component: require('./vues/editor.vue') },
+  '/editor/:size/:key': { component: require('./vues/editor.vue') },
+  '/play/:playerCount': { component: require('./vues/play.vue') },
   '/settings': { component: require('./vues/settings.vue') },
 });
 
