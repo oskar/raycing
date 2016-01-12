@@ -3,33 +3,13 @@
 <head>
   <meta charset="utf-8">
   <title>raycing</title>
-  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
-<body>
-  <div id="menu" class="menu">
-    <div class="playerMenu">
-      <span id="fewerPlayersButton" class="button centeredContainer">&nbsp;</span>
-      <span id="nbrOfPlayers">2</span>
-      Players
-      <span id="morePlayersButton" class="button centeredContainer">&nbsp;</span>
-    </div>
-    <div class="mapsMenu">
-      <div id="maps">
-        <div>
-          <span id="createMapButton" class="button centeredContainer">&nbsp;</span>
-        </div>
-      </div>
-      <div class="selectedMap">
-        <img id="selectedMapImage" />
-        <div class="mapControls">
-          <span id="editMapButton" class="button">Edit</span>
-          <span id="deleteMapButton" class="button">Delete</span>
-        </div>
-      </div>
-    </div>
-  </div>
+<body style="background-color: black;">
+  <canvas id="canvas"></canvas>
+  <router-view></router-view>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>
 </body>
 </html>
