@@ -17,7 +17,7 @@ var App = Vue.extend({
   data: () => {
     return {
       svgMenu: {
-        menu: '',
+        menu: 'medium',
         smallButtons: false,
         showTitle: false
       }

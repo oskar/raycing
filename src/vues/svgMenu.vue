@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="titleText" :style="{ 'opacity': showTitle ? 1 : 0 }">Raycing</div>
+    <div class="titleText" :class="{ 'show': showTitle }" :style="{ 'opacity': showTitle ? 1 : 0 }">Raycing</div>
 
     <div class="svgMenu menuBottom"
         :class="{
@@ -90,6 +90,11 @@
     text-align: center;
     font-size: 10vh;
     transition: opacity 2s;
+    visibility: hidden;
+  }
+
+  .titleText.show {
+    visibility: visible;
   }
 
   .menuClickZone {
@@ -132,6 +137,7 @@
     width: 100%;
     text-align: center;
     color: white;
+    transition: top 1s;
   }
 
   .menuBottom-hidden {

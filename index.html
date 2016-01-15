@@ -12,7 +12,7 @@
 
   <svg-menu :menu="svgMenu.menu" :small-buttons="svgMenu.smallButtons" :show-title="svgMenu.showTitle">
     <div class="text-medium playMenuBottom" slot="menuBottom">
-      <router-view :menu="svgMenu.menu" :small-buttons="svgMenu.smallButtons" :show-title.sync="svgMenu.showTitle"></router-view>
+      <router-view :menu.sync="svgMenu.menu" :small-buttons.sync="svgMenu.smallButtons" :show-title.sync="svgMenu.showTitle"></router-view>
     </div>
   </svg-menu>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>

@@ -86,15 +86,12 @@
 </template>
 
 <script lang="babel">
-  import svgMenu from './svgMenu.vue'
-
   export default {
-    props: [ 'showTitle' ],
+    props: [ 'menu', 'smallButtons', 'showTitle' ],
     created: function() {
+      this.menu = 'medium';
+      this.smallButtons = false;
       setTimeout(() => this.showTitle = true);
-    },
-    components: {
-      svgMenu
     }
   }
 </script>

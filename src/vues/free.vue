@@ -1,43 +1,39 @@
 <template>
-  <div>
-    <svg-menu :menu="'big'">
-      <div class="freeMenuBottom" slot="menuBottom">
-        <div>
-          <div class="text-small">
-            Number of players (1-{{maxPlayerCount}})
-          </div>
-          <div class="text-large">
-            <span v-on:click="decrementPlayerCount" class="cursor-pointer">-</span>
-            <span>{{playerCount}}</span>
-            <span v-on:click="incrementPlayerCount" class="cursor-pointer">+</span>
-          </div>
-        </div>
-        <div>
-          <div
-            v-for="map in maps"
-            class="cursor-pointer text-medium"
-            :class="{ 'selectedMap' : map === selectedMap }"
-            v-on:click="selectMap(map)">
-            {{map.key}}
-          </div>
-        </div>
-        <div>
-          <span v-on:click="editMap()" class="text-medium cursor-pointer">Edit map</span>
-        </div>
-        <div>
-          <span v-on:click="deleteMap()" class="text-medium cursor-pointer">Delete map</span>
-        </div>
-        <div>
-          <span v-on:click="playMap()" class="text-medium cursor-pointer">Play map</span>
-        </div>
-        <div>
-          <span v-link="'/editor/size/s'" class="text-large cursor-pointer">Create small map</span>
-        </div>
-        <div>
-          <span v-link="'/editor/size/l'" class="text-large cursor-pointer">Create large map</span>
-        </div>
+  <div class="freeMenuBottom" slot="menuBottom">
+    <div>
+      <div class="text-small">
+        Number of players (1-{{maxPlayerCount}})
       </div>
-    </svg-menu>
+      <div class="text-large">
+        <span v-on:click="decrementPlayerCount" class="cursor-pointer">-</span>
+        <span>{{playerCount}}</span>
+        <span v-on:click="incrementPlayerCount" class="cursor-pointer">+</span>
+      </div>
+    </div>
+    <div>
+      <div
+        v-for="map in maps"
+        class="cursor-pointer text-medium"
+        :class="{ 'selectedMap' : map === selectedMap }"
+        v-on:click="selectMap(map)">
+        {{map.key}}
+      </div>
+    </div>
+    <div>
+      <span v-on:click="editMap()" class="text-medium cursor-pointer">Edit map</span>
+    </div>
+    <div>
+      <span v-on:click="deleteMap()" class="text-medium cursor-pointer">Delete map</span>
+    </div>
+    <div>
+      <span v-on:click="playMap()" class="text-medium cursor-pointer">Play map</span>
+    </div>
+    <div>
+      <span v-link="'/editor/size/s'" class="text-large cursor-pointer">Create small map</span>
+    </div>
+    <div>
+      <span v-link="'/editor/size/l'" class="text-large cursor-pointer">Create large map</span>
+    </div>
   </div>
 </template>
 
@@ -45,15 +41,18 @@
   import Paper from 'paper';
   import * as storage from './services/storage.js';
   import * as view from './services/view';
-  import svgMenu from './svgMenu.vue';
 
   export default {
+    props: [ 'menu', 'smallButtons', 'showTitle' ],
     destroyed(){
       if(this.course) this.course.remove();
     },
     created(){
       view.reset();
       this.maps = storage.GetMaps();
+      this.menu = 'big';
+      this.smallButtons = false;
+      this.showTitle = false;
     },
     data() {
       return {
@@ -62,9 +61,6 @@
         playerCount: 1,
         maps: []
       }
-    },
-    components: {
-      svgMenu
     },
     methods: {
       decrementPlayerCount(){
@@ -123,10 +119,6 @@
 
   .text-large {
     font-size: 3vw;
-  }
-
-  .freeMenuBottom {
-    padding-top: 2vh;
   }
 
   .freeMenuBottom > * + * {
