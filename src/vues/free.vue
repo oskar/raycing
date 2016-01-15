@@ -121,6 +121,10 @@
     font-size: 3vw;
   }
 
+  .freeMenuBottom {
+    margin-top: 2vh;
+  }
+
   .freeMenuBottom > * + * {
     margin-top: 2vh;
   }

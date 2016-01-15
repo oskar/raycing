@@ -1,7 +1,5 @@
-require('./app.css');
-require('./vues/services/view.js');
-
 import Vue from 'vue';
+import view from './vues/services/view.js';
 import VueRouter from 'vue-router';
 import svgMenu from './vues/svgMenu.vue'
 import attachFastClick from 'fastclick';

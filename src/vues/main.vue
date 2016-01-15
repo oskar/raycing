@@ -100,6 +100,7 @@
   .mainMenuBottom {
     display: flex;
     justify-content: center;
+    padding-top: 7vh;
   }
 
   .mainMenuButton {
