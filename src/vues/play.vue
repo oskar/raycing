@@ -13,9 +13,7 @@
   import svgMenu from './svgMenu.vue'
 
   var model = {
-    text: '',
-    menu: 'none',
-    smallButtons: true
+    text: ''
   };
   var course;
   var game;
@@ -33,8 +31,6 @@
     this.smallButtons = true;
     this.showTitle = false;
     model.text = '';
-    model.menu = 'none';
-    model.smallButtons = true;
     var numberOfPlayers = parseInt(this.$route.params.playerCount);
     var jsonMap = storage.Get(this.$route.params.key).map;
     var track = Paper.project.importJSON(jsonMap.Track);
@@ -75,7 +71,7 @@
     game = new Game(track, start, end, numberOfPlayers);
     game.vectorsForControlsStream.onValue(controls => drawControls(controls));
     game.playerPositionStream.onValue(playerAndPosition => addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
-    game.gameEndedStream.onValue(endState => endGame(endState));
+    game.gameEndedStream.onValue(endGame.bind(this));
 
     for (var i = 0; i < numberOfPlayers; i++) {
       players.push(new Player(playerConfigs.pop()));
@@ -139,8 +135,8 @@
 
   function endGame(endState) {
     clearControls();
-    model.menu = '';
-    model.smallButtons = false;
+    this.menu = 'medium';
+    this.smallButtons = false;
     model.text = endState.winningPlayerIndex < 0 ?
       'Everybody crashed, you all lost!' :
       `Game over, player ${endState.winningPlayerIndex + 1} won in ${endState.moves} moves!`;
@@ -184,8 +180,6 @@
 
 <style>
   .playMenuBottom {
-    width: 40%;
-    left: 30%;
     padding-top: 7vh;
   }
 </style>
