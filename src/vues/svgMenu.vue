@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div class="titleText" :style="{ 'opacity': showTitle ? 1 : 0 }">Raycing</div>
+
     <div class="svgMenu menuBottom"
         :class="{
           'menuBottom-big': menu === 'big',
@@ -66,7 +68,7 @@
 
 <script lang="babel">
   export default {
-    props: [ 'menu', 'buttons', 'smallButtons'],
+    props: [ 'menu', 'smallButtons', 'showTitle'],
     methods: {
       backIsEnabled() {
         return this.$route.path !== '/'
@@ -81,6 +83,15 @@
 </script>
 
 <style>
+  .titleText {
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+    font-size: 10vh;
+    transition: opacity 2s;
+  }
+
   .menuClickZone {
     position: absolute;
     width: 30vw;

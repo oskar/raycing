@@ -3,6 +3,7 @@ require('./vues/services/view.js');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import svgMenu from './vues/svgMenu.vue'
 import attachFastClick from 'fastclick';
 
 Vue.config.debug = true;
@@ -12,7 +13,20 @@ window.addEventListener('load', () => {
   attachFastClick.attach(document.body);
 }, false);
 
-var App = Vue.extend({});
+var App = Vue.extend({
+  data: () => {
+    return {
+      svgMenu: {
+        menu: '',
+        smallButtons: false,
+        showTitle: false
+      }
+    }
+  },
+  components: {
+    svgMenu
+  }
+});
 
 var router = new VueRouter();
 

@@ -9,7 +9,12 @@
 </head>
 <body style="background-color: black;">
   <canvas id="canvas"></canvas>
-  <router-view></router-view>
+
+  <svg-menu :menu="svgMenu.menu" :small-buttons="svgMenu.smallButtons" :show-title="svgMenu.showTitle">
+    <div class="text-medium playMenuBottom" slot="menuBottom">
+      <router-view :menu="svgMenu.menu" :small-buttons="svgMenu.smallButtons" :show-title.sync="svgMenu.showTitle"></router-view>
+    </div>
+  </svg-menu>
   <script type="text/javascript" src="app.js" charset="utf-8"></script>
 </body>
 </html>
