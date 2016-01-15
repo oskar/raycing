@@ -1,5 +1,5 @@
 <template>
-  <svg-menu :menu="'small'">
+  <div>
     <div class="settingsMenuBottom text-medium" slot="menuBottom">
       <div>
         <span v-on:click="toggleIsMuted" :class="{ 'selected': model.isMuted }" class="mainMenuButton mainMenuButton-mute">
@@ -15,7 +15,7 @@
         <span v-on:click="toggleStarsVisibility" :class="{ 'selected': model.starsVisibility }" class="mainMenuButton">Stars</span>
       </div>
     </div>
-  </svg-menu>
+  </div>
 </template>
 
 <script lang="babel">
@@ -29,28 +29,29 @@
     starsVisibility: false
   };
 
-  function created(){
-    model.isMuted = storage.GetIsMuted();
-    model.starsVisibility = storage.GetEnableStars();
-  }
-
-  function toggleIsMuted(){
-    this.model.isMuted = audio.ToggleIsMuted();
-  }
-
-  function toggleStarsVisibility() {
-    this.model.starsVisibility = view.toggleStarsVisibility();
-  }
-
   export default {
-    created,
+    props: [ 'menu', 'smallButtons', 'showTitle' ],
+    created() {
+      model.isMuted = storage.GetIsMuted();
+      model.starsVisibility = storage.GetEnableStars();
+      this.menu = 'small';
+      this.smallButtons = false;
+      this.showTitle = true;
+    },
     data() {
       return { model }
     },
     components: {
       svgMenu
     },
-    methods: { toggleIsMuted, toggleStarsVisibility }
+    methods: {
+      toggleIsMuted(){
+        this.model.isMuted = audio.ToggleIsMuted();
+      },
+      toggleStarsVisibility() {
+        this.model.starsVisibility = view.toggleStarsVisibility();
+      }
+    }
   }
 </script>
 
