@@ -1,7 +1,5 @@
 <template>
-    <svg-menu :menu="model.menu" :small-buttons="model.smallButtons">
-      <div class="text-medium playMenuBottom" slot="menuBottom">{{model.text}}</div>
-    </svg-menu>
+  <div class="text-medium playMenuBottom" slot="menuBottom">{{model.text}}</div>
 </template>
 
 <script lang="babel">
@@ -31,6 +29,9 @@
   var gestureendListener;
 
   function created() {
+    this.menu = 'none';
+    this.smallButtons = true;
+    this.showTitle = false;
     model.text = '';
     model.menu = 'none';
     model.smallButtons = true;
@@ -166,6 +167,7 @@
   }
 
   export default {
+    props: [ 'menu', 'smallButtons', 'showTitle' ],
     created,
     destroyed,
     data() {
