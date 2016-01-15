@@ -1,5 +1,5 @@
 <template>
-    <svg-menu :menu="'small'" :small-buttons="true">
+    <div>
       <div class="text-medium editorMenuBottom" slot="menuBottom">
         <div>
           <span v-on:click="changeBrushSize(-1)" class="cursor-pointer">-</span>
@@ -15,7 +15,7 @@
           <span v-on:click="done()" class="cursor-pointer">Save map</span>
         </div>
       </div>
-    </svg-menu>
+    </div>
 </template>
 
 <script lang="babel">
@@ -44,6 +44,9 @@
   var mouseControls;
 
   function created(){
+    this.menu = 'small';
+    this.smallButtons = true;
+    this.showTitle = false;
     isAdding = true;
     model.brushSize = 40;
     model.selectedTool = getTool('Track');
@@ -142,6 +145,7 @@
   }
 
   export default {
+    props: [ 'menu', 'smallButtons', 'showTitle' ],
     created,
     destroyed,
     data() {

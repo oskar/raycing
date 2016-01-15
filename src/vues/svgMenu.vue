@@ -100,6 +100,7 @@
   .menuClickZone {
     position: absolute;
     width: 30vw;
+    transition: width 1s;
   }
 
   .menuClickZone-small {
