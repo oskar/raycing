@@ -100,7 +100,7 @@
   .menuClickZone {
     position: absolute;
     width: 30vw;
-    transition: width 1s;
+    transition: width 0.5s;
   }
 
   .menuClickZone-small {
@@ -138,19 +138,19 @@
     width: 100%;
     text-align: center;
     color: white;
-    transition: top 1s;
+    transition: transform 0.5s;
   }
 
   .menuBottom-hidden {
-    top: 100vh;
-  }
-
-  .menuBottom-big {
-    top: 20vh;
+    transform: translate(0, 25vh);
   }
 
   .menuBottom-small {
-    top: 85vh;
+    transform: translate(0, 10vh);
+  }
+
+  .menuBottom-big {
+    transform: translate(0, -55vh);
   }
 
   .menuBottom > * {
