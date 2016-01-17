@@ -118,10 +118,12 @@
     right: -10px;
   }
 
+  /*
+   * This has to be "!important" to override the style declaration on the menuClickZone-topRight
+   * element. That in turn has to be there in order for the rotation of the element not to be
+   * animated on page load.
+  **/
   .menuClickZone-topRight.menuClickZone-small {
-    // This has to be "!important" to override the style declaration on the menuClickZone-topRight
-    // element. That in turn has to be there in order for the rotation of the element not to be
-    // animated on page load.
     transform: rotate(0.25turn) translate(0, -100%) scale(0.5)!important;
   }
 
