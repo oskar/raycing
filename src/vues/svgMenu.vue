@@ -47,7 +47,7 @@
       </svg>
     </div>
 
-    <div v-link="{ path: '/settings' }" :class="{ 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled">
+    <div v-link="{ path: '/settings' }" :class="{ 'menuClickZone-small': smallButtons }" class="svgMenu menuClickZone menuClickZone-topRight menuClickZone-enabled" style="transform: rotate(0.25turn) translate(0, -100%);">
       <svg viewbox="0 0 400 400">
         <path class="menuElement" d="
           M0 0
@@ -100,16 +100,8 @@
   .menuClickZone {
     position: absolute;
     width: 30vw;
-    transition: width 0.5s;
-  }
-
-  .menuClickZone-small {
-    width: 15vw;
-  }
-
-  .menuClickZone .icon {
-    opacity: 0.1;
-    color: white;
+    transition: transform 0.5s;
+    transform-origin: top left;
   }
 
   .menuClickZone-topLeft{
@@ -117,10 +109,25 @@
     left: -10px;
   }
 
+  .menuClickZone-topLeft.menuClickZone-small {
+    transform: scale(0.5);
+  }
+
   .menuClickZone-topRight{
     top: -10px;
     right: -10px;
-    transform: rotate(0.25turn);
+  }
+
+  .menuClickZone-topRight.menuClickZone-small {
+    // This has to be "!important" to override the style declaration on the menuClickZone-topRight
+    // element. That in turn has to be there in order for the rotation of the element not to be
+    // animated on page load.
+    transform: rotate(0.25turn) translate(0, -100%) scale(0.5)!important;
+  }
+
+  .menuClickZone .icon {
+    opacity: 0.1;
+    color: white;
   }
 
   .menuClickZone-enabled .icon{
