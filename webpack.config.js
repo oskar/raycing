@@ -1,5 +1,3 @@
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
 var webpack = require("webpack");
 var path = require("path");
 
@@ -21,17 +19,24 @@ module.exports = {
         loaders: [
             {
               test: /\.css$/,
-              loader: "style-loader!css-loader!postcss-loader"
+              loader: "style-loader!css-loader"
             },
             {
               test: /\.jsx?$/,
               exclude: /(node_modules|bower_components)/,
-              loader: 'babel'
+              loader: 'babel',
+              query: {
+                "presets": ["es2015"]
+              }
+            },
+            {
+              test: /\.vue$/,
+              loader: 'vue'
             }
         ]
     },
-    postcss: function () {
-        return [autoprefixer, precss];
+    babel: {
+      presets: ['es2015']
     },
     devtool: "#inline-source-map"
 };

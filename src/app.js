@@ -1,41 +1,41 @@
-require('./app.css');
+import Vue from 'vue';
+import view from './vues/services/view.js';
+import VueRouter from 'vue-router';
+import svgMenu from './vues/svgMenu.vue'
+import attachFastClick from 'fastclick';
 
-var view = require('./views/view');
-var MainMenu = require('./views/mainMenu/mainMenu');
-var FreeplayMenu = require('./views/freeplayMenu/freeplayMenu');
-var PuzzleMenu = require('./views/puzzleMenu/puzzleMenu');
-var MapEditor = require('./views/mapEditor/mapEditor');
-var GameGui = require('./views/gameGui/gameGui');
-var attachFastClick = require('fastclick');
-
-var currentView = new MainMenu(data => onDone(data));
-
-function onDone(data){
-  currentView.dispose();
-  view.reset();
-
-  switch(data.view){
-    case 'Main menu':
-      currentView = new MainMenu(data => onDone(data), data.params);
-      break;
-    case 'Puzzle menu':
-      currentView = new PuzzleMenu(data => onDone(data), data.params);
-      break;
-    case 'Freeplay menu':
-      currentView = new FreeplayMenu(data => onDone(data), data.params);
-      break;
-    case 'Create map':
-      currentView = new MapEditor(data => onDone(data), data.params);
-      break;
-    case 'Game':
-      currentView = new GameGui(data => onDone(data), data.params);
-      break;
-    default:
-      currentView = new FreeplayMenu(data => onDone(data), data.params);
-      break;
-  }
-}
+Vue.config.debug = true;
+Vue.use(VueRouter);
 
 window.addEventListener('load', () => {
   attachFastClick.attach(document.body);
 }, false);
+
+var App = Vue.extend({
+  data: () => {
+    return {
+      svgMenu: {
+        menu: 'medium',
+        smallButtons: false,
+        showTitle: false
+      }
+    }
+  },
+  components: {
+    svgMenu
+  }
+});
+
+var router = new VueRouter();
+
+router.map({
+  '/': { component: require('./vues/main.vue') },
+  '/free': { component: require('./vues/free.vue') },
+  '/puzzle': { component: require('./vues/free.vue') },
+  '/editor/key/:key': { component: require('./vues/editor.vue') },
+  '/editor/size/:size': { component: require('./vues/editor.vue') },
+  '/play/:key/:playerCount': { component: require('./vues/play.vue') },
+  '/settings': { component: require('./vues/settings.vue') },
+});
+
+router.start(App, 'body');
