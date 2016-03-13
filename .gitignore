@@ -27,4 +27,4 @@ build/Release
 node_modules
 bower_components
 
-deploy/Raycing/platforms
+cordova/platforms
