@@ -24,16 +24,11 @@ export function playClick(){
 
 var intro;
 loadArrayBuffer('sounds/TimeGrid03.ogg', context, buffer => {
-  var sound = createSourceAndGain(buffer);
-  sound.gainNode.gain.value = 0.5;
-  sound.source.start(0);
+  var { source, gainNode } = createSourceAndGain(buffer);
+  gainNode.gain.value = 0.5;
+  source.loop = true;
+  source.start(0);
 });
-
-export function playIntro(){
-  var sound = createSourceAndGain(intro);
-  sound.gainNode.gain.value = 0.5;
-  sound.source.start(0);
-}
 
 var ambientSounds = [];
 var ambientSoundUrls = [

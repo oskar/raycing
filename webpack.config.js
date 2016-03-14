@@ -1,11 +1,13 @@
 var webpack = require("webpack");
 var path = require("path");
 
+var wwwRoot = "./cordova/www/";
+
 module.exports = {
-    entry: "./src/app.js",
+    entry: wwwRoot + "src/app.js",
     output: {
         path: __dirname,
-        filename: "app.js"
+        filename: wwwRoot + "app.js"
     },
     resolve: {
         root: [path.join(__dirname, "bower_components")]
