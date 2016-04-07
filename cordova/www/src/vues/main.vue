@@ -96,7 +96,13 @@
   }
 </script>
 
-<style>
+<style lang="less">
+  @import 'services/color';
+
+  body {
+    background-color: @background-color;
+  }
+
   .mainMenuBottom {
     display: flex;
     justify-content: center;
@@ -111,7 +117,7 @@
 
   .mainMenuButton:hover {
     cursor: pointer;
-    color: gray;
+    color: @iconHoverColor;
   }
 
   .mainMenuButton .icon{

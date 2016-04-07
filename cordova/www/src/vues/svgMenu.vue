@@ -82,7 +82,9 @@
   }
 </script>
 
-<style>
+<style lang="less">
+  @import 'services/color';
+
   .titleText {
     position: absolute;
     top: 30%;
@@ -129,7 +131,7 @@
 
   .menuClickZone .icon {
     opacity: 0.1;
-    color: white;
+    color: @iconColor;
   }
 
   .menuClickZone-enabled .icon{
@@ -138,7 +140,7 @@
 
   .menuClickZone-enabled .icon:hover{
     cursor: pointer;
-    color: gray;
+    color: @iconHoverColor;
   }
 
   .menuBottom {
@@ -146,7 +148,7 @@
     top: 75vh;
     width: 100%;
     text-align: center;
-    color: white;
+    color: @menuTextColor;
     transition: transform 0.5s;
   }
 
@@ -171,8 +173,8 @@
 
   .menuElement{
     position: absolute;
-    fill: rgba(0, 128, 128, 0.2);
-    stroke: white;
+    fill: @menuFill;
+    stroke: @menuStroke;
     stroke-width: 2;
     vector-effect: non-scaling-stroke;
   }
