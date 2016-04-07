@@ -113,6 +113,7 @@
     font-size: 2vw;
     display: flex;
     align-items: center;
+    color: @iconColor;
   }
 
   .mainMenuButton:hover {

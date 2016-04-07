@@ -1,6 +1,10 @@
-@background-color: black!important;
-@iconColor: white;
-@iconHoverColor: grey;
-@menuTextColor: white;
-@menuFill: rgba(0, 128, 128, 0.2);
-@menuStroke: white;
+@base: black;
+@complementary: #6D2A25;
+@grey: #777;
+
+@background-color: @base!important;
+@iconColor: @complementary;
+@iconHoverColor: @grey;
+@menuTextColor: @grey;
+@menuFill: fade(@grey, 10%);
+@menuStroke: @grey;
