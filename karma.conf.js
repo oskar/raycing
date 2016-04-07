@@ -1,63 +1,20 @@
-// Karma configuration
-// Generated on Fri Aug 07 2015 23:44:36 GMT+0200 (CEST)
 var webpackConfig = require('./webpack.config');
 
 module.exports = function(config) {
   config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
-
-    // list of files / patterns to load in the browser
-    files: [
-      'cordova/www/src/**/*.test.js'
-    ],
-
-    // list of files to exclude
-    exclude: [
-    ],
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'cordova/www/src/**/*.test.js': ['webpack'],
-    },
-
+    basePath: '', // base path that will be used to resolve all patterns (eg. files, exclude)
+    frameworks: ['jasmine'], // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    files: ['cordova/www/src/**/*.test.js'], // list of files / patterns to load in the browser
+    exclude: [], // list of files to exclude
+    preprocessors: {'cordova/www/src/**/*.test.js': ['webpack']}, // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     webpack: webpackConfig,
-
-    webpackMiddleware: {
-      // webpack-dev-middleware configuration
-      // i. e.
-      noInfo: true
-    },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
-
-    // web server port
+    webpackMiddleware: {noInfo: true}, // webpack-dev-middleware configuration
+    reporters: ['progress'], // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
     colors: true,
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_WARN,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    logLevel: config.LOG_WARN, // LOG_DISABLE, LOG_ERROR, LOG_WARN, LOG_INFO, LOG_DEBUG
+    autoWatch: false, // enable / disable watching file and executing tests whenever any file changes
+    browsers: ['PhantomJS'], // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    singleRun: true // Continuous Integration mode if true, Karma captures browsers, runs the tests and exits
   })
 }
