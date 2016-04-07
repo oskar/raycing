@@ -7,10 +7,12 @@
   import * as storage from './services/storage';
   import * as animation from './services/animation';
   import * as audio from './services/audio';
+  import {color, getColors} from './services/color';
   import Paper from 'paper';
   import Game from '../game/game';
   import Player from './player';
-  import svgMenu from './svgMenu.vue'
+  import svgMenu from './svgMenu.vue';
+  console.log(color);
 
   var model = {
     text: ''
@@ -20,7 +22,6 @@
   var controls;
   var controlAnimations;
   var players;
-  var playerConfigs;
   var foreGround;
   var mouseControls;
   var mousewheelListener;
@@ -37,22 +38,15 @@
     var start = Paper.project.importJSON(jsonMap.Startzone);
     var end = Paper.project.importJSON(jsonMap.Endzone);
 
-    track.fillColor = 'purple';
-    start.fillColor = 'green';
-    end.fillColor = 'yellow';
+    track.fillColor = color.track;
+    start.fillColor = color.start;
+    end.fillColor = color.end;
 
     course = new Paper.Group(track, start, end);
     view.addCourse(course);
 
     controls = new Paper.Group();
     controlAnimations = [];
-    players = [];
-    playerConfigs = [
-      { name: 'Yellow', color: '#ffff00' },
-      { name: 'Blue', color: '#0000ff' },
-      { name: 'Red', color: '#ff0000' },
-      { name: 'Green', color: '#00ff00' },
-    ];
 
     foreGround = new Paper.Group([controls]);
 
@@ -73,10 +67,10 @@
     game.playerPositionStream.onValue(playerAndPosition => addPlayerPosition(playerAndPosition.playerIndex, playerAndPosition.position));
     game.gameEndedStream.onValue(endGame.bind(this));
 
-    for (var i = 0; i < numberOfPlayers; i++) {
-      players.push(new Player(playerConfigs.pop()));
-    }
-
+    players = getColors(numberOfPlayers).map((color, i) => new Player({
+      name: `Player ${i}`,
+      color
+    }));
     players.forEach(p => foreGround.appendBottom(p.elements));
 
     game.startGame();

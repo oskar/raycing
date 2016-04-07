@@ -23,6 +23,7 @@
   import * as view from './services/view';
   import * as audio from './services/audio';
   import * as storage from './services/storage';
+  import {color} from './services/color';
   import svgMenu from './svgMenu.vue'
 
   var isAdding;
@@ -30,9 +31,9 @@
   var course;
 
   var tools = [
-    { name: 'Track', color: 'purple', path: null },
-    { name: 'Startzone', color: 'green', path: null },
-    { name: 'Endzone', color: 'yellow', path: null }
+    { name: 'Track', color: color.track, path: null },
+    { name: 'Startzone', color: color.start, path: null },
+    { name: 'Endzone', color: color.end, path: null }
   ];
 
   var model = {
