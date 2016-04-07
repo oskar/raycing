@@ -1,7 +1,7 @@
 var color = {
-  track: 'purple',
-  start: 'green',
-  end: 'yellow'
+  track: '#833383',
+  start: '#C9AE4E',
+  end: '#378D61'
 }
 
 var getColors = (nbrOfColors) => {
