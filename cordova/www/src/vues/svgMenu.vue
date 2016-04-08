@@ -86,6 +86,7 @@
   @import 'services/color';
 
   .titleText {
+    color: @grey;
     position: absolute;
     top: 30%;
     width: 100%;
